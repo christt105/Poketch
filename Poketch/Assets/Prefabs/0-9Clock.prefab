@@ -760,7 +760,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3613197517939757113}
   m_Layer: 5
-  m_Name: 0-9
+  m_Name: 0-9Clock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
