@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Xml.Serialization;
 using UnityEngine;
 
 public class Clock : MonoBehaviour
@@ -35,12 +36,12 @@ public class Clock : MonoBehaviour
 
             //Debug.Log($"{hours / 10} / {hours % 10} / {minutes / 10} / {minutes % 10}" );
 
-            m_Digits.GetChild( 0 ).GetChild( hours / 9 ).gameObject.SetActive( true );
-            m_Digits.GetChild( 1 ).GetChild( hours % 9 ).gameObject.SetActive( true );
-            m_Digits.GetChild( 2 ).GetChild( minutes / 9 ).gameObject.SetActive( true );
-            m_Digits.GetChild( 3 ).GetChild( minutes % 9 ).gameObject.SetActive( true );
+            m_Digits.GetChild( 0 ).GetChild( hours / 10 ).gameObject.SetActive( true );
+            m_Digits.GetChild( 1 ).GetChild( hours % 10 ).gameObject.SetActive( true );
+            m_Digits.GetChild( 2 ).GetChild( minutes / 10 ).gameObject.SetActive( true );
+            m_Digits.GetChild( 3 ).GetChild( minutes % 10 ).gameObject.SetActive( true );
 
-            yield return new WaitForSeconds( 1f );
+            yield return new WaitForSeconds( 0.5f );
         }
     }
 
