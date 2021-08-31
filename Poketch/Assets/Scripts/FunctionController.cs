@@ -1,8 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class FunctionController : MonoBehaviour
 {
     private int m_FunctionIndex = -1;
+
+    private Function[] m_Functions;
 
     private Transform m_MyTransform;
 
@@ -19,20 +22,26 @@ public class FunctionController : MonoBehaviour
     {
         m_MyTransform = transform;
 
-        foreach ( Transform t in m_MyTransform )
+        m_Functions = m_MyTransform.GetComponentsInChildren < Function >(true);
+
+        foreach ( Function f in m_Functions )
         {
-            if ( !t.gameObject.activeSelf )
+            //TODO: Load from json
+
+
+            if ( !f.gameObject.activeSelf )
             {
                 continue;
             }
 
             if ( m_FunctionIndex != -1 )
             {
-                t.gameObject.SetActive( false );
+                f.gameObject.SetActive( false );
             }
             else
             {
-                m_FunctionIndex = t.GetSiblingIndex();
+                m_FunctionIndex = f.transform.GetSiblingIndex();
+                f.OnStart();
             }
         }
     }
@@ -43,26 +52,30 @@ public class FunctionController : MonoBehaviour
 
     public void Next()
     {
-        m_MyTransform.GetChild( m_FunctionIndex ).gameObject.SetActive( false );
+        m_Functions[m_FunctionIndex].gameObject.SetActive( false );
+        m_Functions[m_FunctionIndex].OnExit();
 
-        if ( ++m_FunctionIndex > m_MyTransform.childCount - 1 )
+        if ( ++m_FunctionIndex > m_Functions.Length - 1 )
         {
             m_FunctionIndex = 0;
         }
 
-        m_MyTransform.GetChild( m_FunctionIndex ).gameObject.SetActive( true );
+        m_Functions[m_FunctionIndex].gameObject.SetActive(true);
+        m_Functions[m_FunctionIndex].OnChange();
     }
 
     public void Previous()
     {
-        m_MyTransform.GetChild( m_FunctionIndex ).gameObject.SetActive( false );
+        m_Functions[m_FunctionIndex].gameObject.SetActive(false);
+        m_Functions[m_FunctionIndex].OnExit();
 
         if ( --m_FunctionIndex < 0 )
         {
-            m_FunctionIndex = m_MyTransform.childCount - 1;
+            m_FunctionIndex = m_Functions.Length - 1;
         }
 
-        m_MyTransform.GetChild( m_FunctionIndex ).gameObject.SetActive( true );
+        m_Functions[m_FunctionIndex].gameObject.SetActive(true);
+        m_Functions[m_FunctionIndex].OnChange();
     }
 
     #endregion

@@ -38,8 +38,8 @@ public class Poketch : MonoBehaviour
     {
         m_AudioSource = GetComponent < AudioSource >();
 
-        m_UpButton.onClick.AddListener( () => Next() );
-        m_DownButton.onClick.AddListener( () => Next(true) );
+        m_UpButton.onClick.AddListener( () => Next(true) );
+        m_DownButton.onClick.AddListener( () => Next() );
     }
 
     #endregion
@@ -49,6 +49,7 @@ public class Poketch : MonoBehaviour
     private void Next(bool previous = false)
     {
         m_ScreenAnimator.SetTrigger( "changeScreen" );
+        m_ScreenAnimator.SetBool( "previous", previous );
         m_AudioSource.PlayOneShot( m_ChangeScreenAudioClip );
     }
 

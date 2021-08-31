@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Counter : MonoBehaviour
+public class Counter : Function
 {
     [SerializeField]
     private Button m_CountButton;
@@ -17,7 +17,7 @@ public class Counter : MonoBehaviour
 
     #region Unity Event Functions
 
-    private void Start()
+    private void Awake()
     {
         m_CountButton.onClick.AddListener( Add );
 
@@ -29,23 +29,39 @@ public class Counter : MonoBehaviour
 
     #endregion
 
+    #region Function
+
+    public override void OnChange()
+    {
+        m_Count = 0;
+        UpdateCounter();
+    }
+
+    #endregion
+
     #region Private
 
     private void Add() //TODO: Optimize
     {
-        ++m_Count;
+        if( ++m_Count > 9999 )
+            m_Count = 0;
 
+        UpdateCounter();
+
+        Poketch.Instance.PlayButton();
+    }
+
+    private void UpdateCounter()
+    {
         foreach ( Transform number in m_NumberPanelTransform )
         {
             ResetNumbers( number );
         }
 
         m_Thousands.GetChild( m_Count / 1000 ).gameObject.SetActive( true );
-        m_Hundreds.GetChild( (m_Count / 100) %10 ).gameObject.SetActive( true );
-        m_Tens.GetChild( (m_Count / 10) %10 ).gameObject.SetActive( true );
+        m_Hundreds.GetChild( ( m_Count / 100 ) % 10 ).gameObject.SetActive( true );
+        m_Tens.GetChild( ( m_Count / 10 ) % 10 ).gameObject.SetActive( true );
         m_Units.GetChild( m_Count % 10 ).gameObject.SetActive( true );
-
-        Poketch.Instance.PlayButton();
     }
 
     private static void ResetNumbers( Transform numberContainer )
