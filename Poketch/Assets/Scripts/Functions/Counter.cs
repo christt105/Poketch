@@ -8,16 +8,16 @@ public class Counter : Function
 
     [SerializeField]
     private Transform m_NumberPanelTransform;
-    private Transform m_Thousands;
-    private Transform m_Hundreds;
-    private Transform m_Tens;
-    private Transform m_Units;
 
     private int m_Count = 0;
+    private Transform m_Hundreds;
+    private Transform m_Tens;
+    private Transform m_Thousands;
+    private Transform m_Units;
 
-    #region Unity Event Functions
+    #region Function
 
-    private void Awake()
+    public override void OnCreate()
     {
         m_CountButton.onClick.AddListener( Add );
 
@@ -26,10 +26,6 @@ public class Counter : Function
         m_Tens = m_NumberPanelTransform.GetChild( 2 );
         m_Units = m_NumberPanelTransform.GetChild( 3 );
     }
-
-    #endregion
-
-    #region Function
 
     public override void OnChange()
     {
@@ -43,8 +39,10 @@ public class Counter : Function
 
     private void Add() //TODO: Optimize
     {
-        if( ++m_Count > 9999 )
+        if ( ++m_Count > 9999 )
+        {
             m_Count = 0;
+        }
 
         UpdateCounter();
 
@@ -59,8 +57,8 @@ public class Counter : Function
         }
 
         m_Thousands.GetChild( m_Count / 1000 ).gameObject.SetActive( true );
-        m_Hundreds.GetChild( ( m_Count / 100 ) % 10 ).gameObject.SetActive( true );
-        m_Tens.GetChild( ( m_Count / 10 ) % 10 ).gameObject.SetActive( true );
+        m_Hundreds.GetChild( m_Count / 100 % 10 ).gameObject.SetActive( true );
+        m_Tens.GetChild( m_Count / 10 % 10 ).gameObject.SetActive( true );
         m_Units.GetChild( m_Count % 10 ).gameObject.SetActive( true );
     }
 

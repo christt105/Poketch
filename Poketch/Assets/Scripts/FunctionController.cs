@@ -28,6 +28,7 @@ public class FunctionController : MonoBehaviour
         {
             //TODO: Load from json
 
+            f.OnCreate();
 
             if ( !f.gameObject.activeSelf )
             {

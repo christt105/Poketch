@@ -1159,27 +1159,6 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: global_51
-      rect:
-        serializedVersion: 2
-        x: 596
-        y: 88
-        width: 192
-        height: 160
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5c0d026ca6b34da90800000000000000
-      internalID: -7290136567029378875
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: global_52
       rect:
         serializedVersion: 2
@@ -1561,10 +1540,10 @@ TextureImporter:
       name: global_70
       rect:
         serializedVersion: 2
-        x: 524
-        y: 77
-        width: 135
-        height: 6
+        x: 507
+        y: 10
+        width: 30
+        height: 70
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -2876,6 +2855,69 @@ TextureImporter:
       bones: []
       spriteID: 6378898a865e7f650800000000000000
       internalID: 6266729644177262390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: global_108
+      rect:
+        serializedVersion: 2
+        x: 401
+        y: 10
+        width: 30
+        height: 76
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31d27d21ba903f2e0800000000000000
+      internalID: -2093318771436999405
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: global_109
+      rect:
+        serializedVersion: 2
+        x: 436
+        y: 10
+        width: 30
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b32ce6dfdf4b66960800000000000000
+      internalID: 7594956824578540091
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: global_110
+      rect:
+        serializedVersion: 2
+        x: 472
+        y: 10
+        width: 30
+        height: 76
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb8ceacf4c8d2b810800000000000000
+      internalID: 1779723143329269948
       vertices: []
       indices: 
       edges: []

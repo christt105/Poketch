@@ -18,7 +18,7 @@ public class Poketch : MonoBehaviour
 
     private AudioSource m_AudioSource;
 
-    [Header("Audio Clips")] //TODO: ScriptableObject
+    [Header("Audio Clips")] //TODO: ScriptableObject and SFXController
     [SerializeField] private AudioClip m_ChangeScreenAudioClip;
     [SerializeField] private AudioClip m_ButtonAudioClip;
     [SerializeField] private AudioClip m_CoinStartAudioClip;
@@ -26,6 +26,8 @@ public class Poketch : MonoBehaviour
     [SerializeField] private AudioClip m_RefreshCounterAudioClip;
     [SerializeField] private AudioClip m_RadarAudioClip;
     [SerializeField] private AudioClip m_RefreshAudioClip;
+    private static readonly int s_Previous = Animator.StringToHash( "previous" );
+    private static readonly int s_ChangeScreen = Animator.StringToHash( "changeScreen" );
 
     #region Unity Event Functions
 
@@ -48,8 +50,8 @@ public class Poketch : MonoBehaviour
 
     private void Next(bool previous = false)
     {
-        m_ScreenAnimator.SetTrigger( "changeScreen" );
-        m_ScreenAnimator.SetBool( "previous", previous );
+        m_ScreenAnimator.SetTrigger( s_ChangeScreen );
+        m_ScreenAnimator.SetBool( s_Previous, previous );
         m_AudioSource.PlayOneShot( m_ChangeScreenAudioClip );
     }
 
