@@ -45,6 +45,12 @@ public class FunctionController : MonoBehaviour
                 f.OnStart();
             }
         }
+
+        if ( m_FunctionIndex == -1 )
+        {
+            m_FunctionIndex = 0;
+            m_Functions[m_FunctionIndex].gameObject.SetActive( true );
+        }
     }
 
     #endregion

@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class Clock : Function
 {
@@ -23,15 +22,15 @@ public class Clock : Function
 
     #region Private
 
-    private void Update()
+    private void Update() //TODO: Coroutine (?)
     {
         m_Timer += Time.deltaTime;
 
-        if ( m_Timer < 0.5f )
+        if (m_Timer < 0.5f)
         {
             return;
         }
-        
+
         UpdateClock();
 
         m_Timer = 0f;
@@ -42,7 +41,7 @@ public class Clock : Function
         int hours = DateTime.Now.Hour;
         int minutes = DateTime.Now.Minute;
 
-        foreach ( Transform digit in m_Digits )
+        foreach ( Transform digit in m_Digits ) //TODO: Only change if number changed
         {
             foreach ( Transform d in digit )
             {
