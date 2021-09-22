@@ -25,7 +25,7 @@ public class Keckleon : Function
         if ( color >= 0 && color < m_ColorsList.Count )
         {
             m_ColorMaterial.SetColor( s_Color, m_ColorsList[color] );
-            Poketch.Instance.PlayButton();
+            SoundManager.Instance.PlaySFX(SoundManager.SFX.Button);
         }
     }
 }

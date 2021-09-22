@@ -64,6 +64,6 @@ public class TypeButton : MonoBehaviour
     {
         m_Text.text = m_Type.ToString().ToUpperInvariant();
         m_MoveTester.OnTypeChanged();
-        Poketch.Instance.PlayButton();
+        SoundManager.Instance.PlaySFX(SoundManager.SFX.Button);
     }
 }

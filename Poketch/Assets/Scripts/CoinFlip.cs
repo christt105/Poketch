@@ -35,11 +35,11 @@ public class CoinFlip : MonoBehaviour, IPointerDownHandler
 
         m_Animator.SetTrigger( s_Flip );
         m_Animator.SetBool( s_IsFace, Random.Range( 0, 2 ) == 1 );
-        Poketch.Instance.PlayStartBoundCoin();
+        SoundManager.Instance.PlaySFX(SoundManager.SFX.CoinStart);
     }
 
     public void PlayBoundSound()
     {
-        Poketch.Instance.PlayBoundCoin();
+        SoundManager.Instance.PlaySFX(SoundManager.SFX.CoinBound);
     }
 }

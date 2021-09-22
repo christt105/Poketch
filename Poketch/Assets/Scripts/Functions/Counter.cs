@@ -46,7 +46,7 @@ public class Counter : Function
 
         UpdateCounter();
 
-        Poketch.Instance.PlayButton();
+        SoundManager.Instance.PlaySFX( SoundManager.SFX.Button );
     }
 
     private void UpdateCounter()

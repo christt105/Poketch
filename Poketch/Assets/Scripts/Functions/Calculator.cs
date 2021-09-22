@@ -30,13 +30,13 @@ public class Calculator : Function
 
     private void OnClickNumber( int number )
     {
-        Poketch.Instance.PlayButton();
+        SoundManager.Instance.PlaySFX(SoundManager.SFX.Button);
         Debug.Log( "Pressed " + number );
     }
 
     private void OnClickAction( string action )
     {
-        Poketch.Instance.PlayButton();
+        SoundManager.Instance.PlaySFX(SoundManager.SFX.Button);
         Debug.Log( "Pressed " + action );
     }
 }
