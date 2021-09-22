@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class Keckleon : Function
 {
+    private static readonly int s_Color = Shader.PropertyToID( "_Color" );
+
     [SerializeField]
     private List < Color > m_ColorsList;
 
@@ -22,8 +24,7 @@ public class Keckleon : Function
     {
         if ( color >= 0 && color < m_ColorsList.Count )
         {
-            m_ColorMaterial.SetColor( "_Color", m_ColorsList[color] );
-            Debug.Log( $"Changed to {color}" );
+            m_ColorMaterial.SetColor( s_Color, m_ColorsList[color] );
         }
     }
 }

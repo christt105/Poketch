@@ -26,7 +26,7 @@ public class Clock : Function
     {
         m_Timer += Time.deltaTime;
 
-        if (m_Timer < 0.5f)
+        if ( m_Timer < 0.5f )
         {
             return;
         }
