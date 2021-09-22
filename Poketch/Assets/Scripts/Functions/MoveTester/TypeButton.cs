@@ -47,9 +47,7 @@ public class TypeButton : MonoBehaviour
             m_Type = m_AllowNone ? PokemonType.None : PokemonType.None + 1;
         }
 
-        m_Text.text = m_Type.ToString().ToUpperInvariant();
-
-        m_MoveTester.OnTypeChanged();
+        OnTypeChange();
     }
 
     private void PrevType()
@@ -59,8 +57,13 @@ public class TypeButton : MonoBehaviour
             m_Type = PokemonType.Max - 1;
         }
 
-        m_Text.text = m_Type.ToString().ToUpperInvariant();
+        OnTypeChange();
+    }
 
+    private void OnTypeChange()
+    {
+        m_Text.text = m_Type.ToString().ToUpperInvariant();
         m_MoveTester.OnTypeChanged();
+        Poketch.Instance.PlayButton();
     }
 }

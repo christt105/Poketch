@@ -17,7 +17,7 @@ public class Keckleon : Function
 
     public override void OnCreate()
     {
-        m_ColorSlider.onValueChanged.AddListener( ( float color ) => ChangeColor( ( int ) color ) );
+        m_ColorSlider.onValueChanged.AddListener( ( color ) => ChangeColor( ( int ) color ) );
     }
 
     private void ChangeColor( int color )
@@ -25,6 +25,7 @@ public class Keckleon : Function
         if ( color >= 0 && color < m_ColorsList.Count )
         {
             m_ColorMaterial.SetColor( s_Color, m_ColorsList[color] );
+            Poketch.Instance.PlayButton();
         }
     }
 }

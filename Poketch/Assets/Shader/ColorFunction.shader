@@ -100,7 +100,7 @@ Shader "UI/ColorFunction"
                 {
                     float4 colorMult = IN.color;
                     if (_Highlight == 1) {
-                        colorMult += float4(1,1,1, 0.f) * 0.2f;
+                        colorMult += float4(1, 1, 1, 0.f) * 0.2f;
                     }
                 	
                     half4 color = (tex2D(_MainTex, IN.texcoord) + _TextureSampleAdd) * colorMult;
