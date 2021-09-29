@@ -1,4 +1,5 @@
 using System;
+using SimpleJSON;
 using UnityEngine;
 
 public class Clock : Function
@@ -8,7 +9,7 @@ public class Clock : Function
 
     private float m_Timer = 0f;
 
-    public override void OnCreate()
+    public override void OnCreate( JSONObject jsonObject )
     {
         UpdateClock();
         m_Timer = 0f;

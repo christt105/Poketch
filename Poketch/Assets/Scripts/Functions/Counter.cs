@@ -1,3 +1,4 @@
+using SimpleJSON;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,7 +18,7 @@ public class Counter : Function
 
     #region Function
 
-    public override void OnCreate()
+    public override void OnCreate( JSONObject jsonObject )
     {
         m_CountButton.onClick.AddListener( Add );
 
@@ -46,7 +47,7 @@ public class Counter : Function
 
         UpdateCounter();
 
-        SoundManager.Instance.PlaySFX( SoundManager.SFX.Button );
+        SoundManager.Instance.PlaySFX( SoundManager.SFX.ResetCounter );
     }
 
     private void UpdateCounter()

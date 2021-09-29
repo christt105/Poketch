@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using SimpleJSON;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,17 +16,34 @@ public class Keckleon : Function
     [SerializeField]
     private Material m_ColorMaterial;
 
-    public override void OnCreate()
+    public override void OnCreate( JSONObject jsonObject )
     {
         m_ColorSlider.onValueChanged.AddListener( ( color ) => ChangeColor( ( int ) color ) );
+
+        if ( jsonObject != null )
+        {
+            int color = jsonObject["color"];
+            SetColor( color );
+            m_ColorSlider.SetValueWithoutNotify( color );
+        }
     }
 
     private void ChangeColor( int color )
     {
         if ( color >= 0 && color < m_ColorsList.Count )
         {
-            m_ColorMaterial.SetColor( s_Color, m_ColorsList[color] );
-            SoundManager.Instance.PlaySFX(SoundManager.SFX.Button);
+            SetColor( color );
+
+            SoundManager.Instance.PlaySFX( SoundManager.SFX.Button );
+
+            JSONNode json = new JSONObject();
+            json.Add( "color", color );
+            FunctionController.Instance.Save( GetType().Name, json );
         }
+    }
+
+    private void SetColor( int color )
+    {
+        m_ColorMaterial.SetColor( s_Color, m_ColorsList[color] );
     }
 }

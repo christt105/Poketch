@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+using System.IO;
+using SimpleJSON;
 using UnityEngine;
 
 public class FunctionController : MonoBehaviour
@@ -9,7 +10,18 @@ public class FunctionController : MonoBehaviour
 
     private Transform m_MyTransform;
 
+    private static string DataPath => Application.persistentDataPath + "/data.json";
+
     public static FunctionController Instance { get; private set; }
+
+    public void Save( string functionName, JSONNode json )
+    {
+        JSONNode file = File.Exists( DataPath ) ? JSON.Parse( File.ReadAllText( DataPath ) ) : new JSONObject();
+
+        file["Functions"][functionName] = json;
+
+        File.WriteAllText( DataPath, file.ToString() );
+    }
 
     #region Unity Event Functions
 
@@ -22,13 +34,12 @@ public class FunctionController : MonoBehaviour
     {
         m_MyTransform = transform;
 
-        m_Functions = m_MyTransform.GetComponentsInChildren < Function >(true);
+        m_Functions = m_MyTransform.GetComponentsInChildren < Function >( true );
+        JSONNode file = File.Exists( DataPath ) ? JSON.Parse( File.ReadAllText( DataPath ) )["Functions"] : null;
 
         foreach ( Function f in m_Functions )
         {
-            //TODO: Load from json
-
-            f.OnCreate();
+            f.OnCreate(file[f.GetType().Name].AsObject);
 
             if ( !f.gameObject.activeSelf )
             {
@@ -67,13 +78,13 @@ public class FunctionController : MonoBehaviour
             m_FunctionIndex = 0;
         }
 
-        m_Functions[m_FunctionIndex].gameObject.SetActive(true);
+        m_Functions[m_FunctionIndex].gameObject.SetActive( true );
         m_Functions[m_FunctionIndex].OnChange();
     }
 
     public void Previous()
     {
-        m_Functions[m_FunctionIndex].gameObject.SetActive(false);
+        m_Functions[m_FunctionIndex].gameObject.SetActive( false );
         m_Functions[m_FunctionIndex].OnExit();
 
         if ( --m_FunctionIndex < 0 )
@@ -81,7 +92,7 @@ public class FunctionController : MonoBehaviour
             m_FunctionIndex = m_Functions.Length - 1;
         }
 
-        m_Functions[m_FunctionIndex].gameObject.SetActive(true);
+        m_Functions[m_FunctionIndex].gameObject.SetActive( true );
         m_Functions[m_FunctionIndex].OnChange();
     }
 

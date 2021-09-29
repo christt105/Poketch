@@ -1,3 +1,4 @@
+using SimpleJSON;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -88,7 +89,7 @@ public class MoveTester : Function
 
     #region Functions
 
-    public override void OnCreate()
+    public override void OnCreate( JSONObject jsonObject )
     {
         m_Exclamations = new GameObject[m_ExclamationsTransform.childCount];
 
