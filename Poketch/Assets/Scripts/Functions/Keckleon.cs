@@ -22,9 +22,13 @@ public class Keckleon : Function
 
         if ( jsonObject != null )
         {
-            int color = jsonObject["color"];
+            int color = jsonObject.GetValueOrDefault("color", 0);
             SetColor( color );
             m_ColorSlider.SetValueWithoutNotify( color );
+        }
+        else
+        {
+            SetColor( 0 );
         }
     }
 
