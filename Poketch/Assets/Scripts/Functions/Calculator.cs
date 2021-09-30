@@ -115,7 +115,7 @@ public class Calculator : Function
         ShowResult();
     }
 
-    private void ShowResult()
+    private void ShowResult( bool result = false )
     {
         int n = m_NumberOfNumbers - 1;
 
@@ -129,7 +129,7 @@ public class Calculator : Function
             t.GetChild( 10 ).gameObject.SetActive( true );
         }
 
-        foreach ( char c in m_Action == Action.None
+        foreach ( char c in result || m_Action == Action.None
             ? m_Result.ToString().Reverse()
             : m_AuxiliarNumber.ToString().Reverse() )
         {
@@ -154,6 +154,14 @@ public class Calculator : Function
             case Action.Sub:
             case Action.Mul:
             case Action.Div:
+                if ( m_Action >= Action.Sum && m_Action <= Action.Div )
+                {
+                    m_Result = Calculate( m_Result, m_AuxiliarNumber, m_Action );
+                    m_AuxiliarNumber = 0;
+                    m_NumberOfDigits = 0;
+                    ShowResult( true );
+                }
+
                 foreach ( Transform t in m_OperationsTransform )
                 {
                     t.gameObject.SetActive( false );
@@ -180,8 +188,6 @@ public class Calculator : Function
                     t.gameObject.SetActive( false );
                 }
 
-                m_Action = Action.None;
-
                 if ( m_Result > 9999999999 )
                 {
                     SetAllNumbersTo( 11 );
@@ -190,9 +196,7 @@ public class Calculator : Function
                     return;
                 }
 
-                ShowResult();
-
-                m_Action = Action.Equal;
+                ShowResult(true);
 
                 break;
 
