@@ -26,7 +26,7 @@ public class AnalogClock : Function
         float angle = angleH * 30 + minutes / 2;
         shortHand.rotation = Quaternion.Euler(new Vector3(0, 0, -angle));
 
-        angle = (float)minutes * 60;
+        angle = (float)minutes * 6;
         longHand.rotation = Quaternion.Euler(new Vector3(0, 0, -angle));
 
         time = new Vector2(hour, minutes);
