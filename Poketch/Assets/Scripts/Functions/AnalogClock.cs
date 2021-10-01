@@ -23,10 +23,10 @@ public class AnalogClock : Function
         if (time == new Vector2(hour, minutes)) return;
 
         int angleH = hour >= 12 ? hour - 12 : hour;
-        float angle = angleH * 30 + minutes / 2;
+        float angle = angleH * 30 + minutes * 0.5f;
         shortHand.rotation = Quaternion.Euler(new Vector3(0, 0, -angle));
 
-        angle = (float)minutes * 6;
+        angle = minutes * 6;
         longHand.rotation = Quaternion.Euler(new Vector3(0, 0, -angle));
 
         time = new Vector2(hour, minutes);
