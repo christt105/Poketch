@@ -78,6 +78,9 @@ public class Temporizer : Function
         for (int i = 0; i < m_ArrayActualTime.Length; i++)
             m_ArrayActualTime[i] = 0;
 
+        ResetTimer();
+        StartCoroutine(ArrowAnim());
+
     }
 
     #endregion
