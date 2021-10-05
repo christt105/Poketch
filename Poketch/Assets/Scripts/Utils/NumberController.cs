@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,7 +32,7 @@ public class NumberController : MonoBehaviour
             return;
         }
 
-        int[] newNumber = GetIntArray( number );
+        int[] newNumber = GetIntArray( number, m_MaxNumberLength );
         int lengthNewNnumber = newNumber.Length;
 
         for ( int i = 0; i < m_MaxNumberLength; ++i )
@@ -52,24 +52,31 @@ public class NumberController : MonoBehaviour
         }
     }
 
-    private static int[] GetIntArray( int num )
+    private static int[] GetIntArray( int num, int maxNumber )
     {
+        int[] listOfInts = new int[maxNumber];
+
         if ( num == 0 )
         {
-            return new int[] { 0 };
+            return listOfInts;
         }
 
-        List < int > listOfInts = new List < int >();
+        int n = 0;
 
         while ( num > 0 )
         {
-            listOfInts.Add( num % 10 );
+            if ( n >= listOfInts.Length )
+            {
+                Debug.LogError( "number (" + num + ") is bigger than the max number allowed (" + maxNumber + ")" );
+
+                break;
+            }
+
+            listOfInts[n++] = num % 10;
             num /= 10;
         }
 
-        listOfInts.Reverse();
-
-        return listOfInts.ToArray();
+        return listOfInts.Reverse().ToArray();
     }
 
     public static int GetNumberDigits( int n )
