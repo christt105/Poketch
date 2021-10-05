@@ -1,59 +1,44 @@
 using System;
-using SimpleJSON;
 using UnityEngine;
 
 public class Clock : Function
 {
     [SerializeField]
-    private Transform m_Digits;
+    private NumberController m_Hours;
 
-    private float m_Timer = 0f;
+    [SerializeField]
+    private NumberController m_Minutes;
 
-    public override void OnCreate( JSONObject jsonObject )
-    {
-        UpdateClock();
-        m_Timer = 0f;
-    }
+    private Vector2Int m_LastTime = Vector2Int.zero;
 
     public override void OnChange()
     {
-        UpdateClock();
-        m_Timer = 0f;
+        InvokeRepeating( nameof( UpdateClock ), 0f, 2f );
+    }
+
+    public override void OnExit()
+    {
+        CancelInvoke();
     }
 
     #region Private
-
-    private void Update() //TODO: Coroutine (?)
-    {
-        m_Timer += Time.deltaTime;
-
-        if ( m_Timer < 0.5f )
-        {
-            return;
-        }
-
-        UpdateClock();
-
-        m_Timer = 0f;
-    }
 
     private void UpdateClock()
     {
         int hours = DateTime.Now.Hour;
         int minutes = DateTime.Now.Minute;
 
-        foreach ( Transform digit in m_Digits ) //TODO: Only change if number changed
+        if ( m_LastTime.x != hours )
         {
-            foreach ( Transform d in digit )
-            {
-                d.gameObject.SetActive( false );
-            }
+            m_Hours.SetNumber( hours );
+            m_LastTime.x = hours;
         }
 
-        m_Digits.GetChild( 0 ).GetChild( hours / 10 ).gameObject.SetActive( true );
-        m_Digits.GetChild( 1 ).GetChild( hours % 10 ).gameObject.SetActive( true );
-        m_Digits.GetChild( 2 ).GetChild( minutes / 10 ).gameObject.SetActive( true );
-        m_Digits.GetChild( 3 ).GetChild( minutes % 10 ).gameObject.SetActive( true );
+        if ( m_LastTime.y != minutes )
+        {
+            m_Minutes.SetNumber( minutes );
+            m_LastTime.y = minutes;
+        }
     }
 
     #endregion

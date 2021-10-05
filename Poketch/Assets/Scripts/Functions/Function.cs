@@ -12,12 +12,6 @@ public abstract class Function : MonoBehaviour
 
     /// <summary>
     /// </summary>
-    public virtual void OnStart()
-    {
-    }
-
-    /// <summary>
-    /// </summary>
     public virtual void OnChange()
     {
     }

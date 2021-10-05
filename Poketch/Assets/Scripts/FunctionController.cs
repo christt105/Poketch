@@ -53,7 +53,7 @@ public class FunctionController : MonoBehaviour
             else
             {
                 m_FunctionIndex = f.transform.GetSiblingIndex();
-                f.OnStart();
+                f.OnChange();
             }
         }
 
