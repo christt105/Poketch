@@ -24,9 +24,9 @@ public class MoveTester : Function
 
     #region Private
 
-    private int GetEffectivenessIndex( float effectiveness )
+    private static int GetEffectivenessIndex( float effectiveness )
     {
-        int index = ( int ) ( effectiveness * 100f / 25f );
+        int index = ( int ) ( effectiveness * 4 );
 
         switch ( index )
         {
@@ -45,7 +45,7 @@ public class MoveTester : Function
                 return 5;
         }
 
-        Debug.LogError( $"Effectiveness {index.ToString()} not compatible" );
+        Debug.LogError( "Effectiveness " + index + " not compatible" );
 
         return -1;
     }

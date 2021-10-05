@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class Calculator : Function
 {
+    private const long MaxValue = 9999999999;
+
     [SerializeField]
     private Transform m_ButtonsTransform;
 
@@ -92,6 +94,8 @@ public class Calculator : Function
 
         if ( m_NumberOfDigits == 10 || m_Result == 0 && number == 0 )
         {
+            ShowResult();
+
             return;
         }
 
@@ -134,7 +138,7 @@ public class Calculator : Function
             : m_AuxiliarNumber.ToString().Reverse() )
         {
             m_NumbersTransform.GetChild( n ).GetChild( 10 ).gameObject.SetActive( false );
-            m_NumbersTransform.GetChild( n-- ).GetChild( c - '0' ).gameObject.SetActive( true );
+            m_NumbersTransform.GetChild( n-- ).GetChild( c == '-' ? 13 : c - '0' ).gameObject.SetActive( true );
         }
     }
 
@@ -154,7 +158,7 @@ public class Calculator : Function
             case Action.Sub:
             case Action.Mul:
             case Action.Div:
-                if ( m_Action >= Action.Sum && m_Action <= Action.Div )
+                if ( m_Action >= Action.Sum && m_Action <= Action.Div && m_AuxiliarNumber != 0 )
                 {
                     m_Result = Calculate( m_Result, m_AuxiliarNumber, m_Action );
                     m_AuxiliarNumber = 0;
@@ -175,6 +179,9 @@ public class Calculator : Function
                 break;
 
             case Action.Dot:
+                ++m_NumberOfDigits;
+                m_Action = Action.Dot;
+
                 break;
 
             case Action.Equal:
@@ -182,13 +189,14 @@ public class Calculator : Function
 
                 m_AuxiliarNumber = 0;
                 m_NumberOfDigits = 0;
+                m_Action = Action.None;
 
                 foreach ( Transform t in m_OperationsTransform )
                 {
                     t.gameObject.SetActive( false );
                 }
 
-                if ( m_Result > 9999999999 )
+                if ( m_Result > MaxValue )
                 {
                     SetAllNumbersTo( 11 );
                     m_Result = 0;
@@ -196,7 +204,7 @@ public class Calculator : Function
                     return;
                 }
 
-                ShowResult(true);
+                ShowResult( true );
 
                 break;
 
@@ -219,6 +227,11 @@ public class Calculator : Function
                 return result * auxiliarNumber;
 
             case Action.Div:
+                if ( result == 0 && auxiliarNumber == 0 )
+                {
+                    return long.MaxValue;
+                }
+
                 return result / auxiliarNumber;
 
             default:
