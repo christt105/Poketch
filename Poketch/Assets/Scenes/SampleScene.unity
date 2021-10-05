@@ -5614,7 +5614,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1282845089
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5651,6 +5651,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ButtonErase: {fileID: 559311922}
   m_ButtonPaint: {fileID: 825744281}
+  current_state: 1
 --- !u!1001 &1292519021
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6642,9 +6643,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1535058860}
   - component: {fileID: 1535058862}
+  - component: {fileID: 1535058863}
   - component: {fileID: 1535058861}
   m_Layer: 5
-  m_Name: TexturaQueSePinta
+  m_Name: RenderTexture
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6678,7 +6680,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1535058859}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: 2f1a39c8b0b20be4cab9a35df9306d8c, type: 2}
@@ -6689,16 +6691,13 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 1
-  m_PreserveAspect: 1
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_Texture: {fileID: 0}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!222 &1535058862
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6707,6 +6706,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1535058859}
   m_CullTransparentMesh: 1
+--- !u!114 &1535058863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1535058859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70c648b9b93838e4fa33ae9f945874a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  memoPad: {fileID: 1282845090}
 --- !u!1 &1566034298
 GameObject:
   m_ObjectHideFlags: 0
@@ -12762,7 +12774,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &6303668235445652330
 GameObject:
   m_ObjectHideFlags: 0
