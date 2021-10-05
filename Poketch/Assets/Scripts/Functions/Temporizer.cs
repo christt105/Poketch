@@ -6,30 +6,53 @@ using UnityEngine;
 
 public class Temporizer : Function
 {
+    enum Buttons
+    {
+        START,
+        STOP,
+        RESET
+    }
+    
+    enum TimePos
+    {
+        SEC,
+        TENTH_SEC,
+        MIN,
+        TENTH_MIN
+    }
 
     [Serializable]
     public struct SnorlaxTime
     {
         public Transform[] slotTime;
     }
-
     [SerializeField]
     private SnorlaxTime[] m_ArraySpritesTime;
+
+    [Serializable]
+    public struct Button
+    {
+        public Transform button;
+        public Text buttonText;
+        public bool m_is_selected;
+        [Range(0, 50)]
+        public float offset_pushed;
+    }
+    [SerializeField]
+    private Button[] m_ArrayButtons;
+
     private int[] m_ArrayActualTime;
+
     private bool m_enable_timer;
 
     [SerializeField]
-    private Transform[] m_ArrayButtons;
-    [SerializeField]
-    private Sprite m_imgButton;
-    [SerializeField]
-    private Sprite m_imgButtonPressed;
+    private Transform[] m_ArrayArrows;
 
     [SerializeField]
-    private Transform[] m_ArrayArrows;
-    [SerializeField]
     private Sprite m_imgArrow;
+
     private bool enable_arrows;
+
     [SerializeField] [Range(0f, 3f)]
     private float arrow_anim_duration;
 
@@ -44,6 +67,9 @@ public class Temporizer : Function
         for (int i = 0; i < m_ArrayActualTime.Length; i++)
             m_ArrayActualTime[i] = 0;
 
+        ChangeStateButton((int)Buttons.STOP, true);
+
+
         enable_arrows = true;
     }
 
@@ -52,11 +78,15 @@ public class Temporizer : Function
         for (int i = 0; i < m_ArrayActualTime.Length; i++)
             m_ArrayActualTime[i] = 0;
 
-        StartCoroutine(ArrowAnim());
     }
 
     #endregion
     #region Private
+
+    private void Start()
+    {
+        StartCoroutine(ArrowAnim());
+    }
 
     private void Update()
     {
@@ -68,6 +98,8 @@ public class Temporizer : Function
             {
                 m_totalTimeSec = 0;
                 m_enable_timer = false;
+                ChangeStateButton((int)Buttons.START, false);
+
                 ResetTimer();
             }
             ShowTimerCountDown();
@@ -103,7 +135,9 @@ public class Temporizer : Function
             m_ArraySpritesTime[i].slotTime[m_ArrayActualTime[i]].gameObject.SetActive(true);
         }
 
-        ResetSpriteButtonPressed();
+        ChangeStateButton((int)Buttons.STOP, true);
+        ChangeStateButton((int)Buttons.START, false);
+
 
         enable_arrows = true;
         m_enable_timer = false;
@@ -112,17 +146,21 @@ public class Temporizer : Function
     private void DisableAllSprites()
     {
         for (int i = 0; i < m_ArrayActualTime.Length; i++) // Set all actual sprites to false
-            for (int j = 0; j < m_ArraySpritesTime[0].slotTime.Length; j++)
+            for (int j = 0; j < m_ArraySpritesTime[(int)TimePos.SEC].slotTime.Length; j++)
                 m_ArraySpritesTime[i].slotTime[j].gameObject.SetActive(false);
     }
 
-    private void ResetSpriteButtonPressed()
+    private void ChangeStateButton(int position, bool value)
     {
-        for (int i = 0; i < m_ArrayButtons.Length; i++)
-            m_ArrayButtons[i].GetComponent<Image>().sprite = m_imgButton;
+        if (!m_ArrayButtons[position].m_is_selected && value)
+            m_ArrayButtons[position].button.position = new Vector3(m_ArrayButtons[position].button.position.x, m_ArrayButtons[position].button.position.y - m_ArrayButtons[position].offset_pushed, m_ArrayButtons[position].button.position.z);
+        else if (m_ArrayButtons[position].m_is_selected && !value)
+            m_ArrayButtons[position].button.position = new Vector3(m_ArrayButtons[position].button.position.x, m_ArrayButtons[position].button.position.y + m_ArrayButtons[position].offset_pushed, m_ArrayButtons[position].button.position.z);
+
+        m_ArrayButtons[position].m_is_selected = value;
     }
 
-    private int CalculateTimeInSeconds() { return (m_ArrayActualTime[0] + m_ArrayActualTime[1] * 10 + m_ArrayActualTime[2] * 60 + m_ArrayActualTime[3] * 600); }
+    private int CalculateTimeInSeconds() { return (m_ArrayActualTime[(int)TimePos.SEC] + m_ArrayActualTime[(int)TimePos.TENTH_SEC] * 10 + m_ArrayActualTime[(int)TimePos.MIN] * 60 + m_ArrayActualTime[(int)TimePos.TENTH_MIN] * 600); }
 
     #endregion
     #region Button Functions
@@ -132,7 +170,7 @@ public class Temporizer : Function
         m_ArraySpritesTime[position].slotTime[m_ArrayActualTime[position]].gameObject.SetActive(false);
         m_ArrayActualTime[position]++;
 
-        if (m_ArrayActualTime[0] > 9 || m_ArrayActualTime[2] > 9 || m_ArrayActualTime[1] > 5 || m_ArrayActualTime[3] > 5) //TODO: Magic Numbers :)
+        if (m_ArrayActualTime[(int)TimePos.SEC] > 9 || m_ArrayActualTime[(int)TimePos.TENTH_SEC] > 9 || m_ArrayActualTime[(int)TimePos.TENTH_SEC] > 5 || m_ArrayActualTime[(int)TimePos.TENTH_MIN] > 5)
             m_ArrayActualTime[position] = 0;
 
 
@@ -144,9 +182,9 @@ public class Temporizer : Function
         m_ArraySpritesTime[position].slotTime[m_ArrayActualTime[position]].gameObject.SetActive(false);
         m_ArrayActualTime[position]--;
 
-        if (m_ArrayActualTime[0] < 0 || m_ArrayActualTime[2] < 0) //TODO: Magic Numbers :)
+        if (m_ArrayActualTime[(int)TimePos.SEC] < 0 || m_ArrayActualTime[(int)TimePos.MIN] < 0 || m_ArrayActualTime[(int)TimePos.TENTH_MIN] < 0) 
             m_ArrayActualTime[position] = 9;
-        else if (m_ArrayActualTime[1] < 0 || m_ArrayActualTime[3] < 0) //TODO: Magic Numbers :)
+        else if (m_ArrayActualTime[(int)TimePos.TENTH_SEC] < 0) 
             m_ArrayActualTime[position] = 5;
 
         m_ArraySpritesTime[position].slotTime[m_ArrayActualTime[position]].gameObject.SetActive(true);
@@ -154,22 +192,31 @@ public class Temporizer : Function
 
     public void StartButton()
     {
-        ResetSpriteButtonPressed();
-        m_ArrayButtons[0].GetComponent<Image>().sprite = m_imgButtonPressed;
+        if(!m_ArrayButtons[(int)Buttons.START].m_is_selected && !(m_ArrayActualTime[(int)TimePos.SEC] == 0 && m_ArrayActualTime[(int)TimePos.TENTH_SEC] == 0 && m_ArrayActualTime[(int)TimePos.MIN] == 0 && m_ArrayActualTime[(int)TimePos.TENTH_MIN] == 0))
+        {
+            ChangeStateButton((int)Buttons.START, true);
+            ChangeStateButton((int)Buttons.STOP, false);
 
-        enable_arrows = false;
-        m_enable_timer = true;
+            enable_arrows = false;
+            m_enable_timer = true;
 
-        m_totalTimeSec = CalculateTimeInSeconds();
-        Debug.Log("--- Total time: " + m_totalTimeSec + " ---");
+            m_totalTimeSec = CalculateTimeInSeconds();
+            Debug.Log("--- Total time: " + m_totalTimeSec + " ---");
+        }
+        
     }
 
     public void StopButton()
     {
-        ResetSpriteButtonPressed();
-        m_ArrayButtons[1].GetComponent<Image>().sprite = m_imgButtonPressed;
-        enable_arrows = true;
-        m_enable_timer = false;
+        if(!m_ArrayButtons[(int)Buttons.STOP].m_is_selected)
+        {
+            ChangeStateButton((int)Buttons.STOP, true);
+            ChangeStateButton((int)Buttons.START, false);
+
+            enable_arrows = true;
+            m_enable_timer = false;
+        }
+
     }
 
     public void ResetButton()
@@ -184,9 +231,10 @@ public class Temporizer : Function
     private IEnumerator ResetButtonAnim()
     {
         float anim_duration = .2f;
-        m_ArrayButtons[2].GetComponent<Image>().sprite = m_imgButtonPressed; // "2" Position of ResetButton in the SerializField array
+        m_ArrayButtons[(int)Buttons.RESET].button.position = new Vector3(m_ArrayButtons[(int)Buttons.RESET].button.position.x, m_ArrayButtons[(int)Buttons.RESET].button.position.y - m_ArrayButtons[(int)Buttons.RESET].offset_pushed, m_ArrayButtons[(int)Buttons.RESET].button.position.z);
+
         yield return new WaitForSeconds(anim_duration);
-        m_ArrayButtons[2].GetComponent<Image>().sprite = m_imgButton;
+        m_ArrayButtons[(int)Buttons.RESET].button.position = new Vector3(m_ArrayButtons[(int)Buttons.RESET].button.position.x, m_ArrayButtons[(int)Buttons.RESET].button.position.y + m_ArrayButtons[(int)Buttons.RESET].offset_pushed, m_ArrayButtons[(int)Buttons.RESET].button.position.z);
     }
 
     private IEnumerator ArrowAnim()
@@ -209,7 +257,6 @@ public class Temporizer : Function
                 arrow.gameObject.SetActive(false);
             }
         }
-
 
         yield return new WaitForSeconds(arrow_anim_duration);
 
