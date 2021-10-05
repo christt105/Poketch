@@ -21,11 +21,19 @@ public class Temporizer : Function
         TENTH_MIN
     }
 
+    enum SnorlaxPose
+    {
+        TIME_OUT,
+        TIME_ON,
+        TIME_OF
+    }
+
     [Serializable]
     public struct SnorlaxTime
     {
         public Transform[] slotTime;
     }
+
     [SerializeField]
     private SnorlaxTime[] m_ArraySpritesTime;
 
@@ -38,12 +46,9 @@ public class Temporizer : Function
         [Range(0, 50)]
         public float offset_pushed;
     }
+
     [SerializeField]
     private Button[] m_ArrayButtons;
-
-    private int[] m_ArrayActualTime;
-
-    private bool m_enable_timer;
 
     [SerializeField]
     private Transform[] m_ArrayArrows;
@@ -51,13 +56,26 @@ public class Temporizer : Function
     [SerializeField]
     private Sprite m_imgArrow;
 
-    private bool enable_arrows;
+    [SerializeField]
+    private Transform[] m_ArraySnorlaxPose;
 
     [SerializeField] [Range(0f, 3f)]
     private float arrow_anim_duration;
 
+    [SerializeField] [Range(0f, 3f)]
+    private float snorlax_anim_duration;
+
     private float m_totalTimeSec;
 
+    private bool m_enable_arrows;
+
+    private int[] m_ArrayActualTime;
+
+    private bool m_enable_timer;
+
+    private bool m_enable_snorlax_anim;
+
+    private bool m_snorlax_paused;
 
     #region Override Functions
 
@@ -69,8 +87,11 @@ public class Temporizer : Function
 
         ChangeStateButton((int)Buttons.STOP, true);
 
+        DisableSnorlaxAnimations();
+        m_ArraySnorlaxPose[(int)SnorlaxPose.TIME_OF].gameObject.SetActive(true);
 
-        enable_arrows = true;
+
+        m_enable_arrows = true;
     }
 
     public override void OnChange()
@@ -78,9 +99,11 @@ public class Temporizer : Function
         for (int i = 0; i < m_ArrayActualTime.Length; i++)
             m_ArrayActualTime[i] = 0;
 
+        DisableSnorlaxAnimations();
+        m_ArraySnorlaxPose[(int)SnorlaxPose.TIME_OF].gameObject.SetActive(true);
+
         ResetTimer();
         StartCoroutine(ArrowAnim());
-
     }
 
     #endregion
@@ -97,13 +120,17 @@ public class Temporizer : Function
         {
             m_totalTimeSec -= Time.deltaTime;
 
-            if (m_totalTimeSec < 0.1f)
+            if (m_totalTimeSec <= 0f)
             {
-                m_totalTimeSec = 0;
-                m_enable_timer = false;
-                ChangeStateButton((int)Buttons.START, false);
+                m_totalTimeSec = 0f;
 
-                ResetTimer();
+                DisableSnorlaxAnimations();
+                m_ArraySnorlaxPose[(int)SnorlaxPose.TIME_OUT].gameObject.SetActive(true);
+                
+                m_enable_snorlax_anim = true;
+                StartCoroutine(SnorlaxAnim());
+                m_enable_timer = false;
+
             }
             ShowTimerCountDown();
         }
@@ -142,7 +169,7 @@ public class Temporizer : Function
         ChangeStateButton((int)Buttons.START, false);
 
 
-        enable_arrows = true;
+        m_enable_arrows = true;
         m_enable_timer = false;
     }
 
@@ -161,6 +188,15 @@ public class Temporizer : Function
             m_ArrayButtons[position].button.position = new Vector3(m_ArrayButtons[position].button.position.x, m_ArrayButtons[position].button.position.y + m_ArrayButtons[position].offset_pushed, m_ArrayButtons[position].button.position.z);
 
         m_ArrayButtons[position].m_is_selected = value;
+    }
+
+    private void DisableSnorlaxAnimations()
+    {
+        for (int i = 0; i < m_ArraySnorlaxPose.Length; i++)
+            m_ArraySnorlaxPose[i].gameObject.SetActive(false);
+
+        m_snorlax_paused = false;
+        m_enable_snorlax_anim = false;
     }
 
     private int CalculateTimeInSeconds() { return (m_ArrayActualTime[(int)TimePos.SEC] + m_ArrayActualTime[(int)TimePos.TENTH_SEC] * 10 + m_ArrayActualTime[(int)TimePos.MIN] * 60 + m_ArrayActualTime[(int)TimePos.TENTH_MIN] * 600); }
@@ -195,35 +231,53 @@ public class Temporizer : Function
 
     public void StartButton()
     {
-        if(!m_ArrayButtons[(int)Buttons.START].m_is_selected && !(m_ArrayActualTime[(int)TimePos.SEC] == 0 && m_ArrayActualTime[(int)TimePos.TENTH_SEC] == 0 && m_ArrayActualTime[(int)TimePos.MIN] == 0 && m_ArrayActualTime[(int)TimePos.TENTH_MIN] == 0))
+        if(!m_ArrayButtons[(int)Buttons.START].m_is_selected && (!(m_ArrayActualTime[(int)TimePos.SEC] == 0 && m_ArrayActualTime[(int)TimePos.TENTH_SEC] == 0 && m_ArrayActualTime[(int)TimePos.MIN] == 0 && m_ArrayActualTime[(int)TimePos.TENTH_MIN] == 0) || m_snorlax_paused))
         {
+            SoundManager.Instance.PlaySFX(SoundManager.SFX.Button);
+
             ChangeStateButton((int)Buttons.START, true);
             ChangeStateButton((int)Buttons.STOP, false);
 
-            enable_arrows = false;
+            DisableSnorlaxAnimations();
+            m_ArraySnorlaxPose[(int)SnorlaxPose.TIME_ON].gameObject.SetActive(true);
+
+            m_snorlax_paused = false;
+            m_enable_snorlax_anim = true;
+            m_enable_arrows = false;
             m_enable_timer = true;
 
             m_totalTimeSec = CalculateTimeInSeconds();
             Debug.Log("--- Total time: " + m_totalTimeSec + " ---");
         }
-        
+        else
+            SoundManager.Instance.PlaySFX(SoundManager.SFX.ButtonDeny);
+
     }
 
     public void StopButton()
     {
         if(!m_ArrayButtons[(int)Buttons.STOP].m_is_selected)
         {
+            SoundManager.Instance.PlaySFX(SoundManager.SFX.Button);
+
             ChangeStateButton((int)Buttons.STOP, true);
             ChangeStateButton((int)Buttons.START, false);
 
-            enable_arrows = true;
+            m_enable_snorlax_anim = false;
+            m_enable_arrows = false;
             m_enable_timer = false;
         }
-
+        else
+            SoundManager.Instance.PlaySFX(SoundManager.SFX.ButtonDeny);
     }
 
     public void ResetButton()
     {
+        SoundManager.Instance.PlaySFX(SoundManager.SFX.Button);
+
+        DisableSnorlaxAnimations();
+        m_ArraySnorlaxPose[(int)SnorlaxPose.TIME_OF].gameObject.SetActive(true);
+
         ResetTimer();
         StartCoroutine(ResetButtonAnim());
     }
@@ -240,9 +294,25 @@ public class Temporizer : Function
         m_ArrayButtons[(int)Buttons.RESET].button.position = new Vector3(m_ArrayButtons[(int)Buttons.RESET].button.position.x, m_ArrayButtons[(int)Buttons.RESET].button.position.y + m_ArrayButtons[(int)Buttons.RESET].offset_pushed, m_ArrayButtons[(int)Buttons.RESET].button.position.z);
     }
 
+    private IEnumerator SnorlaxAnim()
+    {
+        m_ArraySnorlaxPose[(int)SnorlaxPose.TIME_OUT].transform.localScale = new Vector3(-m_ArraySnorlaxPose[(int)SnorlaxPose.TIME_OUT].transform.localScale.x, m_ArraySnorlaxPose[(int)SnorlaxPose.TIME_OUT].transform.localScale.y, m_ArraySnorlaxPose[(int)SnorlaxPose.TIME_OUT].transform.localScale.z);
+        SoundManager.Instance.PlaySFX(SoundManager.SFX.SnorlaxTemporizer);
+
+        yield return new WaitForSeconds(snorlax_anim_duration);
+        m_ArraySnorlaxPose[(int)SnorlaxPose.TIME_OUT].transform.localScale = new Vector3(m_ArraySnorlaxPose[(int)SnorlaxPose.TIME_OUT].transform.localScale.x, m_ArraySnorlaxPose[(int)SnorlaxPose.TIME_OUT].transform.localScale.y, m_ArraySnorlaxPose[(int)SnorlaxPose.TIME_OUT].transform.localScale.z);
+        SoundManager.Instance.PlaySFX(SoundManager.SFX.SnorlaxTemporizer);
+
+        m_snorlax_paused = true;
+        if(m_enable_snorlax_anim)
+            StartCoroutine(SnorlaxAnim());
+        else
+            StopCoroutine(SnorlaxAnim());
+    }
+
     private IEnumerator ArrowAnim()
     {
-        if (enable_arrows)
+        if (m_enable_arrows)
         {
             foreach (Transform arrow in m_ArrayArrows)
                 arrow.gameObject.SetActive(false);

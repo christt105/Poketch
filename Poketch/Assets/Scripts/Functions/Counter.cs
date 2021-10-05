@@ -8,67 +8,37 @@ public class Counter : Function
     private Button m_CountButton;
 
     [SerializeField]
-    private Transform m_NumberPanelTransform;
+    private NumberController m_NumberUI;
 
     private int m_Count = 0;
-    private Transform m_Hundreds;
-    private Transform m_Tens;
-    private Transform m_Thousands;
-    private Transform m_Units;
-
-    #region Function
-
-    public override void OnCreate( JSONObject jsonObject )
-    {
-        m_CountButton.onClick.AddListener( Add );
-
-        m_Thousands = m_NumberPanelTransform.GetChild( 0 );
-        m_Hundreds = m_NumberPanelTransform.GetChild( 1 );
-        m_Tens = m_NumberPanelTransform.GetChild( 2 );
-        m_Units = m_NumberPanelTransform.GetChild( 3 );
-    }
-
-    public override void OnChange()
-    {
-        m_Count = 0;
-        UpdateCounter();
-    }
-
-    #endregion
 
     #region Private
 
-    private void Add() //TODO: Optimize
+    private void Add()
     {
         if ( ++m_Count > 9999 )
         {
             m_Count = 0;
         }
 
-        UpdateCounter();
+        m_NumberUI.SetNumber( m_Count );
 
         SoundManager.Instance.PlaySFX( SoundManager.SFX.ResetCounter );
     }
 
-    private void UpdateCounter()
-    {
-        foreach ( Transform number in m_NumberPanelTransform )
-        {
-            ResetNumbers( number );
-        }
+    #endregion
 
-        m_Thousands.GetChild( m_Count / 1000 ).gameObject.SetActive( true );
-        m_Hundreds.GetChild( m_Count / 100 % 10 ).gameObject.SetActive( true );
-        m_Tens.GetChild( m_Count / 10 % 10 ).gameObject.SetActive( true );
-        m_Units.GetChild( m_Count % 10 ).gameObject.SetActive( true );
+    #region Function
+
+    public override void OnCreate( JSONObject jsonObject )
+    {
+        m_CountButton.onClick.AddListener( Add );
     }
 
-    private static void ResetNumbers( Transform numberContainer )
+    public override void OnChange()
     {
-        foreach ( Transform n in numberContainer )
-        {
-            n.gameObject.SetActive( false );
-        }
+        m_Count = 0;
+        m_NumberUI.SetNumber( 0 );
     }
 
     #endregion

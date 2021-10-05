@@ -99,11 +99,6 @@ public class MoveTester : Function
         }
     }
 
-    public override void OnStart()
-    {
-        Reset();
-    }
-
     public override void OnChange()
     {
         Reset();
