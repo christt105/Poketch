@@ -27,10 +27,8 @@ public class MemoPad : Function
     // Variable that has the current state of the action we are performing.
     public ACTION_STATE current_state = ACTION_STATE.PAINTING;
 
-    public delegate void OnPaint();
+    public delegate void OnPaint(Color colorToPaint);
     public static event OnPaint onPaint;
-    public delegate void OnErase();
-    public static event OnErase onErase;
     public delegate void OnResetTexture();
     public static event OnResetTexture onResetTexture;
 
@@ -80,11 +78,11 @@ public class MemoPad : Function
     {
         if (current_state == ACTION_STATE.PAINTING)
         {
-            onPaint();
+            onPaint(Color.black);
         }
         else
         {
-            onErase();
+            onPaint(Color.white);
         }
     }
 
