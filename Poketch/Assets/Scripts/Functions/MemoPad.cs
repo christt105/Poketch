@@ -14,7 +14,7 @@ public class MemoPad : Function
     [SerializeField]
     private RawImage m_ImageToPaint;
 
-    private Color[] pixelColors = new Color[156 * 150];
+    public Color[] pixelColors { get; private set; } = new Color[156 * 150];
     public Texture2D m_renderer_texture { get; private set; }
 
     // Enum that has the different possible actions.
@@ -31,6 +31,8 @@ public class MemoPad : Function
     public static event OnPaint onPaint;
     public delegate void OnErase();
     public static event OnErase onErase;
+    public delegate void OnResetTexture();
+    public static event OnResetTexture onResetTexture;
 
     // This function is used as a Start function.
     // @_jsonObject has information of the JSON file.
@@ -55,8 +57,7 @@ public class MemoPad : Function
 
     public override void OnChange()
     {
-        m_renderer_texture.SetPixels(pixelColors);
-        m_renderer_texture.Apply();
+        onResetTexture();
     }
 
     // Method that change the current action state and perform the logic and graphic part.

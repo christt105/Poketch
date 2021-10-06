@@ -18,6 +18,7 @@ public class PaintTexture : MonoBehaviour, IDragHandler
     {
         MemoPad.onPaint += Paint;
         MemoPad.onErase += Erase;
+        MemoPad.onResetTexture += ResetTexture;
     }
     public void OnDrag(PointerEventData eventData)
     {
@@ -27,7 +28,6 @@ public class PaintTexture : MonoBehaviour, IDragHandler
             onScreenTouched();
         }
     }
-
 
     private void Paint()
     {
@@ -39,8 +39,11 @@ public class PaintTexture : MonoBehaviour, IDragHandler
 
         if (localCursor.x >= 0 && localCursor.x <= 156 && localCursor.y >= 0 && localCursor.y <= 150)
         {
-            memoPad.m_renderer_texture.SetPixel((int)localCursor.x, (int)localCursor.y, Color.black);
-            memoPad.m_renderer_texture.Apply();
+            if (memoPad.m_renderer_texture.GetPixel((int)localCursor.x, (int)localCursor.y) != Color.black)
+            {
+                memoPad.m_renderer_texture.SetPixel((int)localCursor.x, (int)localCursor.y, Color.black);
+                memoPad.m_renderer_texture.Apply();
+            }
         }
     }
 
@@ -49,11 +52,17 @@ public class PaintTexture : MonoBehaviour, IDragHandler
 
     }
 
+    private void ResetTexture()
+    {
+        memoPad.m_renderer_texture.SetPixels(memoPad.pixelColors);
+        memoPad.m_renderer_texture.Apply();
+    }
 
 
 
 
 
-   
+
+
 
 }
