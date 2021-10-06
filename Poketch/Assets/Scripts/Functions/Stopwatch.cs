@@ -23,7 +23,7 @@ public class Stopwatch : Function
 
     float time = 0;
 
-    public override void OnChange()
+    public override void OnExit()
     {
         ChangeState((int)StopWatchState.Idle);
     }
