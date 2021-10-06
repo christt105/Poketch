@@ -34,7 +34,7 @@ public class FunctionController : MonoBehaviour
     {
         m_MyTransform = transform;
 
-        m_Functions = m_MyTransform.GetComponentsInChildren < Function >( true );
+        m_Functions = m_MyTransform.GetComponentsInChildren < Function >( true);
         JSONNode file = File.Exists( DataPath ) ? JSON.Parse( File.ReadAllText( DataPath ) )["Functions"] : null;
 
         foreach ( Function f in m_Functions )
@@ -61,6 +61,7 @@ public class FunctionController : MonoBehaviour
         {
             m_FunctionIndex = 0;
             m_Functions[m_FunctionIndex].gameObject.SetActive( true );
+            m_Functions[m_FunctionIndex].OnChange();
         }
     }
 

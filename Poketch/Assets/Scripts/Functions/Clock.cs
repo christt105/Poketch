@@ -9,10 +9,11 @@ public class Clock : Function
     [SerializeField]
     private NumberController m_Minutes;
 
-    private Vector2Int m_LastTime = Vector2Int.zero;
+    private Vector2Int m_LastTime = Vector2Int.one * -1;
 
     public override void OnChange()
     {
+        CancelInvoke();
         InvokeRepeating( nameof( UpdateClock ), 0f, 2f );
     }
 

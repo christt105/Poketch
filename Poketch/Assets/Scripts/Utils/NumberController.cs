@@ -75,10 +75,15 @@ public class NumberController : MonoBehaviour
             listOfInts[n++] = num % 10;
             num /= 10;
         }
-
+        
         return listOfInts.Reverse().ToArray();
     }
 
+    /// <summary>
+    /// Returns the number digits length
+    /// </summary>
+    /// <param name="n">number</param>
+    /// <returns></returns>
     public static int GetNumberDigits( int n )
     {
         return n == 0 ? 1 : ( n > 0 ? 1 : 2 ) + ( int ) Math.Log10( Math.Abs( ( double ) n ) );
