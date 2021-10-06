@@ -45,8 +45,9 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         Vector2 localCursor;
         if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(GetComponent<RectTransform>(), Input.mousePosition, null, out localCursor))
             return;
-        localCursor.x += memoPad.m_renderer_texture.width * 0.5f;
-        localCursor.y += memoPad.m_renderer_texture.height * 0.5f;
+        localCursor.x += memoPad.m_renderer_texture.width;
+        localCursor.y += memoPad.m_renderer_texture.height;
+        localCursor *= 0.5f;
 
         if (localCursor.x >= 0 && localCursor.x <= MemoPad.width && localCursor.y >= 0 && localCursor.y <= MemoPad.height)
         {
