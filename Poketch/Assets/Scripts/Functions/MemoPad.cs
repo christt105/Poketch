@@ -14,7 +14,10 @@ public class MemoPad : Function
     [SerializeField]
     private RawImage m_ImageToPaint;
 
-    public Color[] pixelColors { get; private set; } = new Color[156 * 150];
+    public static readonly int width = 156 / 2;
+    public static readonly int height = 150 / 2;
+
+    public Color[] pixelColors { get; private set; } = new Color[width * height];
     public Texture2D m_renderer_texture { get; private set; }
 
     // Enum that has the different possible actions.
@@ -45,11 +48,12 @@ public class MemoPad : Function
         PaintTexture.onScreenTouched += ScreenTouched;
       
 
-        for (int i = 0; i < 156 * 150; ++i)
+        for (int i = 0; i < width * height; ++i)
         {
             pixelColors[i] = Color.white;
         }
-        m_renderer_texture = new Texture2D(156, 150);
+        m_renderer_texture = new Texture2D(width, height);
+        m_renderer_texture.filterMode = FilterMode.Point;
         m_ImageToPaint.texture = m_renderer_texture;
     }
 

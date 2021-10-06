@@ -48,7 +48,7 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         localCursor.x += memoPad.m_renderer_texture.width * 0.5f;
         localCursor.y += memoPad.m_renderer_texture.height * 0.5f;
 
-        if (localCursor.x >= 0 && localCursor.x <= 156 && localCursor.y >= 0 && localCursor.y <= 150)
+        if (localCursor.x >= 0 && localCursor.x <= MemoPad.width && localCursor.y >= 0 && localCursor.y <= MemoPad.height)
         {
             if (memoPad.m_renderer_texture.GetPixel((int)localCursor.x, (int)localCursor.y) != colorToPaint)
             {
