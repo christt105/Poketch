@@ -1,59 +1,67 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using SimpleJSON;
+using System.Collections;
 
 [ RequireComponent( typeof(RawImage))]
-public class PaintTexture : Function, IPointerDownHandler
+public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField]
     private MemoPad memoPad;
-    private Texture2D m_renderer_texture;
-    private Color[] pixelColors = new Color[156*150];
-    public override void OnCreate(JSONObject jsonObject)
-    {
-        for (int i = 0; i < 156 * 150; ++i)
-        {
-            pixelColors[i] = Color.white;
-        }
-        m_renderer_texture = new Texture2D(156, 150);
-        GetComponent<RawImage>().texture = m_renderer_texture;
-    }
 
-    public override void OnChange()
+    private bool isPainting = false;
+
+    public delegate void OnScreenTouched();
+    public static event OnScreenTouched onScreenTouched;
+
+    private void Start()
     {
-        m_renderer_texture.SetPixels(pixelColors);
-        m_renderer_texture.Apply();
+        MemoPad.onPaint += Paint;
+        MemoPad.onResetTexture += ResetTexture;
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (memoPad.current_state == MemoPad.ACTION_STATE.PAINTING)
+        isPainting = true;
+        StartCoroutine(OnMousePressing());
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        isPainting = false;
+    }
+
+    IEnumerator OnMousePressing()
+    {
+        while (isPainting)
         {
-            Paint(eventData);
-        }
-        else
-        {
-            Erase(eventData);
+            onScreenTouched();
+            yield return null; 
         }
     }
 
-
-
-    private void Paint(PointerEventData eventData)
+    private void Paint(Color colorToPaint)
     {
         Vector2 localCursor;
-        if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(GetComponent<RectTransform>(), Input.mousePosition, eventData.pressEventCamera, out localCursor))
+        if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(GetComponent<RectTransform>(), Input.mousePosition, null, out localCursor))
             return;
-        localCursor.x += m_renderer_texture.width * 0.5f;
-        localCursor.y += m_renderer_texture.height * 0.5f;
-        m_renderer_texture.SetPixel((int)localCursor.x, (int)localCursor.y, Color.black);
-        m_renderer_texture.Apply();
+        localCursor.x += memoPad.m_renderer_texture.width * 0.5f;
+        localCursor.y += memoPad.m_renderer_texture.height * 0.5f;
+
+        if (localCursor.x >= 0 && localCursor.x <= MemoPad.width && localCursor.y >= 0 && localCursor.y <= MemoPad.height)
+        {
+            if (memoPad.m_renderer_texture.GetPixel((int)localCursor.x, (int)localCursor.y) != colorToPaint)
+            {
+                memoPad.m_renderer_texture.SetPixel((int)localCursor.x, (int)localCursor.y, colorToPaint);
+                memoPad.m_renderer_texture.Apply();
+            }
+        }
     }
 
-    private void Erase(PointerEventData eventData)
+    private void ResetTexture()
     {
-
+        memoPad.m_renderer_texture.SetPixels(memoPad.pixelColors);
+        memoPad.m_renderer_texture.Apply();
     }
 
    
