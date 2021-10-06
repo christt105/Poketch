@@ -4,57 +4,56 @@ using UnityEngine.UI;
 using SimpleJSON;
 
 [ RequireComponent( typeof(RawImage))]
-public class PaintTexture : Function, IPointerDownHandler
+public class PaintTexture : MonoBehaviour, IDragHandler
 {
     [SerializeField]
     private MemoPad memoPad;
-    private Texture2D m_renderer_texture;
-    private Color[] pixelColors = new Color[156*150];
-    public override void OnCreate(JSONObject jsonObject)
-    {
-        for (int i = 0; i < 156 * 150; ++i)
-        {
-            pixelColors[i] = Color.white;
-        }
-        m_renderer_texture = new Texture2D(156, 150);
-        GetComponent<RawImage>().texture = m_renderer_texture;
-    }
 
-    public override void OnChange()
-    {
-        m_renderer_texture.SetPixels(pixelColors);
-        m_renderer_texture.Apply();
-    }
+    private PointerEventData m_pointerEventData;
 
-    public void OnPointerDown(PointerEventData eventData)
+    public delegate void OnScreenTouched();
+    public static event OnScreenTouched onScreenTouched;
+
+    private void Start()
     {
-        if (memoPad.current_state == MemoPad.ACTION_STATE.PAINTING)
+        MemoPad.onPaint += Paint;
+        MemoPad.onErase += Erase;
+    }
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (Input.GetMouseButton(0))
         {
-            Paint(eventData);
-        }
-        else
-        {
-            Erase(eventData);
+            m_pointerEventData = eventData;
+            onScreenTouched();
         }
     }
 
 
-
-    private void Paint(PointerEventData eventData)
+    private void Paint()
     {
         Vector2 localCursor;
-        if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(GetComponent<RectTransform>(), Input.mousePosition, eventData.pressEventCamera, out localCursor))
+        if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(GetComponent<RectTransform>(), Input.mousePosition, m_pointerEventData.pressEventCamera, out localCursor))
             return;
-        localCursor.x += m_renderer_texture.width * 0.5f;
-        localCursor.y += m_renderer_texture.height * 0.5f;
-        m_renderer_texture.SetPixel((int)localCursor.x, (int)localCursor.y, Color.black);
-        m_renderer_texture.Apply();
+        localCursor.x += memoPad.m_renderer_texture.width * 0.5f;
+        localCursor.y += memoPad.m_renderer_texture.height * 0.5f;
+
+        if (localCursor.x >= 0 && localCursor.x <= 156 && localCursor.y >= 0 && localCursor.y <= 150)
+        {
+            memoPad.m_renderer_texture.SetPixel((int)localCursor.x, (int)localCursor.y, Color.black);
+            memoPad.m_renderer_texture.Apply();
+        }
     }
 
-    private void Erase(PointerEventData eventData)
+    private void Erase()
     {
 
     }
 
+
+
+
+
+
    
+
 }
