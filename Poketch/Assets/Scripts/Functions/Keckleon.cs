@@ -42,7 +42,7 @@ public class Keckleon : Function
 
             JSONNode json = new JSONObject();
             json.Add( "color", color );
-            FunctionController.Instance.Save( GetType().Name, json );
+            FunctionController.Instance.SaveFunctionInfo( GetType().Name, json );
         }
     }
 
