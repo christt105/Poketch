@@ -14,10 +14,16 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     public delegate void OnScreenTouched();
     public static event OnScreenTouched onScreenTouched;
 
-    private void Start()
+    private void OnEnable()
     {
         MemoPad.onPaint += Paint;
         MemoPad.onResetTexture += ResetTexture;
+    }
+
+    private void OnDisable()
+    {
+        MemoPad.onPaint -= Paint;
+        MemoPad.onResetTexture -= ResetTexture;
     }
 
     public void OnPointerDown(PointerEventData eventData)

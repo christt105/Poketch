@@ -70,14 +70,14 @@ public class MemoPad : Function
         }
         m_renderer_texture = new Texture2D(width, height);
         m_renderer_texture.filterMode = FilterMode.Point;
-        onResetTexture();
+        onResetTexture?.Invoke();
         m_ImageToPaint.texture = m_renderer_texture;
     }
 
     public override void OnChange()
     {
         ChangeState(ACTION_STATE.PAINTING, true);
-        onResetTexture();
+        onResetTexture?.Invoke();
     }
 
     // Method that change the current action state and perform the logic and graphic part.
