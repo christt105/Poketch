@@ -2291,10 +2291,50 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1232647962}
     m_Modifications:
+    - target: {fileID: 8368194950493204544, guid: 6f0d2a8ef992c924a913895da249abd6, type: 3}
+      propertyPath: m_Transition
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8368194950759499755, guid: 6f0d2a8ef992c924a913895da249abd6, type: 3}
+      propertyPath: m_Transition
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8368194952022046160, guid: 6f0d2a8ef992c924a913895da249abd6, type: 3}
+      propertyPath: m_EraseSprite
+      value: 
+      objectReference: {fileID: -2093318771436999405, guid: 3fdd55973831b0e4b9b45fce49f86da0, type: 3}
+    - target: {fileID: 8368194952022046160, guid: 6f0d2a8ef992c924a913895da249abd6, type: 3}
+      propertyPath: m_PaintSprite
+      value: 
+      objectReference: {fileID: 1779723143329269948, guid: 3fdd55973831b0e4b9b45fce49f86da0, type: 3}
     - target: {fileID: 8368194952022046160, guid: 6f0d2a8ef992c924a913895da249abd6, type: 3}
       propertyPath: m_ImageToPaint
       value: 
       objectReference: {fileID: 1791138364}
+    - target: {fileID: 8368194952022046160, guid: 6f0d2a8ef992c924a913895da249abd6, type: 3}
+      propertyPath: m_EraseSpriteIdle
+      value: 
+      objectReference: {fileID: 7594956824578540091, guid: 3fdd55973831b0e4b9b45fce49f86da0, type: 3}
+    - target: {fileID: 8368194952022046160, guid: 6f0d2a8ef992c924a913895da249abd6, type: 3}
+      propertyPath: m_PaintSpriteIdle
+      value: 
+      objectReference: {fileID: 2468866068640949953, guid: 3fdd55973831b0e4b9b45fce49f86da0, type: 3}
+    - target: {fileID: 8368194952022046160, guid: 6f0d2a8ef992c924a913895da249abd6, type: 3}
+      propertyPath: m_EraseButtonSprite
+      value: 
+      objectReference: {fileID: -2093318771436999405, guid: 3fdd55973831b0e4b9b45fce49f86da0, type: 3}
+    - target: {fileID: 8368194952022046160, guid: 6f0d2a8ef992c924a913895da249abd6, type: 3}
+      propertyPath: m_PaintButtonSprite
+      value: 
+      objectReference: {fileID: 1779723143329269948, guid: 3fdd55973831b0e4b9b45fce49f86da0, type: 3}
+    - target: {fileID: 8368194952022046160, guid: 6f0d2a8ef992c924a913895da249abd6, type: 3}
+      propertyPath: m_EraseSpritePressed
+      value: 
+      objectReference: {fileID: -2093318771436999405, guid: 3fdd55973831b0e4b9b45fce49f86da0, type: 3}
+    - target: {fileID: 8368194952022046160, guid: 6f0d2a8ef992c924a913895da249abd6, type: 3}
+      propertyPath: m_PaintSpritePressed
+      value: 
+      objectReference: {fileID: 1779723143329269948, guid: 3fdd55973831b0e4b9b45fce49f86da0, type: 3}
     - target: {fileID: 8368194952022046162, guid: 6f0d2a8ef992c924a913895da249abd6, type: 3}
       propertyPath: m_Name
       value: MemoPad
