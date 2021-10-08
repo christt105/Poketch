@@ -14,11 +14,20 @@ public class FunctionController : MonoBehaviour
 
     public static FunctionController Instance { get; private set; }
 
-    public void Save( string functionName, JSONNode json )
+    public void SaveFunctionInfo( string functionName, JSONNode json )
     {
         JSONNode file = File.Exists( DataPath ) ? JSON.Parse( File.ReadAllText( DataPath ) ) : new JSONObject();
 
         file["Functions"][functionName] = json;
+
+        File.WriteAllText( DataPath, file.ToString() );
+    }
+
+    private void SaveActualFunction( int index )
+    {
+        JSONNode file = File.Exists( DataPath ) ? JSON.Parse( File.ReadAllText( DataPath ) ) : new JSONObject();
+
+        file["Actual"] = index;
 
         File.WriteAllText( DataPath, file.ToString() );
     }
@@ -35,7 +44,13 @@ public class FunctionController : MonoBehaviour
         m_MyTransform = transform;
 
         m_Functions = m_MyTransform.GetComponentsInChildren < Function >( true );
-        JSONNode file = File.Exists( DataPath ) ? JSON.Parse( File.ReadAllText( DataPath ) )["Functions"] : null;
+        JSONNode file = File.Exists( DataPath ) ? JSON.Parse( File.ReadAllText( DataPath ) ) : null;
+
+#if !UNITY_EDITOR
+        m_FunctionIndex = file != null ? file.GetValueOrDefault( "Actual", -1 ).AsInt : -1;
+#endif
+
+        file = file?["Functions"];
 
         foreach ( Function f in m_Functions )
         {
@@ -46,22 +61,21 @@ public class FunctionController : MonoBehaviour
                 continue;
             }
 
-            if ( m_FunctionIndex != -1 )
-            {
-                f.gameObject.SetActive( false );
-            }
-            else
+            if ( m_FunctionIndex == -1 )
             {
                 m_FunctionIndex = f.transform.GetSiblingIndex();
-                f.OnChange();
             }
+
+            f.gameObject.SetActive( false );
         }
 
         if ( m_FunctionIndex == -1 )
         {
             m_FunctionIndex = 0;
-            m_Functions[m_FunctionIndex].gameObject.SetActive( true );
         }
+
+        m_Functions[m_FunctionIndex].gameObject.SetActive( true );
+        m_Functions[m_FunctionIndex].OnChange();
     }
 
     #endregion
@@ -78,6 +92,8 @@ public class FunctionController : MonoBehaviour
             m_FunctionIndex = 0;
         }
 
+        SaveActualFunction( m_FunctionIndex );
+
         m_Functions[m_FunctionIndex].gameObject.SetActive( true );
         m_Functions[m_FunctionIndex].OnChange();
     }
@@ -92,6 +108,7 @@ public class FunctionController : MonoBehaviour
             m_FunctionIndex = m_Functions.Length - 1;
         }
 
+        SaveActualFunction( m_FunctionIndex );
         m_Functions[m_FunctionIndex].gameObject.SetActive( true );
         m_Functions[m_FunctionIndex].OnChange();
     }
