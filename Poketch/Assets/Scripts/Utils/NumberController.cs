@@ -5,11 +5,17 @@ using UnityEngine.UI;
 
 public class NumberController : MonoBehaviour
 {
+    private bool m_Init = false;
     private int m_MaxNumberLength = 0;
     private int[] m_Numbers;
     private Digit[] m_NumbersTransforms;
 
     private void Start()
+    {
+        Init();
+    }
+
+    private void Init()
     {
         m_MaxNumberLength = transform.childCount;
         m_NumbersTransforms = new Digit[m_MaxNumberLength];
@@ -20,10 +26,17 @@ public class NumberController : MonoBehaviour
             m_NumbersTransforms[i] = new Digit( transform.GetChild( i ) );
             m_Numbers[i] = 0;
         }
+
+        m_Init = true;
     }
 
     public void SetNumber( int number )
     {
+        if ( !m_Init )
+        {
+            Init();
+        }
+
         if ( GetNumberDigits( number ) > m_MaxNumberLength )
         {
             Debug.LogError(
@@ -75,12 +88,12 @@ public class NumberController : MonoBehaviour
             listOfInts[n++] = num % 10;
             num /= 10;
         }
-        
+
         return listOfInts.Reverse().ToArray();
     }
 
     /// <summary>
-    /// Returns the number digits length
+    ///     Returns the number digits length
     /// </summary>
     /// <param name="n">number</param>
     /// <returns></returns>
