@@ -50,11 +50,18 @@ public class FunctionController : MonoBehaviour
         m_FunctionIndex = file != null ? file.GetValueOrDefault( "Actual", -1 ).AsInt : -1;
 #endif
 
-        file = file?["Functions"];
+        file = file?.GetValueOrDefault( "Functions", null );
 
         foreach ( Function f in m_Functions )
         {
-            f.OnCreate( file?[f.GetType().Name]?.AsObject );
+            if ( file != null && file.HasKey( f.GetType().Name ) )
+            {
+                f.OnCreate( file[f.GetType().Name].AsObject );
+            }
+            else
+            {
+                f.OnCreate( null );
+            }
 
             if ( !f.gameObject.activeSelf )
             {
