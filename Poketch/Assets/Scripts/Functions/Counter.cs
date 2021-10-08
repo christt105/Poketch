@@ -30,7 +30,7 @@ public class Counter : Function
 
     #region Function
 
-    public override void OnCreate( JSONObject jsonObject )
+    public override void OnCreate( JSONNode jsonObject )
     {
         m_CountButton.onClick.AddListener( Add );
     }

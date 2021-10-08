@@ -79,7 +79,7 @@ public class Temporizer : Function
 
     #region Override Functions
 
-    public override void OnCreate(JSONObject jsonObject)
+    public override void OnCreate(JSONNode jsonObject)
     {
         m_ArrayActualTime = new int[4];
         for (int i = 0; i < m_ArrayActualTime.Length; i++)

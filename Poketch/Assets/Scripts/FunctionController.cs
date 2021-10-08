@@ -54,14 +54,7 @@ public class FunctionController : MonoBehaviour
 
         foreach ( Function f in m_Functions )
         {
-            if ( file != null && file.HasKey( f.GetType().Name ) )
-            {
-                f.OnCreate( file[f.GetType().Name].AsObject );
-            }
-            else
-            {
-                f.OnCreate( null );
-            }
+            f.OnCreate( file?[f.GetType().Name] );
 
             if ( !f.gameObject.activeSelf )
             {
