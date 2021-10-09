@@ -1,0 +1,122 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Functions
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 3765fd6d8c9c7ed4593477bea4b28d0b, type: 3}
+    totalSpriteSurfaceArea: 186420
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: fc542a00b3f4abf45994c7c6d3dc8f4a, type: 3}
+  - {fileID: 21300000, guid: d15b94105e5537e44b6aac8af4d82577, type: 3}
+  - {fileID: 21300000, guid: c35a0a70d7adb774e976a53ef4cfe599, type: 3}
+  - {fileID: 21300000, guid: f347dbe055045484697d654ca1d760ef, type: 3}
+  - {fileID: 21300000, guid: 6fc0918135807e24b98a800ca79ac405, type: 3}
+  - {fileID: 21300000, guid: d9fdbcc124555284eb26c7a041450939, type: 3}
+  - {fileID: 21300000, guid: 4d7053f135560f84eb9fbeb83db7574f, type: 3}
+  - {fileID: 21300000, guid: 1afc5af128158794ba71f9fa9c7e2592, type: 3}
+  - {fileID: 21300000, guid: a0af9e43ac43bfb4b860b79581e9be84, type: 3}
+  - {fileID: 21300000, guid: fb3ecdc338cfb21439bae29dc7608a90, type: 3}
+  - {fileID: 21300000, guid: 381b1bf33eb0c6d4ba22845dca6cec0c, type: 3}
+  - {fileID: 21300000, guid: 3659ae044b181844c912071a377cc850, type: 3}
+  - {fileID: 21300000, guid: e76197e4db048cb47aab31c28075d24a, type: 3}
+  - {fileID: 21300000, guid: e07a3c26cb66ba746b86e36ec9dcdb40, type: 3}
+  - {fileID: 21300000, guid: 8b64a2760805197458431e79df5eec01, type: 3}
+  - {fileID: 21300000, guid: 1f9e60d6399443848ac6f4e5f1fa34e0, type: 3}
+  - {fileID: 21300000, guid: 35263fb72cbf98e44b23d8dad5fa8c88, type: 3}
+  - {fileID: 21300000, guid: 27ba89d7ec1e83c4ebd2925e3f2b5399, type: 3}
+  - {fileID: 21300000, guid: 11573be71a0e3fb4d9222900f8e865da, type: 3}
+  - {fileID: 21300000, guid: 947198582b0fefe4d9346a37f75942ad, type: 3}
+  - {fileID: 21300000, guid: 101c9088eec70f84dba31e07a68b4623, type: 3}
+  - {fileID: 21300000, guid: 19e7c8a91bc21564f9b2f4ae26cdfad4, type: 3}
+  - {fileID: 21300000, guid: 3ba08bc986f8ec94cbe9f870c5be58da, type: 3}
+  - {fileID: 21300000, guid: 76ff657aa596c7e4bac46296fd57d4ec, type: 3}
+  - {fileID: 21300000, guid: 63e865ba6632c234d8c4fd6036140665, type: 3}
+  - {fileID: 21300000, guid: f563976bcfa5a73418808362291f96f6, type: 3}
+  - {fileID: 21300000, guid: 646f190cb1c26c1448c03f6ccabcb83c, type: 3}
+  - {fileID: 21300000, guid: 82fb821c99a350d478fb4ecb82865e73, type: 3}
+  - {fileID: 21300000, guid: 32cac22c927a47946b434d43a5a2ae93, type: 3}
+  - {fileID: 21300000, guid: a4dc0ebcbe1cc6a45a025b5eed063e2b, type: 3}
+  - {fileID: 21300000, guid: cb80a2cc9d2ac994596afd3ce6ac6424, type: 3}
+  - {fileID: 21300000, guid: a45df00d8077e53459f6b5ba5d8e206b, type: 3}
+  - {fileID: 21300000, guid: d17c143d0ef85df4783df32554908599, type: 3}
+  - {fileID: 21300000, guid: 680de15efdc8f2047a43a30e6d71428f, type: 3}
+  - {fileID: 21300000, guid: f52e436ec83222e4183c43f9a9378d13, type: 3}
+  - {fileID: 21300000, guid: 5b0d57aed1f11c848b00039fe7712354, type: 3}
+  - {fileID: 21300000, guid: 0a36192f716d1ce4a9c86066ad519caf, type: 3}
+  - {fileID: 21300000, guid: 8e62843f6ff24744c8abcedb1614e884, type: 3}
+  - {fileID: 21300000, guid: 071c0edfc713821458b6eccb4c74de41, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - 3
+  - ButtonExplosion2
+  - LifeContainer
+  - ButtonPressed6
+  - 6
+  - 5
+  - ButtonPressed2
+  - ButtonExplosion3
+  - Object
+  - 8
+  - 5
+  - 9
+  - ButtonPressed4
+  - 0
+  - ButtonExplosion4
+  - 6
+  - ButtonStruggle
+  - 2
+  - 0
+  - SnorlaxOneArm
+  - 8
+  - 7
+  - 1
+  - 2
+  - ButtonIdle
+  - 9
+  - ButtonPressed5
+  - ButtonPressed
+  - 1
+  - 4
+  - 3
+  - ButtonPressed1
+  - 7
+  - 4
+  - SnorlaxWait
+  - ButtonPressed3
+  - ButtonPressed0
+  - ButtonStruggle1
+  - ButtonExplosion1
+  m_RenderDataMap: {}
+  m_Tag: Functions
+  m_IsVariant: 0
