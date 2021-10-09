@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using SimpleJSON;
 using UnityEngine;
@@ -7,6 +8,9 @@ using UnityEngine.UI;
 public class Calculator : Function
 {
     private const long MaxValue = 9999999999;
+    private const long MinValue = -999999999;
+    private const int CharNone = 10;
+    private const int CharInterrogant = 11;
 
     [SerializeField]
     private Transform m_ButtonsTransform;
@@ -17,18 +21,27 @@ public class Calculator : Function
     [SerializeField]
     private Transform m_OperationsTransform;
 
-    private Action m_Action = Action.None;
-    private long m_AuxiliarNumber = 0;
+    private ActualNumber m_ActualNumber = ActualNumber.Result;
+    private double m_AuxiliarNumber = 0;
+
+    private Action m_CurrentAction = Action.None;
+    private KeyAction m_LastKeyAction = KeyAction.None;
 
     private int m_NumberOfDigits;
 
     private int m_NumberOfNumbers;
 
-    private long m_Result;
+    private double m_Result;
+
+    private enum ActualNumber
+    {
+        Result, Auxiliar,
+        Invalid
+    }
 
     #region Functions
 
-    public override void OnCreate( JSONObject jsonObject )
+    public override void OnCreate( JSONNode jsonObject )
     {
         foreach ( Transform t in m_ButtonsTransform )
         {
@@ -50,16 +63,21 @@ public class Calculator : Function
     public override void OnChange()
     {
         Reset();
-        SetAllNumbersTo( 10 );
+        SetAllNumbersTo( CharNone );
     }
 
     #endregion
 
     #region Private
 
-    private enum Action
+    private enum KeyAction
     {
         Sum, Sub, Mul, Div, Dot, Equal, Clear, None
+    }
+
+    private enum Action
+    {
+        Sum, Sub, Mul, Div, None
     }
 
     private void SetAllNumbersTo( int character )
@@ -79,33 +97,30 @@ public class Calculator : Function
     {
         m_Result = 0;
         m_AuxiliarNumber = 0;
-        m_Action = Action.None;
         m_NumberOfDigits = 0;
-
-        foreach ( Transform t in m_OperationsTransform )
-        {
-            t.gameObject.SetActive( false );
-        }
+        m_ActualNumber = ActualNumber.Result;
+        SetOperation( Action.None );
     }
 
     private void OnClickNumber( int number )
     {
         SoundManager.Instance.PlaySFX( SoundManager.SFX.Button );
 
-        if ( m_NumberOfDigits == 10 || m_Result == 0 && number == 0 )
+        if ( m_NumberOfDigits >= 10 )
         {
-            ShowResult();
-
             return;
         }
 
-        if ( m_Action == Action.Equal && m_Result != 0 )
+        ++m_NumberOfDigits;
+
+        if ( m_LastKeyAction == KeyAction.Equal || m_ActualNumber == ActualNumber.Invalid )
         {
             m_Result = 0;
-            m_Action = Action.None;
+            m_LastKeyAction = KeyAction.None;
+            m_ActualNumber = ActualNumber.Result;
         }
 
-        if ( m_Action == Action.None )
+        if ( m_ActualNumber == ActualNumber.Result )
         {
             m_Result = m_Result * 10 + number;
         }
@@ -114,12 +129,15 @@ public class Calculator : Function
             m_AuxiliarNumber = m_AuxiliarNumber * 10 + number;
         }
 
-        m_NumberOfDigits++;
-
         ShowResult();
     }
 
-    private void ShowResult( bool result = false )
+    private void ShowResult()
+    {
+        ShowResult( m_ActualNumber );
+    }
+
+    private void ShowResult( ActualNumber actualNumber )
     {
         int n = m_NumberOfNumbers - 1;
 
@@ -133,89 +151,127 @@ public class Calculator : Function
             t.GetChild( 10 ).gameObject.SetActive( true );
         }
 
-        foreach ( char c in result || m_Action == Action.None
-            ? m_Result.ToString().Reverse()
-            : m_AuxiliarNumber.ToString().Reverse() )
+        foreach ( char c in ( actualNumber == ActualNumber.Result ? m_Result : m_AuxiliarNumber ).
+                            ToString( CultureInfo.InvariantCulture ).
+                            Reverse() )
         {
             m_NumbersTransform.GetChild( n ).GetChild( 10 ).gameObject.SetActive( false );
             m_NumbersTransform.GetChild( n-- ).GetChild( c == '-' ? 13 : c - '0' ).gameObject.SetActive( true );
         }
     }
 
-    private void OnClickAction( Action action )
+    private void OnClickAction( KeyAction keyAction )
     {
         SoundManager.Instance.PlaySFX( SoundManager.SFX.Button );
 
-        switch ( action )
+        switch ( keyAction )
         {
-            case Action.Clear:
+            case KeyAction.Clear:
                 Reset();
                 ShowResult();
 
                 break;
 
-            case Action.Sum:
-            case Action.Sub:
-            case Action.Mul:
-            case Action.Div:
-                if ( m_Action >= Action.Sum && m_Action <= Action.Div && m_AuxiliarNumber != 0 )
+            case KeyAction.Sum:
+            case KeyAction.Sub:
+            case KeyAction.Mul:
+            case KeyAction.Div:
+                if ( m_ActualNumber == ActualNumber.Invalid )
                 {
-                    m_Result = Calculate( m_Result, m_AuxiliarNumber, m_Action );
+                    break;
+                }
+
+                if ( m_ActualNumber == ActualNumber.Result )
+                {
+                    m_ActualNumber = ActualNumber.Auxiliar;
                     m_AuxiliarNumber = 0;
                     m_NumberOfDigits = 0;
-                    ShowResult( true );
                 }
-
-                foreach ( Transform t in m_OperationsTransform )
+                else
                 {
-                    t.gameObject.SetActive( false );
+                    m_Result = Calculate( m_Result, m_AuxiliarNumber, m_CurrentAction );
+
+                    if ( m_Result > MaxValue || m_Result < MinValue )
+                    {
+                        m_Result = 0;
+                        m_AuxiliarNumber = 0;
+                        m_ActualNumber = ActualNumber.Invalid;
+
+                        SetAllNumbersTo( CharInterrogant );
+
+                        break;
+                    }
+
+                    ShowResult( ActualNumber.Result );
+
+                    m_AuxiliarNumber = 0;
                 }
 
-                m_OperationsTransform.GetChild( ( int ) action ).gameObject.SetActive( true );
+                m_CurrentAction = ( Action ) keyAction;
 
-                m_NumberOfDigits = 0;
-                m_Action = action;
+                SetOperation( m_CurrentAction );
 
                 break;
 
-            case Action.Dot:
-                ++m_NumberOfDigits;
-                m_Action = Action.Dot;
+            case KeyAction.Dot:
 
                 break;
 
-            case Action.Equal:
-                m_Result = Calculate( m_Result, m_AuxiliarNumber, m_Action );
+            case KeyAction.Equal:
 
-                m_AuxiliarNumber = 0;
-                m_NumberOfDigits = 0;
-                m_Action = Action.None;
-
-                foreach ( Transform t in m_OperationsTransform )
+                if ( m_ActualNumber == ActualNumber.Invalid )
                 {
-                    t.gameObject.SetActive( false );
+                    break;
                 }
 
-                if ( m_Result > MaxValue )
+                m_Result = Calculate( m_Result, m_AuxiliarNumber, m_CurrentAction );
+
+                SetOperation( Action.None );
+                m_CurrentAction = Action.None;
+
+                if ( m_Result > MaxValue || m_Result < MinValue )
                 {
-                    SetAllNumbersTo( 11 );
                     m_Result = 0;
+                    m_AuxiliarNumber = 0;
+                    m_ActualNumber = ActualNumber.Invalid;
 
-                    return;
+                    SetAllNumbersTo( CharInterrogant );
+
+                    break;
                 }
 
-                ShowResult( true );
+                m_ActualNumber = ActualNumber.Result;
+                m_NumberOfDigits = 0;
+
+                ShowResult();
 
                 break;
 
             default:
-                throw new ArgumentOutOfRangeException( nameof( action ), action, null );
+                throw new ArgumentOutOfRangeException( nameof( keyAction ), keyAction, null );
         }
+
+        m_LastKeyAction = keyAction;
     }
 
-    private static long Calculate( long result, long auxiliarNumber, Action action )
+    private void SetOperation( Action action )
     {
-        switch ( action )
+        foreach ( Transform t in m_OperationsTransform )
+        {
+            t.gameObject.SetActive( false );
+        }
+
+        if ( action == Action.None )
+        {
+            return;
+        }
+
+        m_OperationsTransform.GetChild( ( int ) action ).gameObject.SetActive( true );
+    }
+
+    private static double Calculate( double result, double auxiliarNumber, Action keyAction )
+    {
+        switch ( keyAction )
         {
             case Action.Sum:
                 return result + auxiliarNumber;
@@ -235,39 +291,39 @@ public class Calculator : Function
                 return result / auxiliarNumber;
 
             default:
-                throw new ArgumentOutOfRangeException( nameof( action ), action, null );
+                throw new ArgumentOutOfRangeException( nameof( keyAction ), keyAction, null );
         }
     }
 
-    private static Action GetActionFromString( string action )
+    private static KeyAction GetActionFromString( string action )
     {
         switch ( action )
         {
             case "C":
-                return Action.Clear;
+                return KeyAction.Clear;
 
             case "+":
-                return Action.Sum;
+                return KeyAction.Sum;
 
             case "-":
-                return Action.Sub;
+                return KeyAction.Sub;
 
             case "x":
-                return Action.Mul;
+                return KeyAction.Mul;
 
             case "/":
-                return Action.Div;
+                return KeyAction.Div;
 
             case ".":
-                return Action.Dot;
+                return KeyAction.Dot;
 
             case "=":
-                return Action.Equal;
+                return KeyAction.Equal;
         }
 
         Debug.LogError( "No enum action for " + action );
 
-        return Action.None;
+        return KeyAction.Clear;
     }
 
     #endregion
