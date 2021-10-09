@@ -28,7 +28,7 @@ public class Calculator : Function
 
     #region Functions
 
-    public override void OnCreate( JSONObject jsonObject )
+    public override void OnCreate(JSONNode jsonObject )
     {
         foreach ( Transform t in m_ButtonsTransform )
         {
