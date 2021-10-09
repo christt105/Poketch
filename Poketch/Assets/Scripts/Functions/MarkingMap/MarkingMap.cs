@@ -25,9 +25,9 @@ public class MarkingMap : Function
 
         foreach ( Mark mark in m_MarksArray )
         {
-            JSONObject jsonMark = new JSONObject();
             Vector2 position = mark.GetPosition();
 
+            JSONObject jsonMark = new JSONObject();
             jsonMark["x"] = position.x;
             jsonMark["y"] = position.y;
 
