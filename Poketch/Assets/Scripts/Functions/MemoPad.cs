@@ -127,5 +127,4 @@ public class MemoPad : Function
             onPaint(Color.white);
         }
     }
-
 }

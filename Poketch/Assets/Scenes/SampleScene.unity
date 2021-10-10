@@ -3002,6 +3002,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MarkingMap
       objectReference: {fileID: 0}
+    - target: {fileID: 5608788418672678119, guid: 5280ebbf36d060745ae9f686f599b16e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5280ebbf36d060745ae9f686f599b16e, type: 3}
 --- !u!224 &7445011102484301455 stripped
@@ -3066,7 +3070,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8368194952022046162, guid: 6f0d2a8ef992c924a913895da249abd6, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8368194952022046163, guid: 6f0d2a8ef992c924a913895da249abd6, type: 3}
       propertyPath: m_Pivot.x

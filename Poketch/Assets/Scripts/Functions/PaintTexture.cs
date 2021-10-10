@@ -16,13 +16,13 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     private void OnEnable()
     {
-        MemoPad.onPaint += Paint;
+        MemoPad.onPaint += PaintToScreen;
         MemoPad.onResetTexture += ResetTexture;
     }
 
     private void OnDisable()
     {
-        MemoPad.onPaint -= Paint;
+        MemoPad.onPaint -= PaintToScreen;
         MemoPad.onResetTexture -= ResetTexture;
     }
 
@@ -46,23 +46,33 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         }
     }
 
-    private void Paint(Color colorToPaint)
+    private void PaintToScreen(Color colorToPaint)
+    {
+        PaintPixel(colorToPaint, CalculatePixelPosition());
+    }
+
+    private void PaintPixel(Color colorToPaint, Vector2 pixelPosition)
+    {
+        if (pixelPosition.x >= 0 && pixelPosition.x <= MemoPad.width && pixelPosition.y >= 0 && pixelPosition.y <= MemoPad.height)
+        {
+            if (memoPad.m_renderer_texture.GetPixel((int)pixelPosition.x, (int)pixelPosition.y) != colorToPaint)
+            {
+                memoPad.m_renderer_texture.SetPixel((int)pixelPosition.x, (int)pixelPosition.y, colorToPaint);
+                memoPad.m_renderer_texture.Apply();
+            }
+        }
+    }
+
+    private Vector2 CalculatePixelPosition()
     {
         Vector2 localCursor;
         if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(GetComponent<RectTransform>(), Input.mousePosition, null, out localCursor))
-            return;
+            return Vector2.zero;
         localCursor.x += memoPad.m_renderer_texture.width;
         localCursor.y += memoPad.m_renderer_texture.height;
         localCursor *= 0.5f;
 
-        if (localCursor.x >= 0 && localCursor.x <= MemoPad.width && localCursor.y >= 0 && localCursor.y <= MemoPad.height)
-        {
-            if (memoPad.m_renderer_texture.GetPixel((int)localCursor.x, (int)localCursor.y) != colorToPaint)
-            {
-                memoPad.m_renderer_texture.SetPixel((int)localCursor.x, (int)localCursor.y, colorToPaint);
-                memoPad.m_renderer_texture.Apply();
-            }
-        }
+        return localCursor;
     }
 
     private void ResetTexture()
