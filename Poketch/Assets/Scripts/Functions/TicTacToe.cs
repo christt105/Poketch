@@ -92,10 +92,7 @@ public class TicTacToe : Function
                     break;
             }
 
-            JSONNode json = new JSONObject();
-            json.Add("pikaWins", pikaWons);
-            json.Add("eeveeWins", eeveeWons);
-            FunctionController.Instance.SaveFunctionInfo(GetType().Name, json);
+            SaveResults();
 
             return;
         }
@@ -176,6 +173,15 @@ public class TicTacToe : Function
 
         pikaWins.text = "0";
         eeveeWins.text = "0";
+        SaveResults();
+    }
+
+    void SaveResults()
+    {
+        JSONNode json = new JSONObject();
+        json.Add("pikaWins", pikaWons);
+        json.Add("eeveeWins", eeveeWons);
+        FunctionController.Instance.SaveFunctionInfo(GetType().Name, json);
     }
 
     public void StartOver()
