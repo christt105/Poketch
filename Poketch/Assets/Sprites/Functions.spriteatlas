@@ -32,7 +32,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 3765fd6d8c9c7ed4593477bea4b28d0b, type: 3}
-    totalSpriteSurfaceArea: 217389
+    totalSpriteSurfaceArea: 229421
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -50,6 +50,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: fb3ecdc338cfb21439bae29dc7608a90, type: 3}
   - {fileID: 21300000, guid: 381b1bf33eb0c6d4ba22845dca6cec0c, type: 3}
   - {fileID: 21300000, guid: 3659ae044b181844c912071a377cc850, type: 3}
+  - {fileID: 21300000, guid: 7baaf034b1a468a4c8f52f20d1b53f6f, type: 3}
   - {fileID: 21300000, guid: e76197e4db048cb47aab31c28075d24a, type: 3}
   - {fileID: 21300000, guid: 7e305cf4a2ba857418dffa0c2c09dad1, type: 3}
   - {fileID: 21300000, guid: e07a3c26cb66ba746b86e36ec9dcdb40, type: 3}
@@ -58,10 +59,13 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 8b64a2760805197458431e79df5eec01, type: 3}
   - {fileID: 21300000, guid: 8a2a82a6b67f6994ca2afa30187223f0, type: 3}
   - {fileID: 21300000, guid: 1f9e60d6399443848ac6f4e5f1fa34e0, type: 3}
+  - {fileID: 21300000, guid: 41f429178a7268844bb88326dead1276, type: 3}
   - {fileID: 21300000, guid: 72282327f7539674fbda5b11d12d5da1, type: 3}
+  - {fileID: 21300000, guid: 2562f2971bb941643b823a31e1c104e8, type: 3}
   - {fileID: 21300000, guid: 35263fb72cbf98e44b23d8dad5fa8c88, type: 3}
   - {fileID: 21300000, guid: 27ba89d7ec1e83c4ebd2925e3f2b5399, type: 3}
   - {fileID: 21300000, guid: 11573be71a0e3fb4d9222900f8e865da, type: 3}
+  - {fileID: 21300000, guid: 610c690816111a547a0923811fb16a56, type: 3}
   - {fileID: 21300000, guid: 947198582b0fefe4d9346a37f75942ad, type: 3}
   - {fileID: 21300000, guid: 101c9088eec70f84dba31e07a68b4623, type: 3}
   - {fileID: 21300000, guid: 19e7c8a91bc21564f9b2f4ae26cdfad4, type: 3}
@@ -97,6 +101,7 @@ SpriteAtlas:
   - 8
   - 5
   - 9
+  - CoinFace
   - ButtonPressed4
   - Mark0
   - 0
@@ -105,10 +110,13 @@ SpriteAtlas:
   - ButtonExplosion4
   - Mark1
   - 6
+  - CoinFlipping
   - Mark5
+  - CoinCross
   - ButtonStruggle
   - 2
   - 0
+  - Background
   - SnorlaxOneArm
   - 8
   - 7
