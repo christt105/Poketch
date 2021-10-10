@@ -46,6 +46,15 @@ public class TicTacToe : Function
         {
             tableButtons[i] = buttons.transform.GetChild(i).GetComponent<Button>();
         }
+
+        if (jsonObject != null)
+        {
+            pikaWons = jsonObject.GetValueOrDefault("pikaWins", 0);
+            eeveeWons = jsonObject.GetValueOrDefault("eeveeWins", 0);
+
+            pikaWins.text = pikaWons.ToString();
+            eeveeWins.text = eeveeWons.ToString();
+        }
     }
 
     public void CellClicked(Button buttonPushed)
@@ -82,6 +91,11 @@ public class TicTacToe : Function
                     pikaWins.text = pikaWons.ToString();
                     break;
             }
+
+            JSONNode json = new JSONObject();
+            json.Add("pikaWins", pikaWons);
+            json.Add("eeveeWins", eeveeWons);
+            FunctionController.Instance.SaveFunctionInfo(GetType().Name, json);
 
             return;
         }
