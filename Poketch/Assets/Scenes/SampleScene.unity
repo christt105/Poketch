@@ -1443,7 +1443,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8714770737784676772, guid: a20c6556b828f7e46bcc1e601199a4c1, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8714770737784676773, guid: a20c6556b828f7e46bcc1e601199a4c1, type: 3}
       propertyPath: m_Pivot.x
@@ -1528,6 +1528,18 @@ PrefabInstance:
     - target: {fileID: 8714770737784676773, guid: a20c6556b828f7e46bcc1e601199a4c1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8714770739099696165, guid: a20c6556b828f7e46bcc1e601199a4c1, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 140
+      objectReference: {fileID: 0}
+    - target: {fileID: 8714770739099696165, guid: a20c6556b828f7e46bcc1e601199a4c1, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 140
+      objectReference: {fileID: 0}
+    - target: {fileID: 8714770739099696165, guid: a20c6556b828f7e46bcc1e601199a4c1, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a20c6556b828f7e46bcc1e601199a4c1, type: 3}
@@ -3070,7 +3082,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8368194952022046162, guid: 6f0d2a8ef992c924a913895da249abd6, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8368194952022046163, guid: 6f0d2a8ef992c924a913895da249abd6, type: 3}
       propertyPath: m_Pivot.x
