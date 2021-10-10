@@ -42,6 +42,7 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     IEnumerator OnMousePressing()
     {
+        // Paint the pixel every frame we are pressing the screen
         while (isPainting)
         {
             onScreenTouched();
@@ -59,9 +60,11 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
             PaintPixel(colorToPaint, pixelPosition);
         }
 
+        // If the pixel position is not (-1,-1) and is different from the previous position, do a Lerp to interpolate between the two points
+        // so we can paint all the pixels between.
         if (previousPixel != new Vector2Int(-1, -1) && previousPixel != pixelPosition)
         {
-            // Lerp del previous fins al pixelPosition
+            // Lerp from previous to pixelPosition
             Vector2 initialPos = previousPixel;
             Vector2 endPos = pixelPosition;
             float dist = (endPos - initialPos).magnitude;
@@ -82,6 +85,7 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     private void PaintPixel(Color colorToPaint, Vector2 pixelPosition)
     {
+        // Check if the pixel is inside the boundaries and if it is, check if the pixel was already paint to avoid painting the same pixel
         if (pixelPosition.x >= 0 && pixelPosition.x <= MemoPad.width && pixelPosition.y >= 0 && pixelPosition.y <= MemoPad.height)
         {
             if (memoPad.m_renderer_texture.GetPixel((int)pixelPosition.x, (int)pixelPosition.y) != colorToPaint)
@@ -94,6 +98,7 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     private Vector2 CalculatePixelPosition()
     {
+        // Calculate the pixel position, local to the texture we want to paint
         Vector2 localCursor;
         if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(GetComponent<RectTransform>(), Input.mousePosition, null, out localCursor))
             return Vector2Int.zero;
