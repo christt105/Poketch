@@ -37,6 +37,7 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     public void OnPointerUp(PointerEventData eventData)
     {
         isPainting = false;
+        previousPixel = new Vector2Int(-1, -1);
     }
 
     IEnumerator OnMousePressing()
@@ -50,15 +51,33 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     private void PaintToScreen(Color colorToPaint)
     {
+        Vector2 pixelPosition = CalculatePixelPosition();
+
+        // Firt time dragging
         if (previousPixel == new Vector2Int(-1, -1))
         {
-            PaintPixel(colorToPaint, CalculatePixelPosition());
+            PaintPixel(colorToPaint, pixelPosition);
         }
 
-        if (previousPixel != new Vector2Int(-1, -1) && previousPixel != CalculatePixelPosition())
+        if (previousPixel != new Vector2Int(-1, -1) && previousPixel != pixelPosition)
         {
-            PaintPixel(colorToPaint, CalculatePixelPosition());
+            // Lerp del previous fins al pixelPosition
+            Vector2 initialPos = previousPixel;
+            Vector2 endPos = pixelPosition;
+            float dist = (endPos - initialPos).magnitude;
+            float step = 0.0f;
+
+            while(step <= 1.0f)
+            {
+                Vector2 newPixelPos = Vector2.Lerp(initialPos, endPos, step);
+
+                PaintPixel(colorToPaint, newPixelPos);
+
+                step += 1.0f / dist;
+            }
+
         }
+        previousPixel = pixelPosition;
     }
 
     private void PaintPixel(Color colorToPaint, Vector2 pixelPosition)
@@ -73,7 +92,7 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         }
     }
 
-    private Vector2Int CalculatePixelPosition()
+    private Vector2 CalculatePixelPosition()
     {
         Vector2 localCursor;
         if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(GetComponent<RectTransform>(), Input.mousePosition, null, out localCursor))
@@ -82,7 +101,7 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         localCursor.y += memoPad.m_renderer_texture.height;
         localCursor *= 0.5f;
 
-        return new Vector2Int((int)localCursor.x, (int)localCursor.y);
+        return localCursor;
     }
 
     private void ResetTexture()
