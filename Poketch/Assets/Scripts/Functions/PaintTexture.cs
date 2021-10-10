@@ -3,13 +3,14 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
 
-[ RequireComponent( typeof(RawImage))]
+[RequireComponent(typeof(RawImage))]
 public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField]
     private MemoPad memoPad;
 
     private bool isPainting = false;
+    private Vector2 previousPixel = new Vector2Int(-1, -1);
 
     public delegate void OnScreenTouched();
     public static event OnScreenTouched onScreenTouched;
@@ -28,6 +29,7 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        Debug.Log("pointer down");
         isPainting = true;
         StartCoroutine(OnMousePressing());
     }
@@ -42,13 +44,21 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         while (isPainting)
         {
             onScreenTouched();
-            yield return null; 
+            yield return null;
         }
     }
 
     private void PaintToScreen(Color colorToPaint)
     {
-        PaintPixel(colorToPaint, CalculatePixelPosition());
+        if (previousPixel == new Vector2Int(-1, -1))
+        {
+            PaintPixel(colorToPaint, CalculatePixelPosition());
+        }
+
+        if (previousPixel != new Vector2Int(-1, -1) && previousPixel != CalculatePixelPosition())
+        {
+            PaintPixel(colorToPaint, CalculatePixelPosition());
+        }
     }
 
     private void PaintPixel(Color colorToPaint, Vector2 pixelPosition)
@@ -63,16 +73,16 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         }
     }
 
-    private Vector2 CalculatePixelPosition()
+    private Vector2Int CalculatePixelPosition()
     {
         Vector2 localCursor;
         if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(GetComponent<RectTransform>(), Input.mousePosition, null, out localCursor))
-            return Vector2.zero;
+            return Vector2Int.zero;
         localCursor.x += memoPad.m_renderer_texture.width;
         localCursor.y += memoPad.m_renderer_texture.height;
         localCursor *= 0.5f;
 
-        return localCursor;
+        return new Vector2Int((int)localCursor.x, (int)localCursor.y);
     }
 
     private void ResetTexture()
@@ -81,5 +91,5 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         memoPad.m_renderer_texture.Apply();
     }
 
-   
+
 }
