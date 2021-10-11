@@ -61,6 +61,7 @@ public class TicTacToe : Function
     {
         ++moves;
         buttonPushed.interactable = false;
+        SoundManager.Instance.PlaySFX(SoundManager.SFX.ResetCounter);
 
         float p = int.Parse(buttonPushed.gameObject.name) * (1.0f / 3.0f);
         int row = Mathf.FloorToInt(p);
@@ -91,6 +92,8 @@ public class TicTacToe : Function
                     pikaWins.text = pikaWons.ToString();
                     break;
             }
+
+            SoundManager.Instance.PlaySFX(SoundManager.SFX.Refresh);
 
             SaveResults();
 
