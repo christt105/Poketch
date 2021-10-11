@@ -61,7 +61,7 @@ public class VoltorbWeeper : Function
 
     #region Override Functions
 
-    public override void OnCreate(JSONObject jsonObject)
+    public override void OnCreate(JSONNode jsonObject)
     {
 
     }

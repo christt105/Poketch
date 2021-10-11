@@ -89,7 +89,7 @@ public class MoveTester : Function
 
     #region Functions
 
-    public override void OnCreate( JSONObject jsonObject )
+    public override void OnCreate( JSONNode jsonObject )
     {
         m_Exclamations = new GameObject[m_ExclamationsTransform.childCount];
 

@@ -6,7 +6,7 @@ public abstract class Function : MonoBehaviour
     /// <summary>
     /// </summary>
     /// <param name="jsonObject"></param>
-    public virtual void OnCreate( JSONObject jsonObject )
+    public virtual void OnCreate( JSONNode jsonObject )
     {
     }
 

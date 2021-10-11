@@ -49,7 +49,7 @@ public class MemoPad : Function
     // This function is used as a Start function.
     // @_jsonObject has information of the JSON file.
 
-    public override void OnCreate(JSONObject _jsonObject)
+    public override void OnCreate(JSONNode _jsonObject)
     {
         m_ButtonErase.onClick.AddListener(() => ChangeState(ACTION_STATE.ERASING));
         m_ButtonPaint.onClick.AddListener(() => ChangeState(ACTION_STATE.PAINTING));
@@ -127,5 +127,4 @@ public class MemoPad : Function
             onPaint(Color.white);
         }
     }
-
 }

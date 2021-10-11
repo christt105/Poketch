@@ -16,7 +16,7 @@ public class Keckleon : Function
     [SerializeField]
     private Material m_ColorMaterial;
 
-    public override void OnCreate( JSONObject jsonObject )
+    public override void OnCreate( JSONNode jsonObject )
     {
         m_ColorSlider.onValueChanged.AddListener( ( color ) => ChangeColor( ( int ) color ) );
 

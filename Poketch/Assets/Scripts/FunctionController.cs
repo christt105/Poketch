@@ -48,20 +48,17 @@ public class FunctionController : MonoBehaviour
 
 #if !UNITY_EDITOR
         m_FunctionIndex = file != null ? file.GetValueOrDefault( "Actual", -1 ).AsInt : -1;
+        if ( m_FunctionIndex < 0 || m_FunctionIndex >= m_Functions.Length )
+        {
+            m_FunctionIndex = 0;
+        }
 #endif
 
         file = file?.GetValueOrDefault( "Functions", null );
 
         foreach ( Function f in m_Functions )
         {
-            if ( file != null && file.HasKey( f.GetType().Name ) )
-            {
-                f.OnCreate( file[f.GetType().Name].AsObject );
-            }
-            else
-            {
-                f.OnCreate( null );
-            }
+            f.OnCreate( file?[f.GetType().Name] );
 
             if ( !f.gameObject.activeSelf )
             {

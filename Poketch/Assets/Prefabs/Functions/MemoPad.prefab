@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 7594956824578540091, guid: 3fdd55973831b0e4b9b45fce49f86da0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 26fe05a73066ddc4f9a33e8fa3f23b5a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -95,7 +95,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 2
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -186,7 +186,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 2468866068640949953, guid: 3fdd55973831b0e4b9b45fce49f86da0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2ae049a65a1de7b4284e1988034fff21, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -215,7 +215,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 2
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -342,7 +342,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 7649552551862100370, guid: 3fdd55973831b0e4b9b45fce49f86da0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e865ab3cb1946f74093814439e541cb1, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -405,6 +405,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ButtonErase: {fileID: 8368194950493204544}
   m_ButtonPaint: {fileID: 8368194950759499755}
+  m_ImageToPaint: {fileID: 8368194952205975519}
+  m_PaintSpritePressed: {fileID: 21300000, guid: b7795a6509af80d4ba08b6beef9cde43, type: 3}
+  m_PaintSpriteIdle: {fileID: 21300000, guid: 2ae049a65a1de7b4284e1988034fff21, type: 3}
+  m_EraseSpritePressed: {fileID: 21300000, guid: 9bfa90b6e67f5de4ab992d177c543824, type: 3}
+  m_EraseSpriteIdle: {fileID: 21300000, guid: 26fe05a73066ddc4f9a33e8fa3f23b5a, type: 3}
   current_state: 1
 --- !u!1 &8368194952205975513
 GameObject:
