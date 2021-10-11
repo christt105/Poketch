@@ -17,6 +17,7 @@ public class VoltorbWeeper : Function
         VOLTORB
     }
 
+    [Serializable]
     public struct Weeper
     {
         public bool m_is_voltorb;
@@ -31,16 +32,32 @@ public class VoltorbWeeper : Function
 
     [SerializeField] [Range(0f, 200f)]
     private float cellSize;
-    
+
+    [SerializeField]
+    private Font m_font;
+
     [SerializeField] [Range(0, 200)]
     private int textSize;   
 
+    [SerializeField]
     private Weeper[] m_ArrayWeeper;
 
     private GridWeeper m_grid;
 
     [SerializeField]
     private Transform m_RootWeeper;
+
+    [SerializeField]
+    private Material m_materialColor;
+
+    [Header("--- SPRITES ---")]
+    [SerializeField] 
+    private Sprite m_spriteVoltorb;
+
+    [SerializeField]
+    private Sprite  m_spriteBlock;
+
+
 
     #region Override Functions
 
@@ -55,7 +72,7 @@ public class VoltorbWeeper : Function
         {
             m_ArrayWeeper = AddVoltorbNeighbors(MergeVoltorbWeeper(CreateVoltorbs()));
             
-            m_grid = new GridWeeper(m_sizeGrid.x, m_sizeGrid.y, cellSize, textSize, m_RootWeeper, m_ArrayWeeper);
+            m_grid = new GridWeeper(m_sizeGrid.x, m_sizeGrid.y, cellSize, m_font, textSize, m_RootWeeper, m_spriteBlock, m_materialColor, m_ArrayWeeper);
         }
         else
             Debug.LogError("--- Error: You are using more Vortorbs than existent spots ---");
@@ -74,7 +91,7 @@ public class VoltorbWeeper : Function
 
         if(Input.GetMouseButton(0))
         {
-            m_grid.SetValue(GetMouseWorldPosition(), 56);
+            //m_grid.SetValue(Camera.main.ScreenToWorldPoint(Input.mousePosition));
         }
 
         if (Input.GetKeyDown("space"))
@@ -85,13 +102,16 @@ public class VoltorbWeeper : Function
             {
                 m_ArrayWeeper = AddVoltorbNeighbors(MergeVoltorbWeeper(CreateVoltorbs()));
 
-                m_grid = new GridWeeper(m_sizeGrid.x, m_sizeGrid.y, cellSize, textSize, m_RootWeeper, m_ArrayWeeper);
+                m_grid = new GridWeeper(m_sizeGrid.x, m_sizeGrid.y, cellSize, m_font ,textSize, m_RootWeeper, m_spriteBlock, m_materialColor, m_ArrayWeeper);
             }
             else
                 Debug.LogError("--- Error: You are using more Vortorbs than existent spots ---");
         }
     }
-
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawSphere(Camera.main.ScreenToWorldPoint(Input.mousePosition), 5);
+    }
     private int[] CreateVoltorbs()
     {
         int[] new_ArrayVoltorb = new int[m_max_voltorbs];
@@ -198,13 +218,10 @@ public class VoltorbWeeper : Function
         return ArrayWeeper;
     }
 
-    private Vector3 GetMouseWorldPosition()
+    public void DebugButton()
     {
-        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        worldPosition.z = 0f;
-        return worldPosition;
+        Debug.Log("You are pressing a Button!!");
     }
-
 
     private void DeleteArrayVoltorbWeeper()
     {
