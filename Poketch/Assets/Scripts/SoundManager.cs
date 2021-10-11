@@ -18,7 +18,8 @@ public class SoundManager : MonoBehaviour
         Refresh,
         Alarm,
         ButtonDeny,
-        SnorlaxTemporizer
+        SnorlaxTemporizer,
+        ExplodeStopwatch
     }
 
     [SerializeField]

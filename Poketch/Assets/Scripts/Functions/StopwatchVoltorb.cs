@@ -14,12 +14,14 @@ public class StopwatchVoltorb : MonoBehaviour, IPointerDownHandler, IPointerUpHa
         {
             case Stopwatch.StopWatchState.Idle:
                 stopwatch.ChangeState((int)Stopwatch.StopWatchState.PushedIdle);
+                ClickedSFX();
                 break;
             case Stopwatch.StopWatchState.PushedIdle:
                 Debug.LogError("What? Shouldn't be possible xd");
                 break;
             case Stopwatch.StopWatchState.Counting:
                 stopwatch.ChangeState((int)Stopwatch.StopWatchState.PushedCount);
+                ClickedSFX();
                 break;
             case Stopwatch.StopWatchState.Explode:
                 // Nothing to do here
@@ -85,5 +87,15 @@ public class StopwatchVoltorb : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     public void ResetClock()
     {
         stopwatch.ResetClock();
+    }
+
+    public void ClickedSFX()
+    {
+        SoundManager.Instance.PlaySFX(SoundManager.SFX.ResetCounter);
+    }
+
+    public void ExplosionSFX()
+    {
+        SoundManager.Instance.PlaySFX(SoundManager.SFX.ExplodeStopwatch);
     }
 }
