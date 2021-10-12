@@ -241,5 +241,6 @@ public class TicTacToe : Function
         drawText.SetActive(false);
         winText.SetActive(true);
         pokeWinImage.gameObject.SetActive(true);
+        resetButton.interactable = true;
     }
 }
