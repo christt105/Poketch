@@ -666,17 +666,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &364318503 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6965911143695547552, guid: ef49149b6f68a89439a9c89c5e1c197a, type: 3}
-  m_PrefabInstance: {fileID: 964357849}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &374235057
 GameObject:
   m_ObjectHideFlags: 0
@@ -1539,10 +1528,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6965911143220853720, guid: ef49149b6f68a89439a9c89c5e1c197a, type: 3}
-      propertyPath: resetButton
-      value: 
-      objectReference: {fileID: 364318503}
     - target: {fileID: 6965911143695547567, guid: ef49149b6f68a89439a9c89c5e1c197a, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
