@@ -22,15 +22,19 @@ public class Roulette : Function
     [SerializeField] RectTransform rouletteArrow;
 
     float velocity = 0;
-    float maxVelocity = 15;
+    float maxVelocity = 10;
+
+    bool firstFrame = true;
 
     public override void OnCreate(JSONNode jsonObject)
     {
-        
+        ChangeState((int)State.Stopped);
     }
 
     private void Update()
     {
+        if (firstFrame) firstFrame = false;
+
         switch (currentState)
         {
             case State.Stopped:
@@ -72,7 +76,7 @@ public class Roulette : Function
         {
             case State.Stopped:
 
-                SoundManager.Instance.PlaySFX(SoundManager.SFX.RouletteStop);
+                if (!firstFrame) SoundManager.Instance.PlaySFX(SoundManager.SFX.RouletteStop);
 
                 stopButton.interactable = false;
                 playButton.interactable = true;
