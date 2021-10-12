@@ -33,6 +33,10 @@ public class TicTacToe : Function
 
     [Header("Buttons")]
     [SerializeField] CanvasGroup buttons;
+    [SerializeField] Button resetButton;
+
+    [Header("Win Lines")]
+    [SerializeField] GameObject[] lines;
 
     Button[] tableButtons = new Button[9];
 
@@ -70,14 +74,28 @@ public class TicTacToe : Function
         board[row, column] = currentTurn;
         buttonPushed.image.sprite = currentTurn == CellState.Pikachu ? pika : eevee;
 
-        if (CheckWinCondition(row, column))
+        int result = CheckWinCondition(row, column);
+
+        if (result != -1)
         {
+            switch (result)
+            {
+                case 0:
+                    StartCoroutine(WinLineAnim(lines[row]));
+                    break;
+                case 1:
+                    StartCoroutine(WinLineAnim(lines[3 + column]));
+                    break;
+                case 2:
+                    StartCoroutine(WinLineAnim(lines[6]));
+                    break;
+                case 3:
+                    StartCoroutine(WinLineAnim(lines[7]));
+                    break;
+            }
+
             buttons.interactable = false;
-            winMenu.SetActive(true);
-            pokeWinImage.sprite = currentTurn == CellState.Pikachu ? pika : eevee;
-            drawText.SetActive(false);
-            winText.SetActive(true);
-            pokeWinImage.gameObject.SetActive(true);
+            resetButton.interactable = false;
 
             switch (currentTurn)
             {
@@ -113,8 +131,10 @@ public class TicTacToe : Function
         currentTurnImage.sprite = currentTurn == CellState.Pikachu ? pika : eevee;
     }
 
-    bool CheckWinCondition(int row, int column)
+    int CheckWinCondition(int row, int column)
     {
+        Vector2Int result = new Vector2Int(-1, -1);
+
         //check columns
         for (int i = 0; i < 3; ++i)
         {
@@ -122,7 +142,7 @@ public class TicTacToe : Function
 
             if (i == 2)
             {
-                return true;
+                return 0;
             }
         }
 
@@ -133,7 +153,7 @@ public class TicTacToe : Function
 
             if (i == 2)
             {
-                return true;
+                return 1;
             }
         }
 
@@ -147,7 +167,7 @@ public class TicTacToe : Function
 
                 if (i == 2)
                 {
-                    return true;
+                    return 2;
                 }
             }
         }
@@ -161,12 +181,12 @@ public class TicTacToe : Function
 
                 if (i == 2)
                 {
-                    return true;
+                    return 3;
                 }
             }
         }
 
-        return false;
+        return -1;
     }
 
     public void ResetInfo()
@@ -206,5 +226,20 @@ public class TicTacToe : Function
             tableButtons[i].image.sprite = null;
             tableButtons[i].interactable = true;
         }
+    }
+
+    IEnumerator WinLineAnim(GameObject line)
+    {
+        for (int i = 0; i < 6; ++i)
+        {
+            line.SetActive(!line.activeSelf);
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        winMenu.SetActive(true);
+        pokeWinImage.sprite = currentTurn == CellState.Pikachu ? pika : eevee;
+        drawText.SetActive(false);
+        winText.SetActive(true);
+        pokeWinImage.gameObject.SetActive(true);
     }
 }
