@@ -2430,7 +2430,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6873680157438481388, guid: ab9e0148f95c065468d3fa126232d64b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6873680157438481389, guid: ab9e0148f95c065468d3fa126232d64b, type: 3}
       propertyPath: m_Pivot.x
@@ -2672,6 +2672,8 @@ MonoBehaviour:
     value: {fileID: 8300000, guid: 02296545431eadf40b67dee4afcd82ca, type: 3}
   - key: 10
     value: {fileID: 8300000, guid: 1ffa6d67103ec0f4a8df68b2d8cc8b9a, type: 3}
+  - key: 11
+    value: {fileID: 8300000, guid: 83c810d6ac2ca7646ba6b8ffa9dfc252, type: 3}
 --- !u!4 &2050518823
 Transform:
   m_ObjectHideFlags: 0
@@ -3058,6 +3060,10 @@ PrefabInstance:
     - target: {fileID: 3313955455247909139, guid: e4fb1aad7bf821941a107e3aaf183434, type: 3}
       propertyPath: m_Name
       value: AlarmClock
+      objectReference: {fileID: 0}
+    - target: {fileID: 3313955455247909139, guid: e4fb1aad7bf821941a107e3aaf183434, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e4fb1aad7bf821941a107e3aaf183434, type: 3}

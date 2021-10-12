@@ -38,10 +38,22 @@ public class AlarmClock : Function
 
     float timeBG = 0;
     float timeButtons = 0;
+    float alarmTime = 0;
+
+    bool firstFrame = true;
 
     public override void OnCreate(JSONNode jsonObject)
     {
         SetState((int)State.Alarm);
+
+        if (jsonObject != null)
+        {
+            alarm.x = jsonObject.GetValueOrDefault("alarmHour", 0);
+            alarm.y = jsonObject.GetValueOrDefault("alarmMinute", 0);
+
+            hours.SetNumber(alarm.x);
+            minutes.SetNumber(alarm.y);
+        }
     }
 
     private void Update()
@@ -61,10 +73,21 @@ public class AlarmClock : Function
                     if (background.sprite == clockBackground) background.sprite = alarmSoundBackgrounds[0];
 
                     timeBG += Time.deltaTime;
-                    if (timeBG >= 0.1f)
+                    alarmTime += Time.deltaTime;
+
+                    if (timeBG >= 0.05f)
                     {
                         background.sprite = background.sprite == alarmSoundBackgrounds[0] ? alarmSoundBackgrounds[1] : alarmSoundBackgrounds[0];
                         timeBG = 0;
+                    }
+
+                    if (alarmTime >= 0.7f)
+                    {
+                        SoundManager.Instance.PlaySFX(SoundManager.SFX.AlarmClock);
+                        hours.gameObject.SetActive(!hours.gameObject.activeSelf);
+                        minutes.gameObject.SetActive(!minutes.gameObject.activeSelf);
+
+                        alarmTime = 0;
                     }
                 }
                 else
@@ -91,12 +114,15 @@ public class AlarmClock : Function
 
                 break;
         }
+
+        if (firstFrame) firstFrame = false;
     }
 
     public void SetState(int newState)
     {
         arrowsParent.SetActive((State)newState == State.Alarm);
-        
+        if (!firstFrame) SoundManager.Instance.PlaySFX(SoundManager.SFX.Button);
+
         switch ((State)newState)
         {
             case State.Clock:
@@ -113,6 +139,9 @@ public class AlarmClock : Function
                 background.sprite = alarmSetBackground;
                 clockButton.image.sprite = idleButton;
                 alarmButton.image.sprite = pressedButton;
+
+                hours.gameObject.SetActive(true);
+                minutes.gameObject.SetActive(true);
 
                 hours.SetNumber(alarm.x);
                 minutes.SetNumber(alarm.y);
@@ -138,6 +167,11 @@ public class AlarmClock : Function
         if (alarm.x > 23) alarm.x = alarm.x - 24;
 
         hours.SetNumber(alarm.x);
+
+        JSONNode json = new JSONObject();
+        json.Add("alarmHour", alarm.x);
+        json.Add("alarmMinute", alarm.y);
+        FunctionController.Instance.SaveFunctionInfo(GetType().Name, json);
     }
 
     public void ChangeAlarmMinute(int quantity)
@@ -148,5 +182,10 @@ public class AlarmClock : Function
         if (alarm.y > 59) alarm.y = alarm.y - 60;
 
         minutes.SetNumber(alarm.y);
+
+        JSONNode json = new JSONObject();
+        json.Add("alarmHour", alarm.x);
+        json.Add("alarmMinute", alarm.y);
+        FunctionController.Instance.SaveFunctionInfo(GetType().Name, json);
     }
 }
