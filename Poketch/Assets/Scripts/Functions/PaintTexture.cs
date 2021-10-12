@@ -29,7 +29,6 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("pointer down");
         isPainting = true;
         StartCoroutine(OnMousePressing());
     }
@@ -57,7 +56,7 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         // Firt time dragging
         if (previousPixel == new Vector2Int(-1, -1))
         {
-            PaintPixel(colorToPaint, pixelPosition);
+            CreateBrushSize(colorToPaint, pixelPosition);
         }
 
         // If the pixel position is not (-1,-1) and is different from the previous position, do a Lerp to interpolate between the two points
@@ -74,7 +73,7 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
             {
                 Vector2 newPixelPos = Vector2.Lerp(initialPos, endPos, step);
 
-                PaintPixel(colorToPaint, newPixelPos);
+                CreateBrushSize(colorToPaint, newPixelPos);
 
                 step += 1.0f / dist;
             }
@@ -83,17 +82,39 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         previousPixel = pixelPosition;
     }
 
+    private void CreateBrushSize(Color colorToPaint, Vector2 pixelPosition)
+    {
+        // Paint the first pixel that we allways want to paint no matter if we are erasing or painting.
+        PaintPixel(colorToPaint, pixelPosition);
+
+        if (colorToPaint == Color.white) // We need to calculate 3 neighbour pixels because we need to erase 4x4 pixels
+        {
+            Vector2 pixelPositionRight = pixelPosition + new Vector2(1.0f, 0.0f);
+            Vector2 pixelPositionDown = pixelPosition + new Vector2(0.0f, -1.0f);
+            Vector2 pixelPositionDownRight = pixelPosition + new Vector2(1.0f, -1.0f);
+
+            PaintPixel(colorToPaint, pixelPositionRight);
+            PaintPixel(colorToPaint, pixelPositionDown);
+            PaintPixel(colorToPaint, pixelPositionDownRight);
+
+        }
+        memoPad.m_renderer_texture.Apply();
+    }
+
     private void PaintPixel(Color colorToPaint, Vector2 pixelPosition)
     {
-        // Check if the pixel is inside the boundaries and if it is, check if the pixel was already paint to avoid painting the same pixel
         if (pixelPosition.x >= 0 && pixelPosition.x <= MemoPad.width && pixelPosition.y >= 0 && pixelPosition.y <= MemoPad.height)
         {
             if (memoPad.m_renderer_texture.GetPixel((int)pixelPosition.x, (int)pixelPosition.y) != colorToPaint)
             {
                 memoPad.m_renderer_texture.SetPixel((int)pixelPosition.x, (int)pixelPosition.y, colorToPaint);
-                memoPad.m_renderer_texture.Apply();
             }
         }
+    }
+
+    private void PaintPixel()
+    {
+
     }
 
     private Vector2 CalculatePixelPosition()
