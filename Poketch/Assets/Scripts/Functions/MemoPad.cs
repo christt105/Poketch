@@ -39,12 +39,7 @@ public class MemoPad : Function
     // Variable that has the current state of the action we are performing.
     public ACTION_STATE current_state = ACTION_STATE.PAINTING;
 
-    public delegate void OnPaint(Color colorToPaint);
-    public static event OnPaint onPaint;
-    public delegate void OnResetTexture();
-    public static event OnResetTexture onResetTexture;
-    public delegate void OnInitializeValues(Texture2D texture2D, Vector2Int textureRect, Color[] pixelColors);
-    public static event OnInitializeValues onInitializeValues;
+
 
     // This function is used as a Start function.
     // @_jsonObject has information of the JSON file.
@@ -61,7 +56,7 @@ public class MemoPad : Function
 
 
         // Connect the ScreenTouched() method to the PaintTexture signal.
-        PaintTexture.onScreenTouched += ScreenTouched;
+        Signals.onScreenTouched += ScreenTouched;
       
 
         for (int i = 0; i < width * height; ++i)
@@ -75,8 +70,8 @@ public class MemoPad : Function
     public override void OnChange()
     {
         ChangeState(ACTION_STATE.PAINTING, true);
-        onInitializeValues?.Invoke(m_renderer_texture, new Vector2Int(width, height), pixelColors);
-        onResetTexture?.Invoke();
+        Signals.SignalOnInitializeValues(m_renderer_texture, new Vector2Int(width, height), pixelColors);
+        Signals.SignalOnResetTexture();
     }
 
     // Method that change the current action state and perform the logic and graphic part.
@@ -109,21 +104,17 @@ public class MemoPad : Function
                 SoundManager.Instance.PlaySFX(SoundManager.SFX.Button);
             }
         }
-        else
-        {
-            //bad
-        }
     }
 
     private void ScreenTouched()
     {
         if (current_state == ACTION_STATE.PAINTING)
         {
-            onPaint(Color.black);
+            Signals.SignalOnPaint(Color.black);
         }
         else
         {
-            onPaint(Color.white);
+            Signals.SignalOnPaint(Color.white);
         }
     }
 }

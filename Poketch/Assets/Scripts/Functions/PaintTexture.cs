@@ -12,21 +12,18 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     private Vector2Int textureRect;
     private Color[] pixelColors;
 
-    public delegate void OnScreenTouched();
-    public static event OnScreenTouched onScreenTouched;
-
     private void OnEnable()
     {
-        MemoPad.onPaint += PaintToScreen;
-        MemoPad.onResetTexture += ResetTexture;
-        MemoPad.onInitializeValues += InitializeVariables;
+        Signals.onPaint += PaintToScreen;
+        Signals.onResetTexture += ResetTexture;
+        Signals.onInitializeValues += InitializeVariables;
     }
 
     private void OnDisable()
     {
-        MemoPad.onPaint -= PaintToScreen;
-        MemoPad.onResetTexture -= ResetTexture;
-        MemoPad.onInitializeValues -= InitializeVariables;
+        Signals.onPaint -= PaintToScreen;
+        Signals.onResetTexture -= ResetTexture;
+        Signals.onInitializeValues -= InitializeVariables;
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -46,7 +43,7 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         // Paint the pixel every frame we are pressing the screen
         while (isPainting)
         {
-            onScreenTouched();
+            Signals.SignalOnScreenTouched();
             yield return null;
         }
     }
