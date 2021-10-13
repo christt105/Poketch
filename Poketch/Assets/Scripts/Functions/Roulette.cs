@@ -20,6 +20,7 @@ public class Roulette : Function
     [SerializeField] Button stopButton;
     [SerializeField] Button resetButton;
     [SerializeField] RectTransform rouletteArrow;
+    [SerializeField] RoulettePaintTexture paintTexture;
 
     float velocity = 0;
     float maxVelocity = 10;
@@ -106,6 +107,7 @@ public class Roulette : Function
 
     public void ResetCanvas()
     {
+        paintTexture.ClearTexture();
         SoundManager.Instance.PlaySFX(SoundManager.SFX.Button);
     }
 }

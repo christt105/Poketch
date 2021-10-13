@@ -6,6 +6,8 @@ public class GameManager : MonoBehaviour
 {
     static public GameManager get;
 
+    public Camera mainCam;
+
     private void Awake()
     {
         get = this;
