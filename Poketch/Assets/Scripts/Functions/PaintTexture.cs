@@ -2,6 +2,7 @@
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(RawImage))]
 public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
@@ -11,6 +12,7 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     private Texture2D textureContainer;
     private Vector2Int textureRect;
     private Color[] pixelColors;
+    private List<Vector2> neighbours = new List<Vector2>() { new Vector2(1.0f, 0.0f), new Vector2(0.0f, -1.0f), new Vector2(1.0f, -1.0f) };
 
     private void OnEnable()
     {
@@ -95,13 +97,10 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
         if (colorToPaint == Color.white) // We need to calculate 3 neighbour pixels because we need to erase 4x4 pixels
         {
-            Vector2 pixelPositionRight = pixelPosition + new Vector2(1.0f, 0.0f);
-            Vector2 pixelPositionDown = pixelPosition + new Vector2(0.0f, -1.0f);
-            Vector2 pixelPositionDownRight = pixelPosition + new Vector2(1.0f, -1.0f);
-
-            PaintPixel(colorToPaint, pixelPositionRight);
-            PaintPixel(colorToPaint, pixelPositionDown);
-            PaintPixel(colorToPaint, pixelPositionDownRight);
+            foreach(Vector2 position in neighbours)
+            {
+                PaintPixel(colorToPaint, pixelPosition + position);
+            }
         }
         textureContainer.Apply(); 
     }
@@ -121,6 +120,7 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     private Vector2 CalculatePixelPosition()
     {
         // Calculate the pixel position, local to the texture we want to paint
+        // P.e. If the texture is 150x150, no matter where it is in the screen, if the mouse is in the middle of that texture, you will get (75,75)
         Vector2 localCursor;
         if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(GetComponent<RectTransform>(), Input.mousePosition, null, out localCursor))
             return Vector2Int.zero;
