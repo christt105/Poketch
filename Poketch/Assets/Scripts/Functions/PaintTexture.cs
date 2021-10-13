@@ -54,7 +54,7 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     private void InitializeVariables(Texture2D renderTexture, Vector2Int textureRect, Color[] pixelColors)
     {
         textureContainer = renderTexture; // Reference to the texture used to modify it
-        this.textureRect = textureRect;
+        this.textureRect = textureRect; // The size we want to paint. It is not necessary to match with the texture size.
         this.pixelColors = pixelColors;
         GetComponent<RawImage>().texture = textureContainer; // Every time we modify textureContainer, the raw image will change automatically.
     }
@@ -106,11 +106,12 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
             PaintPixel(colorToPaint, pixelPositionDown);
             PaintPixel(colorToPaint, pixelPositionDownRight);
         }
-        textureContainer.Apply();
+        textureContainer.Apply(); 
     }
 
     private void PaintPixel(Color colorToPaint, Vector2 pixelPosition)
     {
+        // Check if the pixel is inside the boundaries and if it is already painted to avoid painting it. If not, paint it.
         if (pixelPosition.x >= 0 && pixelPosition.x <= textureRect.x && pixelPosition.y >= 0 && pixelPosition.y <= textureRect.y)
         {
             if (textureContainer.GetPixel((int)pixelPosition.x, (int)pixelPosition.y) != colorToPaint)
