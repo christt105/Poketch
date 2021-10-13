@@ -12,8 +12,6 @@ public class MemoPad : Function
     [SerializeField]
     private Button m_ButtonPaint;
     [SerializeField]
-    private RawImage m_ImageToPaint;
-    [SerializeField]
     private Sprite m_PaintSpritePressed;
     [SerializeField]
     private Sprite m_PaintSpriteIdle;
@@ -45,6 +43,8 @@ public class MemoPad : Function
     public static event OnPaint onPaint;
     public delegate void OnResetTexture();
     public static event OnResetTexture onResetTexture;
+    public delegate void OnInitializeValues(Texture2D texture2D, Vector2Int textureRect, Color[] pixelColors);
+    public static event OnInitializeValues onInitializeValues;
 
     // This function is used as a Start function.
     // @_jsonObject has information of the JSON file.
@@ -70,13 +70,12 @@ public class MemoPad : Function
         }
         m_renderer_texture = new Texture2D(width, height);
         m_renderer_texture.filterMode = FilterMode.Point;
-        onResetTexture?.Invoke();
-        m_ImageToPaint.texture = m_renderer_texture;
     }
 
     public override void OnChange()
     {
         ChangeState(ACTION_STATE.PAINTING, true);
+        onInitializeValues?.Invoke(m_renderer_texture, new Vector2Int(width, height), pixelColors);
         onResetTexture?.Invoke();
     }
 

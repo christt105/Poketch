@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
@@ -6,11 +6,11 @@ using System.Collections;
 [RequireComponent(typeof(RawImage))]
 public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    [SerializeField]
-    private MemoPad memoPad;
-
     private bool isPainting = false;
     private Vector2 previousPixel = new Vector2Int(-1, -1);
+    private Texture2D textureContainer;
+    private Vector2Int textureRect;
+    private Color[] pixelColors;
 
     public delegate void OnScreenTouched();
     public static event OnScreenTouched onScreenTouched;
@@ -19,12 +19,14 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     {
         MemoPad.onPaint += PaintToScreen;
         MemoPad.onResetTexture += ResetTexture;
+        MemoPad.onInitializeValues += InitializeVariables;
     }
 
     private void OnDisable()
     {
         MemoPad.onPaint -= PaintToScreen;
         MemoPad.onResetTexture -= ResetTexture;
+        MemoPad.onInitializeValues -= InitializeVariables;
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -49,6 +51,14 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         }
     }
 
+    private void InitializeVariables(Texture2D renderTexture, Vector2Int textureRect, Color[] pixelColors)
+    {
+        textureContainer = renderTexture; // Reference to the texture used to modify it
+        this.textureRect = textureRect;
+        this.pixelColors = pixelColors;
+        GetComponent<RawImage>().texture = textureContainer; // Every time we modify textureContainer, the raw image will change automatically.
+    }
+
     private void PaintToScreen(Color colorToPaint)
     {
         Vector2 pixelPosition = CalculatePixelPosition();
@@ -69,7 +79,7 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
             float dist = (endPos - initialPos).magnitude;
             float step = 0.0f;
 
-            while(step <= 1.0f)
+            while (step <= 1.0f)
             {
                 Vector2 newPixelPos = Vector2.Lerp(initialPos, endPos, step);
 
@@ -77,7 +87,6 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
                 step += 1.0f / dist;
             }
-
         }
         previousPixel = pixelPosition;
     }
@@ -96,25 +105,19 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
             PaintPixel(colorToPaint, pixelPositionRight);
             PaintPixel(colorToPaint, pixelPositionDown);
             PaintPixel(colorToPaint, pixelPositionDownRight);
-
         }
-        memoPad.m_renderer_texture.Apply();
+        textureContainer.Apply();
     }
 
     private void PaintPixel(Color colorToPaint, Vector2 pixelPosition)
     {
-        if (pixelPosition.x >= 0 && pixelPosition.x <= MemoPad.width && pixelPosition.y >= 0 && pixelPosition.y <= MemoPad.height)
+        if (pixelPosition.x >= 0 && pixelPosition.x <= textureRect.x && pixelPosition.y >= 0 && pixelPosition.y <= textureRect.y)
         {
-            if (memoPad.m_renderer_texture.GetPixel((int)pixelPosition.x, (int)pixelPosition.y) != colorToPaint)
+            if (textureContainer.GetPixel((int)pixelPosition.x, (int)pixelPosition.y) != colorToPaint)
             {
-                memoPad.m_renderer_texture.SetPixel((int)pixelPosition.x, (int)pixelPosition.y, colorToPaint);
+                textureContainer.SetPixel((int)pixelPosition.x, (int)pixelPosition.y, colorToPaint);
             }
         }
-    }
-
-    private void PaintPixel()
-    {
-
     }
 
     private Vector2 CalculatePixelPosition()
@@ -123,8 +126,8 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         Vector2 localCursor;
         if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(GetComponent<RectTransform>(), Input.mousePosition, null, out localCursor))
             return Vector2Int.zero;
-        localCursor.x += memoPad.m_renderer_texture.width;
-        localCursor.y += memoPad.m_renderer_texture.height;
+        localCursor.x += textureContainer.width;
+        localCursor.y += textureContainer.height;
         localCursor *= 0.5f;
 
         return localCursor;
@@ -132,9 +135,7 @@ public class PaintTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     private void ResetTexture()
     {
-        memoPad.m_renderer_texture.SetPixels(memoPad.pixelColors);
-        memoPad.m_renderer_texture.Apply();
+        textureContainer.SetPixels(pixelColors);
+        textureContainer.Apply();
     }
-
-
 }
