@@ -22,6 +22,9 @@ public class Roulette : Function
     [SerializeField] RectTransform rouletteArrow;
     [SerializeField] RoulettePaintTexture paintTexture;
 
+    Texture2D tex;
+    Color[] pixelColors = new Color[70 * 70];
+
     float velocity = 0;
     float maxVelocity = 10;
 
@@ -29,7 +32,25 @@ public class Roulette : Function
 
     public override void OnCreate(JSONNode jsonObject)
     {
+        tex = new Texture2D(70, 70);
+        tex.filterMode = FilterMode.Point;
+
         ChangeState((int)State.Stopped);
+
+        Signals.onScreenTouched += Paint;
+
+        for (int i = 0; i < tex.width * tex.height; ++i)
+        {
+            pixelColors[i] = Color.white;
+        }
+
+        Signals.SignalOnInitializeValues(tex, new Vector2Int(tex.width, tex.height), pixelColors);
+        Signals.SignalOnResetTexture();
+    }
+
+    public override void OnChange()
+    {
+        Signals.SignalOnInitializeValues(tex, new Vector2Int(tex.width, tex.height), pixelColors);
     }
 
     private void Update()
@@ -107,7 +128,15 @@ public class Roulette : Function
 
     public void ResetCanvas()
     {
-        paintTexture.ClearTexture();
+        Signals.SignalOnResetTexture();
         SoundManager.Instance.PlaySFX(SoundManager.SFX.Button);
+    }
+
+    void Paint()
+    {
+        if (currentState == State.Stopped)
+        {
+            Signals.SignalOnPaint(Color.black);
+        }
     }
 }
