@@ -44,7 +44,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 3765fd6d8c9c7ed4593477bea4b28d0b, type: 3}
-    totalSpriteSurfaceArea: 876636
+    totalSpriteSurfaceArea: 897028
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -60,6 +60,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 52eb6c70aebfb6f4daed4e8d9f742dec, type: 3}
   - {fileID: 21300000, guid: e790a3a0075a2fd44b3fdffe17984522, type: 3}
   - {fileID: 21300000, guid: f347dbe055045484697d654ca1d760ef, type: 3}
+  - {fileID: 21300000, guid: 040ddd715ee37d148a8c086c7904323f, type: 3}
   - {fileID: 21300000, guid: 6fc0918135807e24b98a800ca79ac405, type: 3}
   - {fileID: 21300000, guid: 0fc55791a814eff45b03cd2b507f53f0, type: 3}
   - {fileID: 21300000, guid: d9fdbcc124555284eb26c7a041450939, type: 3}
@@ -84,6 +85,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 7baaf034b1a468a4c8f52f20d1b53f6f, type: 3}
   - {fileID: 21300000, guid: 8f1e1d34f7e7f9243a3b1786d6120af8, type: 3}
   - {fileID: 21300000, guid: 309f618476dc56842a23ebf5adc25f65, type: 3}
+  - {fileID: 21300000, guid: 66de528436edb154390bd2a614b40391, type: 3}
   - {fileID: 21300000, guid: 814ef6b45e6870f49ace22405c6fbd76, type: 3}
   - {fileID: 21300000, guid: 86052fb4308cb8a49b849887b9f6bb77, type: 3}
   - {fileID: 21300000, guid: 911527c45b05abc44ab120d077c735b4, type: 3}
@@ -227,6 +229,7 @@ SpriteAtlas:
   - xPressed
   - 5
   - ButtonPressed6
+  - PokeballBackground
   - 6
   - 3
   - 5
@@ -251,6 +254,7 @@ SpriteAtlas:
   - CoinFace
   - ResetPressed
   - Dot
+  - CircleMask
   - 7
   - 5
   - 4Pressed
