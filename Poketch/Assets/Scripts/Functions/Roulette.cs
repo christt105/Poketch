@@ -43,14 +43,12 @@ public class Roulette : Function
         {
             pixelColors[i] = Color.white;
         }
-
-        Signals.SignalOnInitializeValues(tex, new Vector2Int(tex.width, tex.height), pixelColors);
-        Signals.SignalOnResetTexture();
     }
 
     public override void OnChange()
     {
         Signals.SignalOnInitializeValues(tex, new Vector2Int(tex.width, tex.height), pixelColors);
+        Signals.SignalOnResetTexture();
     }
 
     private void Update()
