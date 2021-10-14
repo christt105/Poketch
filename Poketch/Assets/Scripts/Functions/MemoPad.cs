@@ -54,17 +54,23 @@ public class MemoPad : Function
         EraseButton = m_ButtonErase.gameObject.GetComponent<Image>();
         PaintButton.sprite = m_PaintSpritePressed;
 
-
-        // Connect the ScreenTouched() method to the PaintTexture signal.
-        Signals.onScreenTouched += ScreenTouched;
-      
-
         for (int i = 0; i < width * height; ++i)
         {
             pixelColors[i] = Color.white;
         }
         m_renderer_texture = new Texture2D(width, height);
         m_renderer_texture.filterMode = FilterMode.Point;
+    }
+
+    // Connect the ScreenTouched() method to the PaintTexture signal.
+    private void OnEnable()
+    {
+        Signals.onScreenTouched += ScreenTouched;
+    }
+
+    private void OnDisable()
+    {
+        Signals.onScreenTouched -= ScreenTouched;
     }
 
     public override void OnChange()

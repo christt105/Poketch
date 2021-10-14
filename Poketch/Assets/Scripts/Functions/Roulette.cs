@@ -36,13 +36,21 @@ public class Roulette : Function
         tex.filterMode = FilterMode.Point;
 
         ChangeState((int)State.Stopped);
-
-        Signals.onScreenTouched += Paint;
-
+        
         for (int i = 0; i < tex.width * tex.height; ++i)
         {
             pixelColors[i] = Color.white;
         }
+    }
+
+    private void OnEnable()
+    {
+        Signals.onScreenTouched += Paint;
+    }
+
+    private void OnDisable()
+    {
+        Signals.onScreenTouched -= Paint;
     }
 
     public override void OnChange()
