@@ -44,7 +44,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 3765fd6d8c9c7ed4593477bea4b28d0b, type: 3}
-    totalSpriteSurfaceArea: 899860
+    totalSpriteSurfaceArea: 935276
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -113,6 +113,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 9bfa90b6e67f5de4ab992d177c543824, type: 3}
   - {fileID: 21300000, guid: edc4c8c6b64b6914daf627c42f925624, type: 3}
   - {fileID: 21300000, guid: 1f9e60d6399443848ac6f4e5f1fa34e0, type: 3}
+  - {fileID: 21300000, guid: 6ce49307c7b1cfb4ea71b38a7391ab21, type: 3}
   - {fileID: 21300000, guid: 41f429178a7268844bb88326dead1276, type: 3}
   - {fileID: 21300000, guid: 72282327f7539674fbda5b11d12d5da1, type: 3}
   - {fileID: 21300000, guid: ca2c2727ea4f32c4f8da4c13c694088d, type: 3}
@@ -178,6 +179,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 6d7e958cfc68a82428bc503704caea20, type: 3}
   - {fileID: 21300000, guid: 87d2919c0a9b304409d56d4236b6af44, type: 3}
   - {fileID: 21300000, guid: ae3ef7ac9ebfb3e478956fee63e29f08, type: 3}
+  - {fileID: 21300000, guid: f33652bcd22ed8f4886d6334a5e26683, type: 3}
   - {fileID: 21300000, guid: ba0b92bca23c64a48990b1f3387c3e25, type: 3}
   - {fileID: 21300000, guid: 67b7f9bc21cdb0048800173b72baf68f, type: 3}
   - {fileID: 21300000, guid: a4dc0ebcbe1cc6a45a025b5eed063e2b, type: 3}
@@ -197,6 +199,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 6c1d148d32766164b853f98c50b3a029, type: 3}
   - {fileID: 21300000, guid: 0ec44c8d85438244da3fbe7a9b649a59, type: 3}
   - {fileID: 21300000, guid: f770040e1aade3441a565f2ed9119569, type: 3}
+  - {fileID: 21300000, guid: 64fe723e5daaa3643b9ea72111a64059, type: 3}
   - {fileID: 21300000, guid: f12ff64e9c4e3904ea26ab4508cf220b, type: 3}
   - {fileID: 21300000, guid: 680de15efdc8f2047a43a30e6d71428f, type: 3}
   - {fileID: 21300000, guid: f52e436ec83222e4183c43f9a9378d13, type: 3}
@@ -282,6 +285,7 @@ SpriteAtlas:
   - EraserPressed
   - SnorlaxButtonPressed
   - 6
+  - Background
   - CoinFlipping
   - Mark5
   - ClockBackground
@@ -347,6 +351,7 @@ SpriteAtlas:
   - 6
   - 2
   - ArrowButton
+  - ResetPressed
   - 1
   - Grey_pikachu
   - 4
@@ -366,6 +371,7 @@ SpriteAtlas:
   - Minus
   - DotPressed
   - 7
+  - ResetIdle
   - 8Pressed
   - 4
   - SnorlaxWait
