@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 0.11764707, g: 0.24705884, b: 0.25490198, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -452,6 +452,8 @@ GameObject:
   - component: {fileID: 6199656787101301522}
   - component: {fileID: 6199656787101301524}
   - component: {fileID: 8146604969839793651}
+  - component: {fileID: 8292446033565721821}
+  - component: {fileID: 1710112505}
   m_Layer: 5
   m_Name: PokemonSprite
   m_TagString: Untagged
@@ -516,6 +518,39 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8292446033565721821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6199656787101301523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bf3c9ea70490f14b8a7096306a417cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShowPokemon: {fileID: 7449459151908080409}
+  m_Animator: {fileID: 0}
+--- !u!95 &1710112505
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6199656787101301523}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 125d549f0b9cbc24a95a5c90ae21678e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &6199656787362725158
 GameObject:
   m_ObjectHideFlags: 0
@@ -1080,6 +1115,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e280a88076cc074cbd8899ba4edf0e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PokemonImage: {fileID: 0}
+  m_PokemonImage: {fileID: 8146604969839793651}
   m_PokemonName: {fileID: 3898677540649003778}
   m_InputField: {fileID: 6199656787721207793}

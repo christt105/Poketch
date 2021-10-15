@@ -16,7 +16,7 @@ public class ShowPokemon : Function
     [SerializeField]
     private InputField m_InputField;
 
-    private int m_DexNumber = 1;
+    public int DexNumber { get; private set; } = 1;
 
     public override void OnCreate( JSONNode jsonObject )
     {
@@ -26,42 +26,42 @@ public class ShowPokemon : Function
 
     private void SetPokemon()
     {
-        if ( m_DexNumber < 1 )
+        if ( DexNumber < 1 )
         {
-            m_DexNumber = 1;
+            DexNumber = 1;
         }
 
-        if ( m_DexNumber > PokemonDataBase.Instance.NumberOfPokemon )
+        if ( DexNumber > PokemonDataBase.Instance.NumberOfPokemon )
         {
-            m_DexNumber = PokemonDataBase.Instance.NumberOfPokemon;
+            DexNumber = PokemonDataBase.Instance.NumberOfPokemon;
         }
 
-        m_PokemonImage.sprite = PokemonDataBase.Instance.GetPokemonSprite( m_DexNumber );
+        m_PokemonImage.sprite = PokemonDataBase.Instance.GetPokemonSprite( DexNumber );
 
-        string pokemonName = PokemonDataBase.Instance.GetPokemonNameFromIndex( m_DexNumber );
+        string pokemonName = PokemonDataBase.Instance.GetPokemonNameFromIndex( DexNumber );
         m_PokemonName.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase( pokemonName );
 
-        m_InputField.text = m_DexNumber.ToString();
+        m_InputField.text = DexNumber.ToString();
     }
 
     private void SetNumber( string number )
     {
         if ( int.TryParse( number, out int numberInt ) )
         {
-            m_DexNumber = numberInt;
+            DexNumber = numberInt;
             SetPokemon();
         }
     }
 
     public void Add()
     {
-        ++m_DexNumber;
+        ++DexNumber;
         SetPokemon();
     }
 
     public void Sub()
     {
-        --m_DexNumber;
+        --DexNumber;
         SetPokemon();
     }
 }

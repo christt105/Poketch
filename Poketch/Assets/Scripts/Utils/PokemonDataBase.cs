@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using SimpleJSON;
 using UnityEngine;
 using UnityEngine.U2D;
@@ -93,6 +94,11 @@ public class PokemonDataBase : MonoBehaviour
         return PokemonDictionary.ContainsKey( index ) ? PokemonDictionary[index] : "none";
     }
 
+    public int GetPokemonIndexFromName( string name )
+    {
+        return PokemonDictionary.FirstOrDefault( x => x.Value == name ).Key;
+    }
+
     public Sprite GetPokemonSprite( string name )
     {
         return m_SpriteAtlas.GetSprite( name.ToLower() );
@@ -101,6 +107,16 @@ public class PokemonDataBase : MonoBehaviour
     public Sprite GetPokemonSprite( int index )
     {
         return GetPokemonSprite( GetPokemonNameFromIndex( index ) );
+    }
+
+    public AudioClip GetPokemonAudioClip( int index )
+    {
+        return Resources.Load < AudioClip >( "PokemonCries/" + index );
+    }
+
+    public AudioClip GetPokemonAudioClip( string name )
+    {
+        return Resources.Load < AudioClip >( "PokemonCries/" + GetPokemonIndexFromName( name ) );
     }
 
     #endregion
