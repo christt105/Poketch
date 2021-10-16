@@ -1,7 +1,6 @@
 using System.Globalization;
 using SimpleJSON;
 using UnityEngine;
-using UnityEngine.U2D;
 using UnityEngine.UI;
 using Utils;
 
@@ -28,12 +27,12 @@ public class ShowPokemon : Function
     {
         if ( DexNumber < 1 )
         {
-            DexNumber = 1;
+            DexNumber = PokemonDataBase.Instance.NumberOfPokemon;
         }
 
         if ( DexNumber > PokemonDataBase.Instance.NumberOfPokemon )
         {
-            DexNumber = PokemonDataBase.Instance.NumberOfPokemon;
+            DexNumber = 1;
         }
 
         m_PokemonImage.sprite = PokemonDataBase.Instance.GetPokemonSprite( DexNumber );
@@ -41,7 +40,7 @@ public class ShowPokemon : Function
         string pokemonName = PokemonDataBase.Instance.GetPokemonNameFromIndex( DexNumber );
         m_PokemonName.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase( pokemonName );
 
-        m_InputField.text = DexNumber.ToString();
+        m_InputField.text = DexNumber.ToString( "D3" );
     }
 
     private void SetNumber( string number )
