@@ -63,7 +63,7 @@ RectTransform:
   m_GameObject: {fileID: 3369547343599621504}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1537241418316348624}
   m_RootOrder: 0
@@ -71,7 +71,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 19.16092, y: 20}
+  m_SizeDelta: {x: 8.2811, y: 8.6437}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5178946733825408051
 CanvasRenderer:
@@ -103,7 +103,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 1661af3461462dd42a1966db17b916b5, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -202,6 +202,7 @@ GameObject:
   - component: {fileID: 2095717184212351649}
   - component: {fileID: 5106569539004219958}
   - component: {fileID: 1680834028455938141}
+  - component: {fileID: 5926555961311310191}
   m_Layer: 5
   m_Name: Pokemon
   m_TagString: Untagged
@@ -266,6 +267,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!95 &5926555961311310191
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7735196606245307246}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 37fbd35f5a5c7654e96d52cb43d0743c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &7962361726254203444
 GameObject:
   m_ObjectHideFlags: 0
@@ -301,7 +321,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 147.29, y: 20}
+  m_SizeDelta: {x: 153.6102, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5413855342639744626
 CanvasRenderer:
@@ -341,7 +361,7 @@ MonoBehaviour:
     m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "Christian Mart\xEDnez (christt105)"
