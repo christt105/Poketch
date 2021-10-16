@@ -42,7 +42,7 @@ public class PokePedometer : Function
 
     void OnStep(int steps, double distance)
     {
-        currentSteps = currentSteps + steps > 9999 ? 9999 : currentSteps + steps;
+        currentSteps = currentSteps + steps > 99999 ? 99999 : currentSteps + steps;
 
         if (gameObject.activeSelf)
         {
