@@ -21,7 +21,7 @@ public class DotArtist : Function
 
     private bool m_Painting = false;
 
-    private int[] m_Values;
+    private byte[] m_Values;
 
     private void Reset()
     {
@@ -48,14 +48,31 @@ public class DotArtist : Function
     private void StopPainting()
     {
         m_Painting = false;
+
+        JSONNode json = new JSONObject();
+        json["data"] = m_Values;
+
+        FunctionController.Instance.SaveFunctionInfo( GetType().Name, json );
     }
 
     public override void OnCreate( JSONNode jsonObject )
     {
         m_DotTexture = new DotTexture();
         m_RawImage.texture = m_DotTexture.CreateTexture( m_TextureSize.x, m_TextureSize.y );
-        m_Values = new int [m_DotTexture.Area];
+        m_Values = new byte [m_DotTexture.Area];
+
         Reset();
+
+        if ( jsonObject != null )
+        {
+            m_Values = jsonObject["data"];
+
+            for ( int i = 0; i < m_Values.Length; i++ )
+            {
+                Vector2Int coord = GetCoordsFromIndex( i, m_TextureSize.x );
+                m_DotTexture.Paint( coord.x, coord.y, m_Colors[m_Values[i]] );
+            }
+        }
     }
 
     private void StartPainting()
@@ -72,7 +89,7 @@ public class DotArtist : Function
         {
             Vector2Int pixel = Vector2Int.FloorToInt( m_PointerZone.GetRelativeMousePosition() * m_TextureSize );
 
-            if ( CheckBoundaries(pixel) && pixel != lastPainted )
+            if ( CheckBoundaries( pixel ) && pixel != lastPainted )
             {
                 m_DotTexture.Paint(
                     pixel.x,
@@ -106,5 +123,10 @@ public class DotArtist : Function
     private static int GetIndexOf2DArray( int x, int y, int width )
     {
         return y * width + x;
+    }
+
+    private static Vector2Int GetCoordsFromIndex( int index, int width )
+    {
+        return new Vector2Int( index % width, index / width );
     }
 }
