@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using SimpleJSON;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine.UI;
 
 public class DotArtist : Function
 {
+    private const string InitialPaint =
+        "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAwMDAAMDAwADAwMAAwADAAMAAAAAAwAAAwADAAMAAwADAAAAAwADAAAAAAAAAwAAAwMDAAMAAwADAwMAAwMDAAMAAAAAAwAAAAAAAAAAAAAAAAAAAwAAAAMAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAMAAAMDAwMDAAAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
     [SerializeField]
     private Vector2Int m_TextureSize;
 
@@ -50,7 +53,7 @@ public class DotArtist : Function
         m_Painting = false;
 
         JSONNode json = new JSONObject();
-        json["data"] = m_Values;
+        json["data"] = Convert.ToBase64String(m_Values);
 
         FunctionController.Instance.SaveFunctionInfo( GetType().Name, json );
     }
@@ -65,7 +68,7 @@ public class DotArtist : Function
 
         if ( jsonObject != null )
         {
-            m_Values = jsonObject["data"];
+            m_Values = Convert.FromBase64String(jsonObject["data"]);
 
             for ( int i = 0; i < m_Values.Length; i++ )
             {
@@ -73,6 +76,21 @@ public class DotArtist : Function
                 m_DotTexture.Paint( coord.x, coord.y, m_Colors[m_Values[i]] );
             }
         }
+        else
+        {
+            m_Values = Convert.FromBase64String( InitialPaint );
+
+            for (int i = 0; i < m_Values.Length; i++)
+            {
+                Vector2Int coord = GetCoordsFromIndex(i, m_TextureSize.x);
+                m_DotTexture.Paint(coord.x, coord.y, m_Colors[m_Values[i]]);
+            }
+        }
+    }
+
+    public override void OnAuxButton()
+    {
+        Reset();
     }
 
     private void StartPainting()

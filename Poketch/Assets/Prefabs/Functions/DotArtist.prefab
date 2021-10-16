@@ -134,6 +134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a83f91fdb25e4db4c91f02481ec19665, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_UseAuxButton: 1
   m_TextureSize: {x: 24, y: 20}
   m_RawImage: {fileID: 8583727451235055831}
   m_PointerZone: {fileID: 2729174631178516277}
