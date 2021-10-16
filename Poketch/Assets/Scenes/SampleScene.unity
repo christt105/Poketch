@@ -4207,25 +4207,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1232647962}
     m_Modifications:
-    - target: {fileID: 3898677540649003778, guid: 2a1bbecaf5e210942a774a442515a9c4, type: 3}
-      propertyPath: m_Color.b
-      value: 0.19607843
-      objectReference: {fileID: 0}
-    - target: {fileID: 3898677540649003778, guid: 2a1bbecaf5e210942a774a442515a9c4, type: 3}
-      propertyPath: m_Color.g
-      value: 0.19607843
-      objectReference: {fileID: 0}
-    - target: {fileID: 3898677540649003778, guid: 2a1bbecaf5e210942a774a442515a9c4, type: 3}
-      propertyPath: m_Color.r
-      value: 0.19607843
-      objectReference: {fileID: 0}
     - target: {fileID: 7449459151908080390, guid: 2a1bbecaf5e210942a774a442515a9c4, type: 3}
       propertyPath: m_Name
       value: ShowPokemon
-      objectReference: {fileID: 0}
-    - target: {fileID: 7449459151908080390, guid: 2a1bbecaf5e210942a774a442515a9c4, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7449459151908080391, guid: 2a1bbecaf5e210942a774a442515a9c4, type: 3}
       propertyPath: m_Pivot.x

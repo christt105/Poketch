@@ -23,6 +23,21 @@ public class ShowPokemon : Function
         m_InputField.onEndEdit.AddListener( SetNumber );
     }
 
+#if UNITY_EDITOR
+    private void Update()
+    {
+        if ( Input.GetKeyDown( KeyCode.KeypadPlus ) )
+        {
+            Add();
+        }
+
+        if (Input.GetKeyDown(KeyCode.KeypadMinus))
+        {
+            Sub();
+        }
+    }
+#endif
+
     private void SetPokemon()
     {
         if ( DexNumber < 1 )
