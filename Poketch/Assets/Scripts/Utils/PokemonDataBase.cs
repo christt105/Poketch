@@ -60,6 +60,23 @@ public class PokemonDataBase : MonoBehaviour
 
             m_PokemonDictionary.Add( dexNumber, pokemon.Value );
         }
+
+        //Check
+#if false
+        int i = 1;
+        foreach ( KeyValuePair < int, string > p in PokemonDictionary )
+        {
+            if ( GetPokemonSprite( p.Value ) == null )
+            {
+                Debug.LogError( "Sprite of Pokemon " + p.Value + " not found" );
+            }
+
+            if ( p.Key != i++ )
+            {
+                Debug.LogError( "Missing " + ( i - 1 ) + " Pokemon" );
+            }
+        }
+#endif
     }
 
     //TODO: separate on a tool
