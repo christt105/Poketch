@@ -67,21 +67,31 @@ public class NumberController : MonoBehaviour
         int[] newNumber = GetIntArray( number, m_MaxNumberLength );
         int lengthNewNnumber = newNumber.Length;
 
+        bool foundZero = false;
+
         for ( int i = 0; i < m_MaxNumberLength; ++i )
         {
             if ( i > lengthNewNnumber && m_Numbers[i] != 0 )
             {
                 m_NumbersTransforms[i].Digits[m_Numbers[i]].enabled = false;
-
-                m_NumbersTransforms[i].Digits[0].enabled = !m_HideZero;
+                m_NumbersTransforms[i].Digits[0].enabled = !m_HideZero || foundZero;
 
                 m_Numbers[i] = newNumber[i];
             }
             else if ( newNumber[i] != m_Numbers[i] )
             {
                 m_NumbersTransforms[i].Digits[m_Numbers[i]].enabled = false;
-                m_NumbersTransforms[i].Digits[newNumber[i]].enabled = true;
+                m_NumbersTransforms[i].Digits[newNumber[i]].enabled = newNumber[i] != 0 || (!m_HideZero || foundZero);
                 m_Numbers[i] = newNumber[i];
+            }
+            else if(newNumber[i] == 0)
+            {
+                m_NumbersTransforms[i].Digits[m_Numbers[i]].enabled = !m_HideZero || foundZero;
+            }
+
+            if ( m_Numbers[i] != 0 )
+            {
+                foundZero = true;
             }
         }
     }
