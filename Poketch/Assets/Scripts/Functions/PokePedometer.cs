@@ -14,7 +14,9 @@ public class PokePedometer : Function
     int lastSteps = 0;
     public override void OnCreate(JSONNode jsonObject)
     {
+#if !UNITY_EDITOR
         pedometer = new Pedometer(OnStep);
+#endif
 
         if (jsonObject != null)
         {
@@ -43,7 +45,7 @@ public class PokePedometer : Function
     void OnStep(int steps, double distance)
     {
         currentSteps = currentSteps + steps > 99999 ? 99999 : currentSteps + steps;
-
+        
         if (gameObject.activeSelf)
         {
             stepsDigits.SetNumber(currentSteps);
