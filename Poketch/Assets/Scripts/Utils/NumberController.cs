@@ -5,6 +5,12 @@ using UnityEngine.UI;
 
 public class NumberController : MonoBehaviour
 {
+    [SerializeField]
+    private bool m_HideZero = false;
+
+    [SerializeField]
+    private bool m_InitializeToZero = false;
+
     private bool m_Init = false;
     private int m_MaxNumberLength = 0;
     private int[] m_Numbers;
@@ -25,6 +31,19 @@ public class NumberController : MonoBehaviour
         {
             m_NumbersTransforms[i] = new Digit( transform.GetChild( i ) );
             m_Numbers[i] = 0;
+        }
+
+        if ( m_InitializeToZero )
+        {
+            foreach ( Digit digit in m_NumbersTransforms )
+            {
+                foreach ( Image d in digit.Digits )
+                {
+                    d.enabled = false;
+                }
+
+                digit.Digits[0].enabled = !m_HideZero;
+            }
         }
 
         m_Init = true;
@@ -53,7 +72,9 @@ public class NumberController : MonoBehaviour
             if ( i > lengthNewNnumber && m_Numbers[i] != 0 )
             {
                 m_NumbersTransforms[i].Digits[m_Numbers[i]].enabled = false;
-                m_NumbersTransforms[i].Digits[0].enabled = true;
+
+                m_NumbersTransforms[i].Digits[0].enabled = !m_HideZero;
+
                 m_Numbers[i] = newNumber[i];
             }
             else if ( newNumber[i] != m_Numbers[i] )
