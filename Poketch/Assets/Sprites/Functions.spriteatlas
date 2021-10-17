@@ -44,7 +44,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 3765fd6d8c9c7ed4593477bea4b28d0b, type: 3}
-    totalSpriteSurfaceArea: 999106
+    totalSpriteSurfaceArea: 1084764
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -54,6 +54,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: fc542a00b3f4abf45994c7c6d3dc8f4a, type: 3}
   - {fileID: 21300000, guid: d15b94105e5537e44b6aac8af4d82577, type: 3}
   - {fileID: 21300000, guid: 88b68e20e946af443bb347da5b7795a3, type: 3}
+  - {fileID: 21300000, guid: 0dff294038ebd784fa1cedf64e38e5e4, type: 3}
   - {fileID: 21300000, guid: 0b17f4501aba3ec4fa834366fc029749, type: 3}
   - {fileID: 21300000, guid: ca25a570f071c4c4b9035fa1619dff13, type: 3}
   - {fileID: 21300000, guid: c35a0a70d7adb774e976a53ef4cfe599, type: 3}
@@ -78,6 +79,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: e85a4b5386269c24b82606a61a7b42fd, type: 3}
   - {fileID: 21300000, guid: cc6e016378ecd74479e2c57137479811, type: 3}
   - {fileID: 21300000, guid: fcec2383d3fe5c242a8375415dce67de, type: 3}
+  - {fileID: 21300000, guid: 638392a3841fc3d4499b064602cd06e1, type: 3}
   - {fileID: 21300000, guid: fb3ecdc338cfb21439bae29dc7608a90, type: 3}
   - {fileID: 21300000, guid: e9efb5d351232ba4d9483f11316eb37d, type: 3}
   - {fileID: 21300000, guid: 381b1bf33eb0c6d4ba22845dca6cec0c, type: 3}
@@ -240,6 +242,7 @@ SpriteAtlas:
   - 3
   - ButtonExplosion2
   - 4
+  - Circle12
   - ChangeDigitSnorlax
   - 9Pressed
   - LifeContainer
@@ -264,6 +267,7 @@ SpriteAtlas:
   - MapIndicator
   - Dot
   - Result
+  - Circle11
   - 8
   - Circle9
   - 5
