@@ -30,6 +30,8 @@ public class MusicPlayer : Function
 
     public override void OnCreate(JSONNode jsonObject)
     {
+        player = GetComponent<AudioSource>();
+
         if (jsonObject != null)
         {
             currentSong = jsonObject.GetValueOrDefault("currentSong", 0);
@@ -39,9 +41,8 @@ public class MusicPlayer : Function
 
             looping = jsonObject.GetValueOrDefault("looping", false);
             loopUI.SetActive(looping);
+            player.loop = looping;
         }
-
-        player = GetComponent<AudioSource>();
 
         player.clip = songs[currentSong];
         completeTime = player.clip.length;
@@ -80,12 +81,6 @@ public class MusicPlayer : Function
 
     public void NextTrack()
     {
-        if (looping)
-        {
-            player.time = 0;
-            return;
-        }
-
         if (shuffle)
         {
             if (randomSongs.Count == songs.Length)
