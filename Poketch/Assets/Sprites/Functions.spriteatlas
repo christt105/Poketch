@@ -44,7 +44,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 3765fd6d8c9c7ed4593477bea4b28d0b, type: 3}
-    totalSpriteSurfaceArea: 1084764
+    totalSpriteSurfaceArea: 1089564
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -60,6 +60,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: c35a0a70d7adb774e976a53ef4cfe599, type: 3}
   - {fileID: 21300000, guid: 52eb6c70aebfb6f4daed4e8d9f742dec, type: 3}
   - {fileID: 21300000, guid: e790a3a0075a2fd44b3fdffe17984522, type: 3}
+  - {fileID: 21300000, guid: 8812c5b0ee4718142bc1b4ff7be33a2c, type: 3}
   - {fileID: 21300000, guid: f347dbe055045484697d654ca1d760ef, type: 3}
   - {fileID: 21300000, guid: 040ddd715ee37d148a8c086c7904323f, type: 3}
   - {fileID: 21300000, guid: 6fc0918135807e24b98a800ca79ac405, type: 3}
@@ -103,6 +104,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: db4a55359cf7ebe45a34c354fd258f5e, type: 3}
   - {fileID: 21300000, guid: d57b1065b77871244b09dbc451284a05, type: 3}
   - {fileID: 21300000, guid: b7795a6509af80d4ba08b6beef9cde43, type: 3}
+  - {fileID: 21300000, guid: a78004c539db8bf4287fc56b353bbdbe, type: 3}
   - {fileID: 21300000, guid: 5f94cfd58a71be74b9fbc63b141b2830, type: 3}
   - {fileID: 21300000, guid: 790f2ee5ebb92fa4e8c8e35f7f9914f8, type: 3}
   - {fileID: 21300000, guid: 25e836f5c0f9f6847946f9adad53e0c2, type: 3}
@@ -153,6 +155,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 50238be8209b78446adba0364c19fce3, type: 3}
   - {fileID: 21300000, guid: fb06200947ddb6046945ea8fa9a324e9, type: 3}
   - {fileID: 21300000, guid: f20b0a1919c81244da700b99eb489eb8, type: 3}
+  - {fileID: 21300000, guid: 55ac3b192c6558844ba20aeba320c78c, type: 3}
   - {fileID: 21300000, guid: ef459a2957f838f45976be9923f8e95c, type: 3}
   - {fileID: 21300000, guid: 7f594e29d87fa044fb067b3062213960, type: 3}
   - {fileID: 21300000, guid: ee937c39379c2a34ca1e707cb36ee92f, type: 3}
@@ -248,6 +251,7 @@ SpriteAtlas:
   - LifeContainer
   - xPressed
   - 5
+  - pause
   - ButtonPressed6
   - PokeballBackground
   - 6
@@ -291,6 +295,7 @@ SpriteAtlas:
   - 6
   - pikachu
   - PencilPressed
+  - play-button
   - 2
   - 0
   - =
@@ -341,6 +346,7 @@ SpriteAtlas:
   - 5
   - '-'
   - CPressed
+  - NextTrack
   - 8
   - Circle8
   - Background
