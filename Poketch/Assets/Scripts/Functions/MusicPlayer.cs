@@ -24,6 +24,8 @@ public class MusicPlayer : Function
 
     public override void OnCreate(JSONNode jsonObject)
     {
+        if (jsonObject != null) currentSong = jsonObject.GetValueOrDefault("currentSong", 0);
+
         player = GetComponent<AudioSource>();
 
         player.clip = songs[currentSong];
@@ -94,6 +96,7 @@ public class MusicPlayer : Function
         completeTime = player.clip.length;
         ApplyTimeToUI(songText, completeTime);
         songName.text = player.clip.name;
+        SaveLastSong();
 
         if (play && !player.isPlaying)
         {
@@ -119,5 +122,12 @@ public class MusicPlayer : Function
         currentSongTime = completeTime * songProgression.value;
         player.time = songProgression.value;
         ApplyTimeToUI(currentTimeText, currentSongTime);
+    }
+
+    void SaveLastSong()
+    {
+        JSONNode json = new JSONObject();
+        json.Add("currentSong", currentSong);
+        FunctionController.Instance.SaveFunctionInfo(GetType().Name, json);
     }
 }
