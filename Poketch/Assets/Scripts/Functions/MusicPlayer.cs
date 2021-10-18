@@ -13,18 +13,33 @@ public class MusicPlayer : Function
     [SerializeField] Slider songProgression;
     [SerializeField] Text currentTimeText;
     [SerializeField] Text songText;
+    [SerializeField] GameObject shuffleUI;
+    [SerializeField] GameObject loopUI;
 
     [SerializeField] Sprite play;
     [SerializeField] Sprite pause;
 
     AudioSource player;
     int currentSong = 0;
-    float currentSongTime = 0;
     float completeTime = 0;
+
+    bool shuffle = false;
+    bool looping = false;
+
+    List<int> randomSongs = new List<int>();
 
     public override void OnCreate(JSONNode jsonObject)
     {
-        if (jsonObject != null) currentSong = jsonObject.GetValueOrDefault("currentSong", 0);
+        if (jsonObject != null)
+        {
+            currentSong = jsonObject.GetValueOrDefault("currentSong", 0);
+
+            shuffle = jsonObject.GetValueOrDefault("shuffle", false);
+            shuffleUI.SetActive(shuffle);
+
+            looping = jsonObject.GetValueOrDefault("looping", false);
+            loopUI.SetActive(looping);
+        }
 
         player = GetComponent<AudioSource>();
 
@@ -36,14 +51,14 @@ public class MusicPlayer : Function
 
     private void Update()
     {
-        if (!player.isPlaying) return;
+        if (player.isPlaying)
+        {
+            ApplyTimeToUI(currentTimeText, player.time);
 
-        currentSongTime += Time.deltaTime;
-        ApplyTimeToUI(currentTimeText, currentSongTime);
+            songProgression.value = player.time / completeTime;
+        }
 
-        songProgression.value = currentSongTime / completeTime;
-
-        if (currentSongTime >= completeTime)
+        if (player.time >= completeTime)
         {
             NextTrack();
         }
@@ -55,7 +70,7 @@ public class MusicPlayer : Function
 
         if (player.isPlaying)
         {
-            player.Stop();
+            player.Pause();
         }
         else
         {
@@ -65,16 +80,42 @@ public class MusicPlayer : Function
 
     public void NextTrack()
     {
+        if (looping)
+        {
+            player.time = 0;
+            return;
+        }
+
+        if (shuffle)
+        {
+            if (randomSongs.Count == songs.Length)
+            {
+                randomSongs.Clear();
+            }
+
+            int randomSong = Random.Range(0, songs.Length);
+
+            while (randomSongs.Contains(randomSong) && randomSong != currentSong)
+            {
+                randomSong = Random.Range(0, songs.Length);
+            }
+
+            randomSongs.Add(randomSong);
+            currentSong = randomSong;
+            ChangeTrack(0, true);
+
+            return;
+        }
+
         ChangeTrack(1, true);
     }
 
     public void PreviousTrack()
     {
-        if (currentSongTime >= 2)
+        if (player.time >= 2)
         {
-            currentSongTime = 0;
-            ApplyTimeToUI(currentTimeText, currentSongTime);
             player.time = 0;
+            ApplyTimeToUI(currentTimeText, player.time);
         }
         else
         {
@@ -84,8 +125,8 @@ public class MusicPlayer : Function
 
     void ChangeTrack(int change, bool play)
     {
-        currentSongTime = 0;
-        ApplyTimeToUI(currentTimeText, currentSongTime);
+        player.time = 0;
+        ApplyTimeToUI(currentTimeText, player.time);
 
         currentSong += change;
 
@@ -96,7 +137,7 @@ public class MusicPlayer : Function
         completeTime = player.clip.length;
         ApplyTimeToUI(songText, completeTime);
         songName.text = player.clip.name;
-        SaveLastSong();
+        SaveInfo();
 
         if (play && !player.isPlaying)
         {
@@ -117,17 +158,39 @@ public class MusicPlayer : Function
 
     public void SliderChange()
     {
-        if (Mathf.Approximately(songProgression.value, currentSongTime / completeTime)) return;
+        if (Mathf.Approximately(songProgression.value, player.time / completeTime)) return;
 
-        currentSongTime = completeTime * songProgression.value;
-        player.time = songProgression.value;
-        ApplyTimeToUI(currentTimeText, currentSongTime);
+        player.time = songProgression.value * completeTime;
+        ApplyTimeToUI(currentTimeText, player.time);
     }
 
-    void SaveLastSong()
+    void SaveInfo()
     {
         JSONNode json = new JSONObject();
         json.Add("currentSong", currentSong);
+        json.Add("looping", looping);
+        json.Add("shuffle", shuffle);
         FunctionController.Instance.SaveFunctionInfo(GetType().Name, json);
+    }
+
+    public void ActivateShuffle()
+    {
+        shuffle = !shuffle;
+        shuffleUI.SetActive(shuffle);
+
+        if (!shuffle)
+        {
+            randomSongs.Clear();
+        }
+
+        SaveInfo();
+    }
+
+    public void ActiveLoop()
+    {
+        looping = !looping;
+        loopUI.SetActive(looping);
+        player.loop = looping;
+        SaveInfo();
     }
 }

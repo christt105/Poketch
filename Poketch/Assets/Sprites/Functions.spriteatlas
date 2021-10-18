@@ -44,7 +44,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 3765fd6d8c9c7ed4593477bea4b28d0b, type: 3}
-    totalSpriteSurfaceArea: 1089564
+    totalSpriteSurfaceArea: 1092284
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -90,6 +90,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 7baaf034b1a468a4c8f52f20d1b53f6f, type: 3}
   - {fileID: 21300000, guid: 8f1e1d34f7e7f9243a3b1786d6120af8, type: 3}
   - {fileID: 21300000, guid: 1661af3461462dd42a1966db17b916b5, type: 3}
+  - {fileID: 21300000, guid: 94f850444f6f17340baa16064255bebd, type: 3}
   - {fileID: 21300000, guid: 309f618476dc56842a23ebf5adc25f65, type: 3}
   - {fileID: 21300000, guid: 66de528436edb154390bd2a614b40391, type: 3}
   - {fileID: 21300000, guid: 814ef6b45e6870f49ace22405c6fbd76, type: 3}
@@ -213,6 +214,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 484caa4d26933764596b7b3eefc41c75, type: 3}
   - {fileID: 21300000, guid: ca64ed4d0f166464687d17c45b2cc378, type: 3}
   - {fileID: 21300000, guid: 3f7b636da52533a49ac44e605d91a363, type: 3}
+  - {fileID: 21300000, guid: 1e14de7d1b327814ca41afe25fc3fe1a, type: 3}
   - {fileID: 21300000, guid: 6c1d148d32766164b853f98c50b3a029, type: 3}
   - {fileID: 21300000, guid: 0ec44c8d85438244da3fbe7a9b649a59, type: 3}
   - {fileID: 21300000, guid: f770040e1aade3441a565f2ed9119569, type: 3}
@@ -281,6 +283,7 @@ SpriteAtlas:
   - CoinFace
   - ResetPressed
   - Dot
+  - loop-arrow
   - Dot
   - CircleMask
   - 7
@@ -404,6 +407,7 @@ SpriteAtlas:
   - 7
   - 1
   - StopPressed
+  - shuffle
   - Minus
   - DotPressed
   - 7
