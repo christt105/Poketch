@@ -623,6 +623,10 @@ public class VoltorbWeeper : Function/*, IPointerDownHandler, IPointerUpHandler*
     private void DeleteVoltorbWeeper()
     {
         Array.Clear(m_ArrayWeeper, 0, m_ArrayWeeper.Length);
-        m_grid.DeleteGrid();
+        if(m_grid != null)
+        {
+            m_grid.DeleteGrid();
+            m_grid = null;
+        }
     }
 }
