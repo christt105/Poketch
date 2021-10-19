@@ -1,5 +1,7 @@
 # Poketch
-A Pokétch Unity project 
+A Pokétch Unity project with the original functionalities of Pokémon Platinum and new ones. Focused for android.
+
+![Poketch Preview](docs/ClockPreview.png)
 
 ## Repository
 

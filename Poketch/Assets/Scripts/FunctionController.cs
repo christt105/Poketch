@@ -1,12 +1,18 @@
+using System;
 using System.IO;
+using System.Linq;
 using SimpleJSON;
 using UnityEngine;
 
 public class FunctionController : MonoBehaviour
 {
-    private int m_FunctionIndex = -1;
+    [SerializeField]
+    private GameObject m_AuxButtonGO;
 
+    [SerializeField]
     private Function[] m_Functions;
+
+    private int m_FunctionIndex = -1;
 
     private Transform m_MyTransform;
 
@@ -20,7 +26,7 @@ public class FunctionController : MonoBehaviour
 
         file["Functions"][functionName] = json;
 
-        File.WriteAllText( DataPath, file.ToString() );
+        File.WriteAllText( DataPath, file.ToString( 1 ) );
     }
 
     private void SaveActualFunction( int index )
@@ -43,7 +49,6 @@ public class FunctionController : MonoBehaviour
     {
         m_MyTransform = transform;
 
-        m_Functions = m_MyTransform.GetComponentsInChildren < Function >( true );
         JSONNode file = File.Exists( DataPath ) ? JSON.Parse( File.ReadAllText( DataPath ) ) : null;
 
 #if !UNITY_EDITOR
@@ -67,7 +72,7 @@ public class FunctionController : MonoBehaviour
 
             if ( m_FunctionIndex == -1 )
             {
-                m_FunctionIndex = f.transform.GetSiblingIndex();
+                m_FunctionIndex = Array.IndexOf(m_Functions, f);
             }
 
             f.gameObject.SetActive( false );
@@ -78,13 +83,24 @@ public class FunctionController : MonoBehaviour
             m_FunctionIndex = 0;
         }
 
+        if ( m_FunctionIndex >= m_Functions.Length )
+        {
+            m_FunctionIndex = m_Functions.Length - 1;
+        }
+
         m_Functions[m_FunctionIndex].gameObject.SetActive( true );
         m_Functions[m_FunctionIndex].OnChange();
+        m_AuxButtonGO.SetActive( m_Functions[m_FunctionIndex].UseAuxButton );
     }
 
     #endregion
 
     #region Public
+
+    public void OnAuxButton()
+    {
+        m_Functions[m_FunctionIndex].OnAuxButton();
+    }
 
     public void Next()
     {
@@ -97,6 +113,7 @@ public class FunctionController : MonoBehaviour
         }
 
         SaveActualFunction( m_FunctionIndex );
+        m_AuxButtonGO.SetActive( m_Functions[m_FunctionIndex].UseAuxButton );
 
         m_Functions[m_FunctionIndex].gameObject.SetActive( true );
         m_Functions[m_FunctionIndex].OnChange();
@@ -113,6 +130,8 @@ public class FunctionController : MonoBehaviour
         }
 
         SaveActualFunction( m_FunctionIndex );
+        m_AuxButtonGO.SetActive( m_Functions[m_FunctionIndex].UseAuxButton );
+
         m_Functions[m_FunctionIndex].gameObject.SetActive( true );
         m_Functions[m_FunctionIndex].OnChange();
     }
