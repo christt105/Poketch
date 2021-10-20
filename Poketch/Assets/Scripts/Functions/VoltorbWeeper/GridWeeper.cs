@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class GridWeeper
 {
@@ -124,16 +125,34 @@ public class GridWeeper
             textUI.alignment = textAnchor;
             textUI.material = m_materialColor;
         }
-
+        
         // Create Child Button
-        GameObject childObject = new GameObject("Button", typeof(Image), typeof(Button));
+        GameObject childObject = new GameObject("Button", typeof(Image), typeof(Button), typeof(EventTrigger));
         childObject.transform.SetParent(gameObject.transform);
         childObject.transform.localPosition = Vector3.zero;
         childObject.GetComponent<RectTransform>().sizeDelta = new Vector2(m_cellSize, m_cellSize);
-        
+
+        GameObject go = gameObject;
+
         Image imageUI = childObject.GetComponent<Image>();
         imageUI.sprite = m_spriteBlock;
         imageUI.material = m_materialColor;
+
+        BaseEventData data;
+        EventTrigger trigger = childObject.GetComponent<EventTrigger>();
+
+        EventTrigger.Entry entryPointerDown = new EventTrigger.Entry();
+        entryPointerDown.eventID = EventTriggerType.PointerDown;
+        entryPointerDown.callback.AddListener((data) => { m_voltorbWeeperScript.OnPointerDownButton(); } );
+
+        trigger.triggers.Add(entryPointerDown);
+
+
+        EventTrigger.Entry entryPointerUp = new EventTrigger.Entry();
+        entryPointerUp.eventID = EventTriggerType.PointerUp;
+        entryPointerUp.callback.AddListener(data => { m_voltorbWeeperScript.OnPointerUpButton(go.transform.GetSiblingIndex()); });
+        trigger.triggers.Add(entryPointerUp);
+        
 
         // --- DEBUG ---
         // imageUI.color = new Vector4(0,0,0,0.2f);
@@ -151,8 +170,8 @@ public class GridWeeper
         childChildObject.GetComponent<Image>().material = m_materialColor;
         childChildObject.SetActive(false);     
 
-        GameObject go = gameObject;
-        buttonUI.onClick.AddListener(() => m_voltorbWeeperScript.OnClick(go.transform.GetSiblingIndex()));
+        //buttonUI.onClick.AddListener(() => m_voltorbWeeperScript.OnClick(go.transform.GetSiblingIndex()));
+       
     }
 
 

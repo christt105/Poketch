@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 
 
 
-public class VoltorbWeeper : Function/*, IPointerDownHandler, IPointerUpHandler*/
+public class VoltorbWeeper : Function
 {
     enum GameMode
     {
@@ -105,6 +105,9 @@ public class VoltorbWeeper : Function/*, IPointerDownHandler, IPointerUpHandler*
 
     [Header("--- OTHER ---")]
     [SerializeField]
+    private float m_maxTimePressedDiglett;
+
+    [SerializeField]
     private NumberController m_numController;
 
     [SerializeField]
@@ -131,8 +134,6 @@ public class VoltorbWeeper : Function/*, IPointerDownHandler, IPointerUpHandler*
     private bool m_enableTimer;
     private bool m_firstClick;
     private bool m_clickPressed;
-    private bool m_buttonPressed;
-    private int m_buttonPresedIndex;
 
     private GridWeeper m_grid;
 
@@ -161,10 +162,82 @@ public class VoltorbWeeper : Function/*, IPointerDownHandler, IPointerUpHandler*
         if(m_enableTimer)
             m_timer += Time.deltaTime;
         
-        if(m_buttonPressed && m_clickPressed)
+        if(m_clickPressed)
             m_timerButtonPressed += Time.deltaTime;
+    }
 
+    public void OnPointerDownButton()
+    {
+        m_clickPressed = true;
+
+        Debug.Log("Pressed");
+    }
+
+    public void OnPointerUpButton(int index)
+    {
+        m_clickPressed = false;
+        OnClick(index);
+
+        Debug.Log(m_timerButtonPressed);
+        Debug.Log("UN Pressed----------");
+        m_timerButtonPressed = 0;
+    }
+    private void OnClick(int index)
+    {
+        if (m_timerButtonPressed >= m_maxTimePressedDiglett)
+            DiglettLogic(index);
+        else
+        {
+            switch (m_gameMode)
+            {
+                case GameMode.VOLTORB:
+                    VoltorbLogic(index);
+                    break;
+
+                case GameMode.DIGLETT:
+                    DiglettLogic(index);
+                    break;
+
+                default:
+                    break;
+            }
+        }
        
+    }
+
+    public void OnClickStart(int difficulty)
+    {
+        m_diff = (DifficultMode)difficulty;
+        CreateVoltorbWeeper();
+        ShowMenu(false);
+
+        m_remainingVoltorb = m_gridInfo[(int)m_diff].max_voltorbs;
+        m_numController.SetNumber(m_remainingVoltorb);
+        m_timer = 0;
+        m_enableTimer = true;
+
+        // Game Mode
+        ChangeStateVoltButton((int)Buttons.VOLTORB, true);
+        ChangeStateVoltButton((int)Buttons.DIGLETT, false);
+        m_gameMode = GameMode.VOLTORB;
+
+    }
+    public void OnClickChangeClickMode()
+    {
+        if (m_gameMode == GameMode.VOLTORB)
+        {
+            ChangeStateVoltButton((int)Buttons.VOLTORB, false);
+            ChangeStateVoltButton((int)Buttons.DIGLETT, true);
+
+            m_gameMode = GameMode.DIGLETT;
+        }
+        else if (m_gameMode == GameMode.DIGLETT)
+        {
+            ChangeStateVoltButton((int)Buttons.DIGLETT, false);
+            ChangeStateVoltButton((int)Buttons.VOLTORB, true);
+
+            m_gameMode = GameMode.VOLTORB;
+        }
     }
 
     private void CreateVoltorbWeeper()
@@ -232,6 +305,7 @@ public class VoltorbWeeper : Function/*, IPointerDownHandler, IPointerUpHandler*
         {
             if(ArrayWeeper[i].is_voltorb)
             {
+
                 int sizeGrid = m_gridInfo[(int)m_diff].size;
 
                 int check_right_column = (i + 1) % sizeGrid;
@@ -275,82 +349,6 @@ public class VoltorbWeeper : Function/*, IPointerDownHandler, IPointerUpHandler*
         return ArrayWeeper;
     }
 
-    public void OnClick(int index)
-    {
-        m_buttonPressed = true;
-        m_buttonPresedIndex = index;
-
-        switch (m_gameMode)
-        {
-            case GameMode.VOLTORB:
-                VoltorbLogic(index);
-                break;
-
-            case GameMode.DIGLETT:
-                DiglettLogic(index);
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    public void OnClickStart(int difficulty)
-    {
-        m_diff = (DifficultMode)difficulty;
-        CreateVoltorbWeeper();
-        ShowMenu(false);
-
-        m_remainingVoltorb = m_gridInfo[(int)m_diff].max_voltorbs;
-        m_numController.SetNumber(m_remainingVoltorb);
-        m_timer = 0;
-        m_enableTimer = true;
-
-        // Game Mode
-        ChangeStateVoltButton((int)Buttons.VOLTORB, true);
-        ChangeStateVoltButton((int)Buttons.DIGLETT, false);
-        m_gameMode = GameMode.VOLTORB;
-
-    }
-
-    public void OnClickChangeClickMode()
-    {
-
-        if (m_gameMode == GameMode.VOLTORB)
-        {
-            ChangeStateVoltButton((int)Buttons.VOLTORB, false);
-            ChangeStateVoltButton((int)Buttons.DIGLETT, true);
-
-            m_gameMode = GameMode.DIGLETT;
-        }
-        else if(m_gameMode == GameMode.DIGLETT)
-        {
-            ChangeStateVoltButton((int)Buttons.DIGLETT, false);
-            ChangeStateVoltButton((int)Buttons.VOLTORB, true);           
-
-            m_gameMode = GameMode.VOLTORB;
-        }
-    }
-
-    //public void OnPointerDown(PointerEventData eventData)
-    //{
-    //    m_clickPressed = true;
-    //    Debug.Log("Pressed");
-    //}
-
-    //public void OnPointerUp(PointerEventData eventData)
-    //{
-    //    m_clickPressed = false;
-    //    m_buttonPressed = false;
-
-    //    if (!m_buttonPressed && !m_clickPressed && m_timerButtonPressed >= 1f)
-    //        DiglettLogic(m_buttonPresedIndex);
-
-    //    m_timerButtonPressed = 0;
-
-    //    Debug.Log("UN Pressed----------");
-    //}
-
     private void VoltorbLogic(int index)
     {
         if (m_firstClick && m_ArrayWeeper[index].num != 0)
@@ -367,9 +365,10 @@ public class VoltorbWeeper : Function/*, IPointerDownHandler, IPointerUpHandler*
                 m_firstClick = false;
             }
 
-            DisableZeroNeighbors(index);
-            DiableBlock(index, false);
-            DisablePerimeter();
+            
+            DisableZeroNeighbors(index, true, index => { return m_ArrayWeeper[index].num == 0; });
+            DisableBlock(index, false);
+            DisableZeroNeighbors(index, false, index => true );
         }
         else if (m_ArrayWeeper[index].is_diglett)
         {
@@ -382,7 +381,7 @@ public class VoltorbWeeper : Function/*, IPointerDownHandler, IPointerUpHandler*
                 if (m_ArrayWeeper[i].is_voltorb)
                 {
                     m_grid.m_ArrayGameObjects[i].GetComponent<RectTransform>().localScale = new Vector2(m_gridInfo[(int)m_diff].pokeSize, m_gridInfo[(int)m_diff].pokeSize);
-                    DiableBlock(i, false);
+                    DisableBlock(i, false);
                 }
             }
             m_grid.m_ArrayGameObjects[index].AddComponent<Animator>();
@@ -394,7 +393,7 @@ public class VoltorbWeeper : Function/*, IPointerDownHandler, IPointerUpHandler*
             Invoke("DeleteVoltorbWeeper", 2f);
         }
         else
-            DiableBlock(index, false);
+            DisableBlock(index, false);
 
         if (IsArrayWeeperPressed())
         {
@@ -443,7 +442,7 @@ public class VoltorbWeeper : Function/*, IPointerDownHandler, IPointerUpHandler*
         m_ArrayUIButtons[position].m_is_selected = value;
     }
 
-    private void DisableZeroNeighbors(int index)
+    private void DisableZeroNeighbors(int index, bool value, Predicate<int> predicate)
     {
         int sizeGrid = m_gridInfo[(int)m_diff].size;
 
@@ -464,74 +463,30 @@ public class VoltorbWeeper : Function/*, IPointerDownHandler, IPointerUpHandler*
         if (index < m_ArrayWeeper.Length - sizeGrid)
             down_neighbor = true;
 
-        if (right_neighbor && m_ArrayWeeper[index + 1].num == 0)
-            DiableBlock(index + 1, true);
-        if (right_neighbor && up_neighbor && m_ArrayWeeper[index - sizeGrid + 1].num == 0)
-            DiableBlock(index - sizeGrid + 1, true);
-        if (right_neighbor && down_neighbor && m_ArrayWeeper[index + sizeGrid + 1].num == 0)
-            DiableBlock(index + sizeGrid + 1, true);
+        if(right_neighbor && predicate(index+1))
+            DisableBlock(index + 1, value);
 
-        if (left_neighbor && m_ArrayWeeper[index - 1].num == 0)
-            DiableBlock(index - 1, true);
-        if (left_neighbor && up_neighbor && m_ArrayWeeper[index - sizeGrid - 1].num == 0)
-            DiableBlock(index - sizeGrid - 1, true);
-        if (left_neighbor && down_neighbor && m_ArrayWeeper[index + sizeGrid - 1].num == 0)
-            DiableBlock(index + sizeGrid - 1, true);
+        if(right_neighbor && up_neighbor  && predicate(index - sizeGrid + 1))
+            DisableBlock(index - sizeGrid + 1, true);        
+        
+        if(right_neighbor && down_neighbor && predicate(index + sizeGrid + 1))
+            DisableBlock(index + sizeGrid + 1, true);
 
-        if (up_neighbor && m_ArrayWeeper[index - sizeGrid].num == 0)
-            DiableBlock(index - sizeGrid, true);
-        if (down_neighbor && m_ArrayWeeper[index + sizeGrid].num == 0)
-            DiableBlock(index + sizeGrid, true);
+        if (left_neighbor && predicate(index - 1))
+            DisableBlock(index - 1, true);
+        if (left_neighbor && up_neighbor && predicate(index - sizeGrid - 1))
+            DisableBlock(index - sizeGrid - 1, true);
+        if (left_neighbor && down_neighbor && predicate(index + sizeGrid - 1))
+            DisableBlock(index + sizeGrid - 1, true);
+
+        if (up_neighbor && predicate(index - sizeGrid))
+            DisableBlock(index - sizeGrid, true);
+        if (down_neighbor && predicate(index + sizeGrid))
+            DisableBlock(index + sizeGrid, true);
+        
     }
 
-    private void DisablePerimeter()
-    {
-        for (int i = 0; i < m_ArrayWeeper.Length; i++)
-        {
-            if(m_ArrayWeeper[i].is_zero_checked)
-            {
-                int sizeGrid = m_gridInfo[(int)m_diff].size;
-
-                int check_right_column = (i + 1) % sizeGrid;
-                int check_left_column = (i) % sizeGrid;
-
-                bool right_neighbor = false;
-                bool left_neighbor = false;
-                bool up_neighbor = false;
-                bool down_neighbor = false;
-
-                if (check_right_column != 0 || i == 0)
-                    right_neighbor = true;
-                if (check_left_column != 0)
-                    left_neighbor = true;
-                if (i >= sizeGrid)
-                    up_neighbor = true;
-                if (i < m_ArrayWeeper.Length - sizeGrid)
-                    down_neighbor = true;
-
-                if (right_neighbor)
-                    DiableBlock(i + 1, false);
-                if (right_neighbor && up_neighbor)
-                    DiableBlock(i - sizeGrid + 1, false);
-                if (right_neighbor && down_neighbor)
-                    DiableBlock(i + sizeGrid + 1, false);
-
-                if (left_neighbor)
-                    DiableBlock(i - 1, false);
-                if (left_neighbor && up_neighbor)
-                    DiableBlock(i - sizeGrid - 1, false);
-                if (left_neighbor && down_neighbor)
-                    DiableBlock(i + sizeGrid - 1, false);
-
-                if (up_neighbor)
-                    DiableBlock(i - sizeGrid, false);
-                if (down_neighbor)
-                    DiableBlock(i + sizeGrid, false);
-            }
-        }
-    }
-
-    private void DiableBlock(int index, bool check_neighbor)
+    private void DisableBlock(int index, bool check_neighbor)
     {
         if (check_neighbor && !m_ArrayWeeper[index].is_zero_checked)
         {

@@ -662,6 +662,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56d2e92c9b1cc9344b34691924423397, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_UseAuxButton: 0
   m_gridInfo:
   - mode: 0
     max_voltorbs: 4
@@ -714,6 +715,7 @@ MonoBehaviour:
     m_is_selected: 0
     offset_pushed: 5
   m_ArrayWeeper: []
+  m_maxTimePressedDiglett: 0.3
   m_numController: {fileID: 2990991923069361582}
   m_mainMenu: {fileID: 2990991923215342922}
   m_winloseMenu: {fileID: 2990991922983905253}
@@ -1169,6 +1171,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23cec964674c62045bbfe51c789208db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_HideZero: 0
+  m_InitializeToZero: 0
 --- !u!1 &2990991923171741513
 GameObject:
   m_ObjectHideFlags: 0

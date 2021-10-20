@@ -5543,10 +5543,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: VoltorbWeeper
       objectReference: {fileID: 0}
-    - target: {fileID: 2990991922905475420, guid: 068dd8c9d8c9e5248ad679298736caf7, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2990991922905475421, guid: 068dd8c9d8c9e5248ad679298736caf7, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
