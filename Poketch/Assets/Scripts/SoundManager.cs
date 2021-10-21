@@ -21,7 +21,8 @@ public class SoundManager : MonoBehaviour
         SnorlaxTemporizer,
         ExplodeStopwatch,
         AlarmClock,
-        RouletteStop
+        RouletteStop,
+        Zahori
     }
 
     [SerializeField]

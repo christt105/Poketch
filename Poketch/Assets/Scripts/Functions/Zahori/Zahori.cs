@@ -40,5 +40,7 @@ public class Zahori : Function
         Vector2 pos;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.transform as RectTransform, Input.mousePosition, canvas.worldCamera, out pos);
         circle.transform.position = canvas.transform.TransformPoint(pos);
+
+        SoundManager.Instance.PlaySFX(SoundManager.SFX.Zahori);
     }
 }
