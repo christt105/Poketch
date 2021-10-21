@@ -5,6 +5,8 @@ public class Zahori : Function
 {
     [SerializeField]
     private GameObject circle;
+    [SerializeField]
+    private GameObject spot;
 
     private Canvas canvas;
 
@@ -15,16 +17,19 @@ public class Zahori : Function
     public override void OnChange()
     {
         circle.SetActive(false);
+        spot.SetActive(false);
     }
 
     private void OnEnable()
     {
         Signals.onScreenTouched += ScreenTouched;
+        Signals.onCircleExpanded += SpawnSpot;
     }
 
     private void OnDisable()
     {
         Signals.onScreenTouched -= ScreenTouched;
+        Signals.onCircleExpanded -= SpawnSpot;
     }
 
     private void ScreenTouched()
@@ -42,5 +47,11 @@ public class Zahori : Function
         circle.transform.position = canvas.transform.TransformPoint(pos);
 
         SoundManager.Instance.PlaySFX(SoundManager.SFX.Zahori);
+    }
+
+    private void SpawnSpot()
+    {
+        if (Random.Range(0, 6) == 0)
+            spot.SetActive(true);
     }
 }

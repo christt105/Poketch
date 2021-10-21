@@ -14,6 +14,9 @@ public class Signals
     public delegate void OnScreenTouched();
     public static event OnScreenTouched onScreenTouched;
 
+    public delegate void OnCircleExpanded();
+    public static event OnCircleExpanded onCircleExpanded;
+
     public static void SignalOnInitializeValues(Texture2D texture2D, Vector2Int textureRect, Color[] pixelColors)
     {
         onInitializeValues?.Invoke(texture2D, textureRect, pixelColors);
@@ -30,6 +33,11 @@ public class Signals
     public static void SignalOnScreenTouched()
     {
         onScreenTouched?.Invoke();
+    }
+
+    public static void SignalOnCircleExpanded()
+    {
+        onCircleExpanded?.Invoke();
     }
 }
 
