@@ -1,16 +1,16 @@
-using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using SimpleJSON;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Calculator : Function
 {
-    private const long MaxValue = 9999999999;
-    private const long MinValue = -999999999;
-    private const int CharNone = 10;
-    private const int CharInterrogant = 11;
+    //private const long MaxValue = 9999999999;
+    //private const long MinValue = -999999999;
+    //private const int CharNone = 10;
+    //private const int CharInterrogant = 11;
+    private const int MaxDigits = 10;
 
     [SerializeField]
     private Transform m_ButtonsTransform;
@@ -21,126 +21,225 @@ public class Calculator : Function
     [SerializeField]
     private Transform m_OperationsTransform;
 
-    private ActualNumber m_ActualNumber = ActualNumber.Result;
-    private double m_AuxiliarNumber = 0;
+    //Debug
+    [SerializeField]
+    private string m_Result;
 
-    private Action m_CurrentAction = Action.None;
-    private KeyAction m_LastKeyAction = KeyAction.None;
+    [SerializeField]
+    private string m_Auxiliar;
 
-    private int m_NumberOfDigits;
+    [SerializeField]
+    private char m_CurrentOperation;
 
-    private int m_NumberOfNumbers;
+    [SerializeField]
+    private Stage m_Stage = Stage.AddToResult;
 
-    private double m_Result;
-
-    private enum ActualNumber
+    private readonly Dictionary < char, int > m_NumberIndex = new Dictionary < char, int >()
     {
-        Result, Auxiliar,
-        Invalid
-    }
+        { '0', 0 },
+        { '1', 1 },
+        { '2', 2 },
+        { '3', 3 },
+        { '4', 4 },
+        { '5', 5 },
+        { '6', 6 },
+        { '7', 7 },
+        { '8', 8 },
+        { '9', 9 },
+        { 'n', 10 },
+        { '?', 11 },
+        { '.', 12 },
+        { '-', 13 },
+    };
 
-    #region Functions
-
-    public override void OnCreate( JSONNode jsonObject )
+    private readonly Dictionary < char, int > m_OperationIndex = new Dictionary < char, int >()
     {
-        foreach ( Transform t in m_ButtonsTransform )
+        { '+', 0 }, { '-', 1 }, { '*', 2 }, { '/', 3 },
+    };
+
+    private void Start()
+    {
+        Clear();
+
+        foreach ( Button b in m_ButtonsTransform.GetComponentsInChildren < Button >() )
         {
-            Button b = t.GetComponent < Button >();
-
-            if ( int.TryParse( t.name, out int number ) )
-            {
-                b.onClick.AddListener( () => OnClickNumber( number ) );
-            }
-            else
-            {
-                b.onClick.AddListener( () => OnClickAction( GetActionFromString( t.name ) ) );
-            }
-        }
-
-        m_NumberOfNumbers = m_NumbersTransform.childCount;
-    }
-
-    public override void OnChange()
-    {
-        Reset();
-        SetAllNumbersTo( CharNone );
-    }
-
-    #endregion
-
-    #region Private
-
-    private enum KeyAction
-    {
-        Sum, Sub, Mul, Div, Dot, Equal, Clear, None
-    }
-
-    private enum Action
-    {
-        Sum, Sub, Mul, Div, None
-    }
-
-    private void SetAllNumbersTo( int character )
-    {
-        foreach ( Transform t in m_NumbersTransform )
-        {
-            foreach ( Transform number in t )
-            {
-                number.gameObject.SetActive( false );
-            }
-
-            t.GetChild( character ).gameObject.SetActive( true );
+            b.onClick.AddListener( () => SetKey( b.name[0] ) );
         }
     }
 
-    private void Reset()
+    private void SetKey( char key )
     {
-        m_Result = 0;
-        m_AuxiliarNumber = 0;
-        m_NumberOfDigits = 0;
-        m_ActualNumber = ActualNumber.Result;
-        SetOperation( Action.None );
+        switch ( key )
+        {
+            case 'c':
+                Clear();
+                Display( m_Result );
+
+                break;
+
+            case '+':
+            case '-':
+            case '*':
+            case '/':
+                if ( m_Stage == Stage.InvalidResult )
+                {
+                    break;
+                }
+
+                if ( m_Stage == Stage.AddToResult )
+                {
+                    if ( m_Result != "" )
+                    {
+                        m_Stage = Stage.AddToAuxiliar;
+                        m_Auxiliar = "";
+                    }
+                }
+                else if ( m_Stage == Stage.AddToAuxiliar && m_Auxiliar == "" )
+                {
+
+                }
+                else if ( m_Stage == Stage.ShowResult )
+                {
+                    m_Stage = Stage.AddToAuxiliar;
+                    m_Auxiliar = "";
+                }
+                else
+                {
+                    Calculate();
+                    Display( m_Result );
+                    m_Stage = Stage.AddToAuxiliar;
+                    m_Auxiliar = "";
+                }
+
+                foreach ( Transform t in m_OperationsTransform )
+                {
+                    t.gameObject.SetActive( false );
+                }
+
+                m_OperationsTransform.GetChild( m_OperationIndex[key] ).gameObject.SetActive( true );
+
+                m_CurrentOperation = key;
+
+                break;
+
+            case '=':
+                if (m_Stage == Stage.InvalidResult)
+                {
+                    break;
+                }
+
+                if ( m_CurrentOperation != '\0' )
+                {
+                    Calculate();
+                    Display( m_Result );
+
+                    foreach ( Transform t in m_OperationsTransform )
+                    {
+                        t.gameObject.SetActive( false );
+                    }
+                }
+
+                break;
+
+            default:
+                if ( m_Stage == Stage.ShowResult || m_Stage == Stage.InvalidResult )
+                {
+                    m_Result = "0";
+                    m_Stage = Stage.AddToResult;
+                }
+
+                if ( m_Stage == Stage.AddToResult )
+                {
+                    m_Auxiliar = "";
+                    AddChar( ref m_Result, key );
+                }
+                else if ( m_Stage == Stage.AddToAuxiliar )
+                {
+                    AddChar( ref m_Auxiliar, key );
+                }
+
+                break;
+        }
     }
 
-    private void OnClickNumber( int number )
+    private void AddChar( ref string result, char key )
     {
-        SoundManager.Instance.PlaySFX( SoundManager.SFX.Button );
-
-        if ( m_NumberOfDigits >= 10 )
+        if ( result.Length >= MaxDigits )
         {
             return;
         }
 
-        ++m_NumberOfDigits;
-
-        if ( m_LastKeyAction == KeyAction.Equal || m_ActualNumber == ActualNumber.Invalid )
+        if ( result == "0" && key != '.' )
         {
-            m_Result = 0;
-            m_LastKeyAction = KeyAction.None;
-            m_ActualNumber = ActualNumber.Result;
+            result = "";
         }
 
-        if ( m_ActualNumber == ActualNumber.Result )
+        if ( result.Contains( "." ) && key == '.' )
         {
-            m_Result = m_Result * 10 + number;
+            return;
+        }
+
+        result += key;
+
+        Display( result );
+    }
+
+    private void Calculate()
+    {
+        double result = double.Parse( m_Result, CultureInfo.InvariantCulture );
+        double auxiliar = double.Parse( m_Auxiliar, CultureInfo.InvariantCulture );
+
+        switch ( m_CurrentOperation )
+        {
+            case '+':
+                m_Result = ( result + auxiliar ).ToString( CultureInfo.InvariantCulture );
+
+                break;
+
+            case '-':
+                m_Result = ( result - auxiliar ).ToString( CultureInfo.InvariantCulture );
+
+                break;
+
+            case '*':
+                m_Result = ( result * auxiliar ).ToString( CultureInfo.InvariantCulture );
+
+                break;
+
+            case '/':
+                if ( result == 0d && auxiliar == 0d )
+                {
+                    Debug.LogWarning( "Cannot divide 0/0" );
+                    m_Result = "aaaaaaaaaaaaaaaaaaa";
+                }
+                else
+                {
+                    m_Result = ( result / auxiliar ).ToString( CultureInfo.InvariantCulture );
+                }
+
+                break;
+        }
+
+        if ( !m_Result.Contains( "." ) )
+        {
+            if ( m_Result.Length > MaxDigits )
+            {
+                m_Result = "??????????";
+                m_Stage = Stage.InvalidResult;
+                m_CurrentOperation = '\0';
+
+                return;
+            }
         }
         else
         {
-            m_AuxiliarNumber = m_AuxiliarNumber * 10 + number;
         }
 
-        ShowResult();
+        m_Stage = Stage.ShowResult;
     }
 
-    private void ShowResult()
+    private void Display( string result )
     {
-        ShowResult( m_ActualNumber );
-    }
-
-    private void ShowResult( ActualNumber actualNumber )
-    {
-        int n = m_NumberOfNumbers - 1;
-
         foreach ( Transform t in m_NumbersTransform )
         {
             foreach ( Transform number in t )
@@ -151,180 +250,34 @@ public class Calculator : Function
             t.GetChild( 10 ).gameObject.SetActive( true );
         }
 
-        foreach ( char c in ( actualNumber == ActualNumber.Result ? m_Result : m_AuxiliarNumber ).
-                            ToString( CultureInfo.InvariantCulture ).
-                            Reverse() )
+        int n = m_NumbersTransform.childCount - 1;
+
+        foreach ( char c in result.Reverse() )
         {
-            m_NumbersTransform.GetChild( n ).GetChild( 10 ).gameObject.SetActive( false );
-            m_NumbersTransform.GetChild( n-- ).GetChild( c == '-' ? 13 : c - '0' ).gameObject.SetActive( true );
+            Transform number = m_NumbersTransform.GetChild( n-- );
+            number.GetChild( 10 ).gameObject.SetActive( false );
+            number.GetChild( m_NumberIndex[c] ).gameObject.SetActive( true );
         }
     }
 
-    private void OnClickAction( KeyAction keyAction )
+    private void Clear()
     {
-        SoundManager.Instance.PlaySFX( SoundManager.SFX.Button );
+        m_Result = "0";
+        m_Auxiliar = "";
 
-        switch ( keyAction )
-        {
-            case KeyAction.Clear:
-                Reset();
-                ShowResult();
+        m_Stage = 0;
 
-                break;
-
-            case KeyAction.Sum:
-            case KeyAction.Sub:
-            case KeyAction.Mul:
-            case KeyAction.Div:
-                if ( m_ActualNumber == ActualNumber.Invalid )
-                {
-                    break;
-                }
-
-                if ( m_ActualNumber == ActualNumber.Result )
-                {
-                    m_ActualNumber = ActualNumber.Auxiliar;
-                    m_AuxiliarNumber = 0;
-                    m_NumberOfDigits = 0;
-                }
-                else
-                {
-                    m_Result = Calculate( m_Result, m_AuxiliarNumber, m_CurrentAction );
-
-                    if ( m_Result > MaxValue || m_Result < MinValue )
-                    {
-                        m_Result = 0;
-                        m_AuxiliarNumber = 0;
-                        m_ActualNumber = ActualNumber.Invalid;
-
-                        SetAllNumbersTo( CharInterrogant );
-
-                        break;
-                    }
-
-                    ShowResult( ActualNumber.Result );
-
-                    m_AuxiliarNumber = 0;
-                }
-
-                m_CurrentAction = ( Action ) keyAction;
-
-                SetOperation( m_CurrentAction );
-
-                break;
-
-            case KeyAction.Dot:
-
-                break;
-
-            case KeyAction.Equal:
-
-                if ( m_ActualNumber == ActualNumber.Invalid )
-                {
-                    break;
-                }
-
-                m_Result = Calculate( m_Result, m_AuxiliarNumber, m_CurrentAction );
-
-                SetOperation( Action.None );
-                m_CurrentAction = Action.None;
-
-                if ( m_Result > MaxValue || m_Result < MinValue )
-                {
-                    m_Result = 0;
-                    m_AuxiliarNumber = 0;
-                    m_ActualNumber = ActualNumber.Invalid;
-
-                    SetAllNumbersTo( CharInterrogant );
-
-                    break;
-                }
-
-                m_ActualNumber = ActualNumber.Result;
-                m_NumberOfDigits = 0;
-
-                ShowResult();
-
-                break;
-
-            default:
-                throw new ArgumentOutOfRangeException( nameof( keyAction ), keyAction, null );
-        }
-
-        m_LastKeyAction = keyAction;
-    }
-
-    private void SetOperation( Action action )
-    {
         foreach ( Transform t in m_OperationsTransform )
         {
             t.gameObject.SetActive( false );
         }
-
-        if ( action == Action.None )
-        {
-            return;
-        }
-
-        m_OperationsTransform.GetChild( ( int ) action ).gameObject.SetActive( true );
     }
 
-    private static double Calculate( double result, double auxiliarNumber, Action keyAction )
+    private enum Stage
     {
-        switch ( keyAction )
-        {
-            case Action.Sum:
-                return result + auxiliarNumber;
-
-            case Action.Sub:
-                return result - auxiliarNumber;
-
-            case Action.Mul:
-                return result * auxiliarNumber;
-
-            case Action.Div:
-                if ( result == 0 && auxiliarNumber == 0 )
-                {
-                    return long.MaxValue;
-                }
-
-                return result / auxiliarNumber;
-
-            default:
-                throw new ArgumentOutOfRangeException( nameof( keyAction ), keyAction, null );
-        }
+        AddToResult,
+        AddToAuxiliar,
+        InvalidResult,
+        ShowResult
     }
-
-    private static KeyAction GetActionFromString( string action )
-    {
-        switch ( action )
-        {
-            case "C":
-                return KeyAction.Clear;
-
-            case "+":
-                return KeyAction.Sum;
-
-            case "-":
-                return KeyAction.Sub;
-
-            case "x":
-                return KeyAction.Mul;
-
-            case "/":
-                return KeyAction.Div;
-
-            case ".":
-                return KeyAction.Dot;
-
-            case "=":
-                return KeyAction.Equal;
-        }
-
-        Debug.LogError( "No enum action for " + action );
-
-        return KeyAction.Clear;
-    }
-
-    #endregion
 }
