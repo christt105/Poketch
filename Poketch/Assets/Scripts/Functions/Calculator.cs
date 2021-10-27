@@ -6,10 +6,6 @@ using UnityEngine.UI;
 
 public class Calculator : Function
 {
-    //private const long MaxValue = 9999999999;
-    //private const long MinValue = -999999999;
-    //private const int CharNone = 10;
-    //private const int CharInterrogant = 11;
     private const int MaxDigits = 10;
 
     [SerializeField]
@@ -20,18 +16,11 @@ public class Calculator : Function
 
     [SerializeField]
     private Transform m_OperationsTransform;
-
-    //Debug
-    [SerializeField]
+    
     private string m_Result;
-
-    [SerializeField]
     private string m_Auxiliar;
-
-    [SerializeField]
     private char m_CurrentOperation;
 
-    [SerializeField]
     private Stage m_Stage = Stage.AddToResult;
 
     private readonly Dictionary < char, int > m_NumberIndex = new Dictionary < char, int >()
@@ -94,16 +83,12 @@ public class Calculator : Function
                         m_Auxiliar = "";
                     }
                 }
-                else if ( m_Stage == Stage.AddToAuxiliar && m_Auxiliar == "" )
-                {
-
-                }
                 else if ( m_Stage == Stage.ShowResult )
                 {
                     m_Stage = Stage.AddToAuxiliar;
                     m_Auxiliar = "";
                 }
-                else
+                else if ( !( m_Stage == Stage.AddToAuxiliar && m_Auxiliar == "" ) )
                 {
                     Calculate();
                     Display( m_Result );
@@ -123,7 +108,7 @@ public class Calculator : Function
                 break;
 
             case '=':
-                if (m_Stage == Stage.InvalidResult)
+                if ( m_Stage == Stage.InvalidResult )
                 {
                     break;
                 }
@@ -220,22 +205,58 @@ public class Calculator : Function
                 break;
         }
 
-        if ( !m_Result.Contains( "." ) )
+        if ( m_Result.Length > MaxDigits )
         {
-            if ( m_Result.Length > MaxDigits )
+            if ( !m_Result.Contains( "." ) )
             {
                 m_Result = "??????????";
                 m_Stage = Stage.InvalidResult;
                 m_CurrentOperation = '\0';
+            }
+            else
+            {
+                int digitsBeforeDot = 0;
+                int digitsAfterDot = 0;
+                bool dotFound = false;
 
-                return;
+                foreach ( char c in m_Result )
+                {
+                    if ( dotFound )
+                    {
+                        ++digitsAfterDot;
+                    }
+                    else if ( c == '.' )
+                    {
+                        dotFound = true;
+                    }
+                    else
+                    {
+                        ++digitsBeforeDot;
+                    }
+                }
+
+                if ( digitsBeforeDot > MaxDigits - 1 )
+                {
+                    m_Result = "??????????";
+                    m_Stage = Stage.InvalidResult;
+                    m_CurrentOperation = '\0';
+                }
+                else if ( digitsBeforeDot == MaxDigits - 1 )
+                {
+                    m_Result = m_Result.Remove( digitsBeforeDot );
+                    m_Stage = Stage.ShowResult;
+                }
+                else
+                {
+                    m_Result = m_Result.Remove( MaxDigits );
+                    m_Stage = Stage.ShowResult;
+                }
             }
         }
         else
         {
+            m_Stage = Stage.ShowResult;
         }
-
-        m_Stage = Stage.ShowResult;
     }
 
     private void Display( string result )
