@@ -20,7 +20,9 @@ public class SoundManager : MonoBehaviour
         ButtonDeny,
         SnorlaxTemporizer,
         ExplodeStopwatch,
-        AlarmClock
+        AlarmClock,
+        RouletteStop,
+        Zahori
     }
 
     [SerializeField]
@@ -39,9 +41,14 @@ public class SoundManager : MonoBehaviour
         m_SfxDictionary = m_SFXList.ToDictionary( sfx => sfx.key, sfx => sfx.value );
     }
 
-    public void PlaySFX( SFX sfx )
+    public void PlaySFX( SFX sfx, float volumeScale = 1f)
     {
-        m_AudioSource.PlayOneShot( m_SfxDictionary[sfx] );
+        m_AudioSource.PlayOneShot( m_SfxDictionary[sfx], volumeScale );
+    }
+
+    public void PlaySFX( AudioClip audioClip, float volumeScale = 1f )
+    {
+        m_AudioSource.PlayOneShot( audioClip, volumeScale );
     }
 
     [Serializable]

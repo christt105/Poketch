@@ -368,7 +368,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8368194952022046163
 RectTransform:
   m_ObjectHideFlags: 0
@@ -405,7 +405,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ButtonErase: {fileID: 8368194950493204544}
   m_ButtonPaint: {fileID: 8368194950759499755}
-  m_ImageToPaint: {fileID: 8368194952205975519}
   m_PaintSpritePressed: {fileID: 21300000, guid: b7795a6509af80d4ba08b6beef9cde43, type: 3}
   m_PaintSpriteIdle: {fileID: 21300000, guid: 2ae049a65a1de7b4284e1988034fff21, type: 3}
   m_EraseSpritePressed: {fileID: 21300000, guid: 9bfa90b6e67f5de4ab992d177c543824, type: 3}
@@ -446,8 +445,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -17.4808, y: 5.6694}
-  m_SizeDelta: {x: -34.9615, y: -11.3389}
+  m_AnchoredPosition: {x: -18, y: 5}
+  m_SizeDelta: {x: -36, y: -10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8368194952205975516
 CanvasRenderer:
@@ -469,7 +468,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70c648b9b93838e4fa33ae9f945874a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  memoPad: {fileID: 8368194952022046160}
 --- !u!114 &8368194952205975519
 MonoBehaviour:
   m_ObjectHideFlags: 0

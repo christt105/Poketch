@@ -1,5 +1,7 @@
 # Poketch
-A Pokétch Unity project 
+A Pokétch Unity project with the original functionalities of Pokémon Platinum and new ones. Focused for android.
+
+![Poketch Preview](docs/ClockPreview.png)
 
 ## Repository
 
@@ -9,3 +11,4 @@ A Pokétch Unity project
 
 * Christian Martínez ([christt105](https://github.com/christt105))
 * Víctor Segura ([VictorSegura99](https://github.com/VictorSegura99))
+* Marc Gálvez ([optus23](https://optus23.github.io/))

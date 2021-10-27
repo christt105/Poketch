@@ -2,160 +2,194 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class GridWeeper
 {
     private int m_width;
     private int m_height;
     private float m_cellSize;
+    private float m_gridLayoutCellSize;
+    private float m_pokeSize;
+    private int m_fontSize;
+    private Transform m_parentRootWeeper;
+    private Transform m_parentBgColumn;
+    private Transform m_parentBgRow;
     private Font m_font;
-    private int m_textSize;
-    private Transform m_parent;
 
-    private int[,] m_ArrayGrid;
-    private List<Text> m_ArrayText = new List<Text>();
-    private List<Button> m_ArrayButton = new List<Button>();
-    private List<Image> m_ArrayImage = new List<Image>();
+    private VoltorbWeeper.WeepBlock[] m_ArrayWeeper;
+    private VoltorbWeeper m_voltorbWeeperScript;
+    public GameObject[] m_ArrayGameObjects;
+    public GameObject[] m_ArrayGridBgColumn;
+    public GameObject[] m_ArrayGridBgRow;
 
     private Material m_materialColor;
 
     private Sprite m_spriteBlock;
+    private Sprite m_spriteVoltorb;
+    private Sprite m_spriteDiglett;
 
-    public GridWeeper(int width, int height, float cellSize, Font font, int textSize, Transform parent, Sprite spriteBlock, Material materialColor, VoltorbWeeper.Weeper[] ArrayVoltorbWeeper)
+    public GridWeeper(VoltorbWeeper.GridInfo gridInfo, VoltorbWeeper.WeepBlock[] ArrayVoltorbWeeper, Transform parentRootWeeper, Font font, Sprite spriteBlock, Sprite spriteVoltorb, Sprite spriteDiglett, Material materialColor, VoltorbWeeper voltorbWeeperScript)
     {
-        this.m_width = width;
-        this.m_height = height;
-        this.m_cellSize = cellSize;
-        this.m_textSize = textSize;
-        this.m_parent = parent;
+        this.m_width = gridInfo.size;
+        this.m_height = gridInfo.size;
+        this.m_cellSize = gridInfo.cellSize;
+        this.m_gridLayoutCellSize = gridInfo.gridLayoutCellSize;
+        this.m_pokeSize = gridInfo.pokeSize;
+        this.m_fontSize = gridInfo.fontSize;
+        this.m_parentRootWeeper = parentRootWeeper;
+        this.m_parentBgColumn = gridInfo.parentBgColumn;
+        this.m_parentBgRow = gridInfo.parentBgRow;
         this.m_font = font;
         this.m_spriteBlock = spriteBlock;
+        this.m_spriteVoltorb = spriteVoltorb;
+        this.m_spriteDiglett = spriteDiglett;
         this.m_materialColor = materialColor;
+        this.m_ArrayWeeper = ArrayVoltorbWeeper;
+        this.m_ArrayGameObjects = new GameObject[ArrayVoltorbWeeper.Length];
+        this.m_voltorbWeeperScript = voltorbWeeperScript;
+        this.m_ArrayGridBgColumn = new GameObject[m_height+1];
+        this.m_ArrayGridBgRow = new GameObject[m_width+1];
 
-        m_ArrayGrid = new int[width, height];
+        CreateWorldGrid();
+    }
 
-        int i = 0;
-        for (int y = m_ArrayGrid.GetLength(0) - 1; y >= 0 ; y--)
+    public void CreateWorldGrid()
+    {
+        GridLayoutGroup gridLayout = m_parentRootWeeper.GetComponent<GridLayoutGroup>();
+        gridLayout.constraintCount = m_height;
+        gridLayout.cellSize = new Vector2(m_gridLayoutCellSize, m_gridLayoutCellSize);
+
+        m_parentBgColumn = GameObject.Instantiate(m_parentBgColumn, m_parentRootWeeper.parent);
+        m_parentBgColumn.SetSiblingIndex(1);
+        m_parentBgColumn.GetComponent<GridLayoutGroup>().spacing = new Vector2(m_gridLayoutCellSize - m_parentBgColumn.GetComponent<GridLayoutGroup>().cellSize.x, 0);
+
+        m_parentBgRow = GameObject.Instantiate(m_parentBgRow, m_parentRootWeeper.parent);
+        m_parentBgRow.SetSiblingIndex(1);
+        m_parentBgRow.GetComponent<GridLayoutGroup>().spacing = new Vector2(0, m_gridLayoutCellSize - m_parentBgRow.GetComponent<GridLayoutGroup>().cellSize.y);
+
+        for (int i = 0; i < m_ArrayWeeper.Length; i++)
         {
-            for (int x = 0; x < m_ArrayGrid.GetLength(1); x++)
+            CreateWorldText(m_ArrayWeeper[i].num.ToString(), out GameObject gameObject, m_font, m_fontSize, Color.grey, TextAnchor.MiddleCenter);
+            m_ArrayGameObjects[i] = gameObject;
+            m_ArrayGameObjects[i].transform.SetParent(m_parentRootWeeper);
+
+            // Create Background
+            if (i <= m_height) 
             {
-                m_ArrayGrid[x, y] = ArrayVoltorbWeeper[i].m_num;
-                i++;
+                GameObject gridBgColumn = new GameObject("BackgroundImageColumn", typeof(Image));
+                gridBgColumn.transform.SetParent(m_parentBgColumn);
+                gridBgColumn.transform.localScale = new Vector3(1, 1, 1);
+                gridBgColumn.GetComponent<Image>().material = m_materialColor;
+                gridBgColumn.GetComponent<Image>().color = new Vector4(0.4745098f, 0.4745098f, 0.4745098f, 1);
+                m_ArrayGridBgColumn[i] = gridBgColumn;
+
+                GameObject gridBgRow = new GameObject("BackgroundImageRow", typeof(Image));
+                gridBgRow.transform.SetParent(m_parentBgRow);
+                gridBgRow.transform.localScale = new Vector3(1, 1, 1);
+                gridBgRow.GetComponent<Image>().material = m_materialColor;
+                gridBgRow.GetComponent<Image>().color = new Vector4(0.4745098f, 0.4745098f, 0.4745098f, 1);
+                m_ArrayGridBgRow[i] = gridBgRow;
+
             }
         }
-        CreateWorldGrid(ArrayVoltorbWeeper);
     }
 
-    public void CreateWorldGrid(VoltorbWeeper.Weeper[] ArrayVoltorbWeeper)
+    private void CreateWorldText(string text, out GameObject gameObject, Font font, int fontSize, Color color, TextAnchor textAnchor)
     {
-        for (int i = 0; i < m_ArrayGrid.GetLength(0); i++)
+        int weep_num = int.Parse(text);
+
+
+        // Check if the Weep is Voltorb or Empty (TODO: Change magic numbers)
+        if (weep_num == 9 || weep_num == 0)
         {
-            for (int j = 0; j < m_ArrayGrid.GetLength(1); j++)
-            {
-                CreateWorldText(m_ArrayGrid[i, j].ToString(), null, GetWorldPosition(i, j) + new Vector3(m_cellSize, m_cellSize) * 0.5f, out Button buttonUI, out Image imageUI, out Text textUI, m_font, m_textSize, Color.white, TextAnchor.MiddleCenter, TextAlignment.Center, 1);
+            gameObject = new GameObject("WeeperText", typeof(Image));
+            gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(m_cellSize , m_cellSize);
 
-                m_ArrayText.Add(textUI);
-                m_ArrayImage.Add(imageUI);
-                m_ArrayButton.Add(buttonUI);
+            Image weepImageUI = gameObject.GetComponent<Image>();
+            if(weep_num == 9)
+                weepImageUI.sprite = m_spriteVoltorb;
 
-                Debug.DrawLine(GetWorldPosition(i, j), GetWorldPosition(i, j + 1), Color.white, 100f);
-                Debug.DrawLine(GetWorldPosition(i, j), GetWorldPosition(i + 1, j), Color.white, 100f);
-            }
-            Debug.DrawLine(GetWorldPosition(0, m_height), GetWorldPosition(m_width, m_height), Color.white, 100f);
-            Debug.DrawLine(GetWorldPosition(m_width, 0), GetWorldPosition(m_width, m_height), Color.white, 100f);
-
+            weepImageUI.material = m_materialColor;
         }
-
-        for (int i = 0; i < m_ArrayText.Count; i++)
+        else
         {
-            m_ArrayText[i].gameObject.transform.SetParent(m_parent);
+            gameObject = new GameObject("WeeperText", typeof(Text));
+            gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(m_cellSize, m_cellSize);
+
+            Text textUI = gameObject.GetComponent<Text>();
+            textUI.text = text;
+            textUI.fontSize = fontSize;
+            textUI.color = color;
+            textUI.font = font;
+            textUI.alignment = textAnchor;
+            textUI.material = m_materialColor;
         }
-
-
-        //Todo: Put img Voltorbs instead of mines
-        //Todo: Put empty block instead of 0
-        //Todo: Put blocks in fornt of ALL
-    }
-
-    private Vector3 GetWorldPosition(int x, int y)
-    {
-        return (new Vector3(x, y) * m_cellSize) + m_parent.position;
-    }
-
-    private void CreateWorldText(string text, Transform parent, Vector3 localPosition, out Button buttonUI, out Image imageUI, out Text textUI, Font font, int fontSize, Color color, TextAnchor textAnchor, TextAlignment textAligment, int sortingOrder)
-    {
-        GameObject gameObject = new GameObject("WeeperText", typeof(Text));
-        gameObject.transform.SetParent(parent, false);
-        gameObject.transform.localPosition = localPosition;
-        gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(m_cellSize, m_cellSize);
-
-        textUI = gameObject.GetComponent<Text>();
-        textUI.text = text;
-        textUI.fontSize = fontSize;
-        textUI.color = color;
-        textUI.font = font;
-        textUI.alignment = textAnchor;
-
-        // Create Child Immage
-        GameObject childObject = new GameObject("Button", typeof(Button), typeof(Image));
+        
+        // Create Child Button
+        GameObject childObject = new GameObject("Button", typeof(Image), typeof(Button), typeof(EventTrigger));
         childObject.transform.SetParent(gameObject.transform);
         childObject.transform.localPosition = Vector3.zero;
         childObject.GetComponent<RectTransform>().sizeDelta = new Vector2(m_cellSize, m_cellSize);
 
-        imageUI = childObject.GetComponent<Image>();
+        GameObject go = gameObject;
+
+        Image imageUI = childObject.GetComponent<Image>();
         imageUI.sprite = m_spriteBlock;
         imageUI.material = m_materialColor;
 
-        buttonUI = childObject.GetComponent<Button>();
+        BaseEventData data;
+        EventTrigger trigger = childObject.GetComponent<EventTrigger>();
+
+        EventTrigger.Entry entryPointerDown = new EventTrigger.Entry();
+        entryPointerDown.eventID = EventTriggerType.PointerDown;
+        entryPointerDown.callback.AddListener((data) => { m_voltorbWeeperScript.OnPointerDownButton(); } );
+
+        trigger.triggers.Add(entryPointerDown);
+
+
+        EventTrigger.Entry entryPointerUp = new EventTrigger.Entry();
+        entryPointerUp.eventID = EventTriggerType.PointerUp;
+        entryPointerUp.callback.AddListener(data => { m_voltorbWeeperScript.OnPointerUpButton(go.transform.GetSiblingIndex()); });
+        trigger.triggers.Add(entryPointerUp);
+        
+
+        // --- DEBUG ---
+        // imageUI.color = new Vector4(0,0,0,0.2f);
+
+        Button buttonUI = childObject.GetComponent<Button>();
         buttonUI.transition = Selectable.Transition.SpriteSwap;
-        SpriteState spriteState = buttonUI.spriteState;
 
-        spriteState.pressedSprite = m_spriteBlock;
+        // Create Child Diglett
+        GameObject childChildObject = new GameObject("Diglett", typeof(Image));
+        childChildObject.transform.SetParent(childObject.transform);
+        childChildObject.transform.localPosition = Vector3.zero;
+        childChildObject.GetComponent<RectTransform>().sizeDelta = new Vector2(m_cellSize * m_pokeSize, m_cellSize * m_pokeSize);
 
-        buttonUI.spriteState = spriteState;
+        childChildObject.GetComponent<Image>().sprite = m_spriteDiglett;
+        childChildObject.GetComponent<Image>().material = m_materialColor;
+        childChildObject.SetActive(false);     
 
+        //buttonUI.onClick.AddListener(() => m_voltorbWeeperScript.OnClick(go.transform.GetSiblingIndex()));
+       
     }
 
-    public void GetMousePosition(Vector3 mousePosition)
-    {
-        Gizmos.DrawSphere(mousePosition, 5);
-    }
-
-    public void OnDrawGizmosSelected(Vector3 mousePosition)
-    {
-        Gizmos.DrawSphere(mousePosition, 5);
-
-    }
-
-   /* public void SetValue(int x, int y, int value)
-    {
-        if (m_parent.position.x + x >= m_parent.position.x && m_parent.position.y + y >= m_parent.position.y && m_parent.position.x + x < m_parent.position.x + m_width && m_parent.position.y + y < m_parent.position.y + m_height)
-            Debug.DrawLine(Vector3.zero, new Vector3(m_parent.position.x + x, m_parent.position.y + y, 0));
-        //m_ArrayGrid[x, y] = value; 
-    }
-
-    private void GetXY(Vector3 worldPosition, out int x, out int y)
-    {
-        x = Mathf.FloorToInt(worldPosition.x / m_cellSize);
-        y = Mathf.FloorToInt(worldPosition.y / m_cellSize);
-    }
-
-    public void SetValue(Vector3 worldPosition, int value)
-    {
-        int x, y;
-        GetXY(worldPosition, out x, out y);
-        SetValue(x, y, value);
-    }*/
 
     public void DeleteGrid()
     {
-        for (int i = 0; i < m_ArrayText.Count; i++)
-            GameObject.Destroy(m_ArrayText[i].gameObject);
+        for (int i = 0; i < m_ArrayGameObjects.Length; i++)
+        {
+            GameObject.Destroy(m_ArrayGameObjects[i].gameObject);
 
-        System.Array.Clear(m_ArrayGrid, 0, m_ArrayGrid.Length);
+            if(i <= m_height)
+            {
+                GameObject.Destroy(m_ArrayGridBgColumn[i].gameObject);
+                GameObject.Destroy(m_ArrayGridBgRow[i].gameObject);
+            }
+        }
+        GameObject.Destroy(m_parentBgColumn.gameObject);
+        GameObject.Destroy(m_parentBgRow.gameObject);
 
-        m_ArrayText.Clear();
-        m_ArrayImage.Clear();
-        m_ArrayButton.Clear();
+        System.Array.Clear(m_ArrayWeeper, 0, m_ArrayWeeper.Length);
     }
 }

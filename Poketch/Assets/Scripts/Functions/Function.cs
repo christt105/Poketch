@@ -3,6 +3,11 @@ using UnityEngine;
 
 public abstract class Function : MonoBehaviour
 {
+    [SerializeField]
+    private bool m_UseAuxButton = false;
+
+    public bool UseAuxButton => m_UseAuxButton;
+
     /// <summary>
     /// </summary>
     /// <param name="jsonObject"></param>
@@ -19,6 +24,12 @@ public abstract class Function : MonoBehaviour
     /// <summary>
     /// </summary>
     public virtual void OnExit()
+    {
+    }
+
+    /// <summary>
+    /// </summary>
+    public virtual void OnAuxButton()
     {
     }
 }
