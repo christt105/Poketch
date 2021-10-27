@@ -58,6 +58,8 @@ public class Calculator : Function
 
     private void SetKey( char key )
     {
+        SoundManager.Instance.PlaySFX( SoundManager.SFX.Button );
+
         switch ( key )
         {
             case 'c':
