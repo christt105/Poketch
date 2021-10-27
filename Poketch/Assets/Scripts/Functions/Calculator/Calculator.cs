@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils;
 
 public class Calculator : Function
 {
@@ -16,12 +17,6 @@ public class Calculator : Function
 
     [SerializeField]
     private Transform m_OperationsTransform;
-    
-    private string m_Result;
-    private string m_Auxiliar;
-    private char m_CurrentOperation;
-
-    private Stage m_Stage = Stage.AddToResult;
 
     private readonly Dictionary < char, int > m_NumberIndex = new Dictionary < char, int >()
     {
@@ -45,6 +40,13 @@ public class Calculator : Function
     {
         { '+', 0 }, { '-', 1 }, { '*', 2 }, { '/', 3 },
     };
+
+    private string m_Auxiliar;
+    private char m_CurrentOperation;
+
+    private string m_Result;
+
+    private Stage m_Stage = Stage.AddToResult;
 
     private void Start()
     {
@@ -124,6 +126,8 @@ public class Calculator : Function
                     {
                         t.gameObject.SetActive( false );
                     }
+
+                    PlayCry();
                 }
 
                 break;
@@ -147,6 +151,35 @@ public class Calculator : Function
 
                 break;
         }
+    }
+
+    private void PlayCry()
+    {
+        string indexStr = "";
+
+        foreach ( char c in m_Result )
+        {
+            if ( c == '.' )
+            {
+                break;
+            }
+
+            indexStr += c;
+        }
+
+        if ( indexStr.Length > 3 )
+        {
+            return;
+        }
+
+        int index = int.Parse( indexStr );
+
+        if ( index <= 0 || index > PokemonDataBase.Instance.NumberOfPokemon )
+        {
+            return;
+        }
+
+        SoundManager.Instance.PlaySFX( PokemonDataBase.Instance.GetPokemonAudioClip( index ), 0.1f );
     }
 
     private void AddChar( ref string result, char key )
