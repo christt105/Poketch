@@ -18,6 +18,18 @@ public class Calculator : Function
     [SerializeField]
     private Transform m_OperationsTransform;
 
+    [SerializeField]
+    private string m_Auxiliar;
+
+    [SerializeField]
+    private char m_CurrentOperation;
+
+    [SerializeField]
+    private string m_Result;
+
+    [SerializeField]
+    private Stage m_Stage = Stage.AddToResult;
+
     private readonly Dictionary < char, int > m_NumberIndex = new Dictionary < char, int >()
     {
         { '0', 0 },
@@ -41,13 +53,6 @@ public class Calculator : Function
         { '+', 0 }, { '-', 1 }, { '*', 2 }, { '/', 3 },
     };
 
-    private string m_Auxiliar;
-    private char m_CurrentOperation;
-
-    private string m_Result;
-
-    private Stage m_Stage = Stage.AddToResult;
-
     private void Start()
     {
         Clear();
@@ -67,6 +72,9 @@ public class Calculator : Function
             case 'c':
                 Clear();
                 Display( m_Result );
+
+                m_Stage = Stage.AddToResult;
+                ResetDisplayOperation();
 
                 break;
 
@@ -96,14 +104,18 @@ public class Calculator : Function
                 {
                     Calculate();
                     Display( m_Result );
+
+                    if ( m_Stage == Stage.InvalidResult )
+                    {
+                        ResetDisplayOperation();
+
+                        break;
+                    }
                     m_Stage = Stage.AddToAuxiliar;
                     m_Auxiliar = "";
                 }
 
-                foreach ( Transform t in m_OperationsTransform )
-                {
-                    t.gameObject.SetActive( false );
-                }
+                ResetDisplayOperation();
 
                 m_OperationsTransform.GetChild( m_OperationIndex[key] ).gameObject.SetActive( true );
 
@@ -112,13 +124,18 @@ public class Calculator : Function
                 break;
 
             case '=':
-                if ( m_Stage == Stage.InvalidResult )
+                if ( m_Stage == Stage.InvalidResult || m_Stage == Stage.AddToResult )
                 {
                     break;
                 }
 
                 if ( m_CurrentOperation != '\0' )
                 {
+                    if ( m_Stage == Stage.AddToAuxiliar && m_Auxiliar == "" )
+                    {
+                        m_Auxiliar = m_Result;
+                    }
+
                     Calculate();
                     Display( m_Result );
 
@@ -136,6 +153,8 @@ public class Calculator : Function
                 if ( m_Stage == Stage.ShowResult || m_Stage == Stage.InvalidResult )
                 {
                     m_Result = "0";
+                    m_Auxiliar = "";
+                    m_CurrentOperation = '\0';
                     m_Stage = Stage.AddToResult;
                 }
 
@@ -150,6 +169,14 @@ public class Calculator : Function
                 }
 
                 break;
+        }
+    }
+
+    private void ResetDisplayOperation()
+    {
+        foreach ( Transform t in m_OperationsTransform )
+        {
+            t.gameObject.SetActive( false );
         }
     }
 
@@ -227,14 +254,46 @@ public class Calculator : Function
                 break;
 
             case '/':
-                if ( result == 0d && auxiliar == 0d )
+                if ( auxiliar == 0d )
                 {
-                    Debug.LogWarning( "Cannot divide 0/0" );
+                    Debug.LogWarning( "Cannot divide by 0" );
                     m_Result = "aaaaaaaaaaaaaaaaaaa";
                 }
                 else
                 {
-                    m_Result = ( result / auxiliar ).ToString( CultureInfo.InvariantCulture );
+                    m_Result = ( result / auxiliar ).ToString( "F8", CultureInfo.InvariantCulture );
+
+                    if ( m_Result.All( c => c == '0' || c == '.' ) )
+                    {
+                        m_Result = "0";
+                    }
+
+                    if ( m_Result.Contains( "." ) )
+                    {
+                        int numberOfZeros = 0;
+
+                        for ( int i = m_Result.Length - 1; i >= 0; i-- )
+                        {
+                            if ( m_Result[i] == '.' )
+                            {
+                                ++numberOfZeros;
+
+                                break;
+                            }
+
+                            if ( m_Result[i] != '0' )
+                            {
+                                break;
+                            }
+
+                            ++numberOfZeros;
+                        }
+
+                        if ( numberOfZeros > 0 )
+                        {
+                            m_Result = m_Result.Remove( m_Result.Length - numberOfZeros );
+                        }
+                    }
                 }
 
                 break;
