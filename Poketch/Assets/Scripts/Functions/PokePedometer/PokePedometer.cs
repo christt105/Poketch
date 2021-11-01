@@ -1,71 +1,70 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using PedometerU;
 using SimpleJSON;
+using UnityEngine;
+using UnityEngine.Android;
 
 public class PokePedometer : Function
 {
-    Pedometer pedometer;
+    [SerializeField]
+    private NumberController m_StepsDigits;
 
-    [SerializeField] NumberController stepsDigits;
+    private int m_CurrentSteps = 0;
+    private int m_InitialSteps = 0;
 
-    int currentSteps = 0;
-    int lastSteps = 0;
-    public override void OnCreate(JSONNode jsonObject)
+    private Pedometer m_Pedometer;
+
+    public override void OnCreate( JSONNode jsonObject )
     {
-#if !UNITY_EDITOR
-        pedometer = new Pedometer(OnStep);
-#endif
+        Permission.RequestUserPermission( "android.permission.ACTIVITY_RECOGNITION" );
 
-        if (jsonObject != null)
+        m_Pedometer = new Pedometer( OnStep );
+
+        if ( jsonObject != null )
         {
-            currentSteps = jsonObject.GetValueOrDefault("steps", 0);
+            m_InitialSteps = jsonObject.GetValueOrDefault( "steps", 0 );
 
-            stepsDigits.SetNumber(currentSteps);
+            m_StepsDigits.SetNumber( m_InitialSteps );
         }
-    }
-
-    public override void OnExit()
-    {
-        lastSteps = currentSteps;
     }
 
     public override void OnChange()
     {
-        if (lastSteps != currentSteps)
-        {
-            lastSteps = currentSteps;
-
-            stepsDigits.SetNumber(currentSteps);
-            SaveSteps();
-        }
+        m_StepsDigits.SetNumber( m_CurrentSteps );
+        SaveSteps();
     }
 
-    void OnStep(int steps, double distance)
+    private void OnStep( int steps, double distance )
     {
-        currentSteps = currentSteps + steps > 99999 ? 99999 : currentSteps + steps;
-        
-        if (gameObject.activeSelf)
+        m_CurrentSteps = m_InitialSteps + steps;
+
+        if ( m_CurrentSteps > 99999 )
         {
-            stepsDigits.SetNumber(currentSteps);
-            SaveSteps();
+            m_CurrentSteps = m_InitialSteps = 0;
+
+            m_Pedometer.Dispose();
+            m_Pedometer = new Pedometer( OnStep );
         }
+
+        m_StepsDigits.SetNumber( m_CurrentSteps );
+        SaveSteps();
     }
 
     public void ResetSteps()
     {
-        SoundManager.Instance.PlaySFX(SoundManager.SFX.Button);
-        currentSteps = lastSteps = 0;
-        stepsDigits.SetNumber(currentSteps);
+        SoundManager.Instance.PlaySFX( SoundManager.SFX.Button );
+
+        m_StepsDigits.SetNumber( m_CurrentSteps );
+
+        m_Pedometer.Dispose();
+        m_Pedometer = new Pedometer( OnStep );
 
         SaveSteps();
     }
 
-    void SaveSteps()
+    private void SaveSteps()
     {
         JSONNode json = new JSONObject();
-        json.Add("steps", currentSteps);
-        FunctionController.Instance.SaveFunctionInfo(GetType().Name, json);
+        json.Add( "steps", m_CurrentSteps );
+        FunctionController.Instance.SaveFunctionInfo( GetType().Name, json );
     }
 }
