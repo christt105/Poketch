@@ -4,21 +4,15 @@ using UnityEngine;
 public class Zahori : Function
 {
     [SerializeField]
-    private GameObject circle;
+    private GameObject m_Circle;
+
     [SerializeField]
-    private GameObject spot;
+    private GameObject m_Spot;
 
-    private Canvas canvas;
+    private Canvas m_Canvas;
 
-    public override void OnCreate(JSONNode jsonObject)
-    {
-        canvas = FindObjectOfType<Canvas>();
-    }
-    public override void OnChange()
-    {
-        circle.SetActive(false);
-        spot.SetActive(false);
-    }
+    private Vector2 m_FunctionSize;
+    private Vector2 m_SpotSize;
 
     private void OnEnable()
     {
@@ -32,26 +26,52 @@ public class Zahori : Function
         Signals.onCircleExpanded -= SpawnSpot;
     }
 
+    public override void OnCreate( JSONNode jsonObject )
+    {
+        m_Canvas = FindObjectOfType < Canvas >();
+
+        m_FunctionSize = GetComponent < RectTransform >().sizeDelta;
+        m_SpotSize = m_Spot.GetComponent < RectTransform >().sizeDelta;
+    }
+
+    public override void OnChange()
+    {
+        m_Circle.SetActive( false );
+        m_Spot.SetActive( false );
+    }
+
     private void ScreenTouched()
     {
-        if (!circle.activeInHierarchy)
+        if ( !m_Circle.activeSelf )
+        {
             ActivateCircle();
+        }
     }
 
     private void ActivateCircle()
     {
-        circle.SetActive(true);
+        m_Circle.SetActive( true );
 
-        Vector2 pos;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.transform as RectTransform, Input.mousePosition, canvas.worldCamera, out pos);
-        circle.transform.position = canvas.transform.TransformPoint(pos);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            m_Canvas.transform as RectTransform,
+            Input.mousePosition,
+            m_Canvas.worldCamera,
+            out Vector2 pos );
 
-        SoundManager.Instance.PlaySFX(SoundManager.SFX.Zahori);
+        m_Circle.transform.position = m_Canvas.transform.TransformPoint( pos );
+
+        SoundManager.Instance.PlaySFX( SoundManager.SFX.Zahori );
     }
 
     private void SpawnSpot()
     {
-        if (Random.Range(0, 6) == 0)
-            spot.SetActive(true);
+        if ( Random.Range( 0, 6 ) == 0 )
+        {
+            m_Spot.SetActive( true );
+
+            m_Spot.GetComponent < RectTransform >().anchoredPosition = new Vector2(
+                Random.Range( 0f, m_FunctionSize.x ) - m_SpotSize.x,
+                Random.Range( 0f, m_FunctionSize.y ) - m_SpotSize.y );
+        }
     }
 }
