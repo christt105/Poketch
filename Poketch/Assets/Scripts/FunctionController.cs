@@ -45,7 +45,7 @@ public class FunctionController : MonoBehaviour
 
         file["Actual"] = index;
 
-        File.WriteAllText( DataPath, file.ToString() );
+        File.WriteAllText( DataPath, file.ToString( 1 ) );
     }
 
     public void SetFunctionText( bool previous )

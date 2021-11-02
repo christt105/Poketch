@@ -1021,7 +1021,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3856605873038248628
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1057,40 +1057,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_UseAuxButton: 0
   songs:
-  - {fileID: 8300000, guid: c4ba3324eccf28f4ba185b78907233c9, type: 3}
-  - {fileID: 8300000, guid: 2cb6b9829fd77d94cb43c3fe8dbcbd77, type: 3}
-  - {fileID: 8300000, guid: 167a1ee6e09606245810c93029430f2c, type: 3}
-  - {fileID: 8300000, guid: d05858504d3b8d84cbd3b8e55633732c, type: 3}
-  - {fileID: 8300000, guid: b9acfaedacdd5f04f92a0f601cd5a098, type: 3}
-  - {fileID: 8300000, guid: f087c533f9ec6bb45ad84d7df467da13, type: 3}
-  - {fileID: 8300000, guid: d4dfb489ceceff34cb8975a39f68c42f, type: 3}
-  - {fileID: 8300000, guid: 2e25b1e2fafc2974894dd11a45da51a6, type: 3}
-  - {fileID: 8300000, guid: 945f7d3eba898b94d941b1df28c528b5, type: 3}
-  - {fileID: 8300000, guid: d0f58bf3903c0c64698d1c5ce6c14ab3, type: 3}
-  - {fileID: 8300000, guid: c2dba919583631f48ad257182d0ec41e, type: 3}
-  - {fileID: 8300000, guid: 7aaebade347835d4b80c135ef9244d89, type: 3}
-  - {fileID: 8300000, guid: d151b3148d26b754dad5f7e5320dcd6b, type: 3}
-  - {fileID: 8300000, guid: 20b0032b2f5ae7448b0656a03aa0cad1, type: 3}
-  - {fileID: 8300000, guid: 46c8fe0280c2f584db3e96fbb88fadae, type: 3}
-  - {fileID: 8300000, guid: a8b61d0386f2f9b418173a346cbc5fa6, type: 3}
-  - {fileID: 8300000, guid: 00e2a3b99228ee64585a816411d733b8, type: 3}
-  - {fileID: 8300000, guid: b269073352e95fd4c8531082342885d4, type: 3}
-  - {fileID: 8300000, guid: 5b625e3e36e54904e96e79b9d33a80bc, type: 3}
-  - {fileID: 8300000, guid: 3c85167886a9e5a479d0831be2bae9ee, type: 3}
-  - {fileID: 8300000, guid: fadc896be72293346b993b3ed4ab96a4, type: 3}
-  - {fileID: 8300000, guid: ddab04dcffcccb345b555d3b242b65a6, type: 3}
-  - {fileID: 8300000, guid: d0122bc423e385a4cb54d860b03e2ed7, type: 3}
-  - {fileID: 8300000, guid: 123413d71a2a65d4ea089dbc5f2b5ead, type: 3}
-  - {fileID: 8300000, guid: 1f1f6fd4c70c03e4aa3f27d9fdd53330, type: 3}
-  - {fileID: 8300000, guid: 0d6326b5f4f759d4da4cecb465daf5ae, type: 3}
-  - {fileID: 8300000, guid: 1fae9591312789b429e491144ca34f9f, type: 3}
-  - {fileID: 8300000, guid: 7e5cc6929838fd640b4bb95535536a0d, type: 3}
-  - {fileID: 8300000, guid: 804bfcbe506678b4a98713ccfdce33f7, type: 3}
-  - {fileID: 8300000, guid: ab6f420644a3f794d9ec3a70439322ee, type: 3}
-  - {fileID: 8300000, guid: cce3954ec4e522848a57289abf28b0dd, type: 3}
-  - {fileID: 8300000, guid: 7d7d79c32b1016a4098f9a9e1de53a5f, type: 3}
-  - {fileID: 8300000, guid: 8bbee965cb64f2d4997a2940e952a064, type: 3}
-  - {fileID: 8300000, guid: f224ca126eb7c0745a84e6c8b4628664, type: 3}
+  - {fileID: 8300000, guid: 8e527ab66848c804bbb33c96f13e4500, type: 3}
+  - {fileID: 8300000, guid: 1ca3b127b4dcc7c4ea0541e69e6c38bd, type: 3}
+  - {fileID: 8300000, guid: 31d951e018e444f4daf901c774627f39, type: 3}
+  - {fileID: 8300000, guid: 8d59a6a8b57b2904fa97eb4de45badc5, type: 3}
+  - {fileID: 8300000, guid: de4752b12fa1f4b42893e222fd26b4a8, type: 3}
   songName: {fileID: 3856605873919825926}
   playButton: {fileID: 3856605873118322601}
   songProgression: {fileID: 3856605872756696204}
@@ -1361,7 +1332,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1877,7 +1848,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

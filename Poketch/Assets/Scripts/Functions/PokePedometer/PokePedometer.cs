@@ -17,7 +17,9 @@ public class PokePedometer : Function
     {
         Permission.RequestUserPermission( "android.permission.ACTIVITY_RECOGNITION" );
 
+#if !UNITY_EDITOR
         m_Pedometer = new Pedometer( OnStep );
+#endif
 
         if ( jsonObject != null )
         {

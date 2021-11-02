@@ -1,14 +1,12 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Utils;
 
 [RequireComponent( typeof( Animator ) )]
 public class TapSprite : MonoBehaviour, IPointerDownHandler
 {
-    private static readonly int s_Tap = Animator.StringToHash( "Tap" );
+    public delegate void Tap();
 
-    [SerializeField]
-    private ShowPokemon m_ShowPokemon;
+    private static readonly int s_Tap = Animator.StringToHash( "Tap" );
 
     private Animator m_Animator;
 
@@ -28,9 +26,12 @@ public class TapSprite : MonoBehaviour, IPointerDownHandler
 
         m_OnAnimation = true;
 
-        SoundManager.Instance.PlaySFX( PokemonDataBase.Instance.GetPokemonAudioClip( m_ShowPokemon.DexNumber ), 0.1f );
+        OnTap?.Invoke();
+
         m_Animator.SetTrigger( s_Tap );
     }
+
+    public event Tap OnTap;
 
     public void FinishAnimation()
     {

@@ -44,7 +44,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 3765fd6d8c9c7ed4593477bea4b28d0b, type: 3}
-    totalSpriteSurfaceArea: 2463526
+    totalSpriteSurfaceArea: 2468198
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -66,6 +66,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 6fc0918135807e24b98a800ca79ac405, type: 3}
   - {fileID: 21300000, guid: 0fc55791a814eff45b03cd2b507f53f0, type: 3}
   - {fileID: 21300000, guid: d9fdbcc124555284eb26c7a041450939, type: 3}
+  - {fileID: 21300000, guid: e4eacdc19d2942c45906cf3752ad89f4, type: 3}
   - {fileID: 21300000, guid: 71bd9de15a33fb047adb542ce6722b8b, type: 3}
   - {fileID: 21300000, guid: 4d7053f135560f84eb9fbeb83db7574f, type: 3}
   - {fileID: 21300000, guid: 1afc5af128158794ba71f9fa9c7e2592, type: 3}
@@ -115,6 +116,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: e07a3c26cb66ba746b86e36ec9dcdb40, type: 3}
   - {fileID: 21300000, guid: 5e01aa365b8194c4eb676ad365a4c2ef, type: 3}
   - {fileID: 21300000, guid: 0ffe86562b7a59b4b8e8fa8dc93a6f0f, type: 3}
+  - {fileID: 21300000, guid: 02034f66aaef0c844909f4ea65b55062, type: 3}
   - {fileID: 21300000, guid: 8b64a2760805197458431e79df5eec01, type: 3}
   - {fileID: 21300000, guid: 41294286df6eed0479a80d704dd89dbd, type: 3}
   - {fileID: 21300000, guid: 82565686ab177104aa9dbdcf4a5045e2, type: 3}
@@ -140,6 +142,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: fa478da7e2971954fbd11fe989d3c805, type: 3}
   - {fileID: 21300000, guid: 03bc04b7e94573845bdd299b85329b32, type: 3}
   - {fileID: 21300000, guid: 35263fb72cbf98e44b23d8dad5fa8c88, type: 3}
+  - {fileID: 21300000, guid: 6e4be1d7475ff3f4cb3bc88325fc4031, type: 3}
   - {fileID: 21300000, guid: 27ba89d7ec1e83c4ebd2925e3f2b5399, type: 3}
   - {fileID: 21300000, guid: 11573be71a0e3fb4d9222900f8e865da, type: 3}
   - {fileID: 21300000, guid: 66d9ebe7b4041dc40b630510a4feff09, type: 3}
@@ -195,6 +198,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: fbee67eb7a0253243addae53db9e408f, type: 3}
   - {fileID: 21300000, guid: df3025fbe155169489d9332712460ae4, type: 3}
   - {fileID: 21300000, guid: 646f190cb1c26c1448c03f6ccabcb83c, type: 3}
+  - {fileID: 21300000, guid: e83e621c95a8c5c4eb3358166d0e4b5e, type: 3}
   - {fileID: 21300000, guid: 82fb821c99a350d478fb4ecb82865e73, type: 3}
   - {fileID: 21300000, guid: 32cac22c927a47946b434d43a5a2ae93, type: 3}
   - {fileID: 21300000, guid: e865ab3cb1946f74093814439e541cb1, type: 3}
@@ -271,6 +275,7 @@ SpriteAtlas:
   - 6
   - 3
   - 5
+  - Slider
   - 9
   - ButtonPressed2
   - ButtonExplosion3
@@ -320,6 +325,7 @@ SpriteAtlas:
   - 0
   - Mark4
   - Mark2
+  - Check
   - ButtonExplosion4
   - ResetIdle
   - Circle6
@@ -345,6 +351,7 @@ SpriteAtlas:
   - 4
   - =Pressed
   - ButtonStruggle
+  - Settings
   - 2
   - 0
   - AddButtonPressed
@@ -400,6 +407,7 @@ SpriteAtlas:
   - Div
   - 9
   - ButtonPressed5
+  - Selector
   - ButtonPressed
   - 1
   - Background

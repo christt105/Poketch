@@ -15,13 +15,10 @@ public class ShowPokemon : Function
     [SerializeField]
     private InputField m_InputField;
 
-    public int DexNumber { get; private set; } = 1;
+    [SerializeField]
+    private TapSprite m_TapSprite;
 
-    public override void OnCreate( JSONNode jsonObject )
-    {
-        SetPokemon();
-        m_InputField.onEndEdit.AddListener( SetNumber );
-    }
+    public int DexNumber { get; private set; } = 1;
 
 #if UNITY_EDITOR
     private void Update()
@@ -31,12 +28,24 @@ public class ShowPokemon : Function
             Add();
         }
 
-        if (Input.GetKeyDown(KeyCode.KeypadMinus))
+        if ( Input.GetKeyDown( KeyCode.KeypadMinus ) )
         {
             Sub();
         }
     }
 #endif
+
+    public override void OnCreate( JSONNode jsonObject )
+    {
+        SetPokemon();
+        m_InputField.onEndEdit.AddListener( SetNumber );
+        m_TapSprite.OnTap += TapPokemon;
+    }
+
+    private void TapPokemon()
+    {
+        SoundManager.Instance.PlaySFX( PokemonDataBase.Instance.GetPokemonAudioClip( DexNumber ), 0.1f );
+    }
 
     private void SetPokemon()
     {

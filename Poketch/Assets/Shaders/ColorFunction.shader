@@ -105,6 +105,16 @@ Shader "UI/ColorFunction"
                 	
                     half4 color = (tex2D(_MainTex, IN.texcoord) + _TextureSampleAdd) * colorMult;
 
+                	if(_Highlight == 2)
+                	{
+                        color = (tex2D(_MainTex, IN.texcoord));
+                		if(color.a != 0)
+                		{
+                            color = float4(1,1,1,1) * 0.6 * colorMult;
+                            color.a = 1;
+                		}
+                	}
+
                     #ifdef UNITY_UI_CLIP_RECT
                     color.a *= UnityGet2DClipping(IN.worldPosition.xy, _ClipRect);
                     #endif
