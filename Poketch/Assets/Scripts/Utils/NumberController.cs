@@ -16,7 +16,7 @@ public class NumberController : MonoBehaviour
     private int[] m_Numbers;
     private Digit[] m_NumbersTransforms;
 
-    private void Start()
+    private void Awake()
     {
         Init();
     }
