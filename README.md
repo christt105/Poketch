@@ -13,6 +13,7 @@ A Pokétch Unity project with the original functionalities of Pokémon Platinum 
 * Víctor Segura ([VictorSegura99](https://github.com/VictorSegura99))
 * Marc Gálvez ([optus23](https://optus23.github.io/))
 * Pol Recasens ([PolRecasensSarra](https://polrecasenssarra.github.io/Web/))
+* Iván Ropero ([RoperoIvan](https://github.com/RoperoIvan))
 
 # Disclaimer
 
