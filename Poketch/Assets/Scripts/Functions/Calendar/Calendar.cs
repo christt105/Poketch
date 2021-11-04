@@ -1,68 +1,130 @@
 using System;
-using UnityEngine;
 using SimpleJSON;
-using UnityEngine.UI;
+using UnityEngine;
 
 public class Calendar : Function
 {
-    public GameObject daysContainer;
-    public NumberController m_monthNumber;
-    public Sprite actualDaySprite;
+    [SerializeField]
+    private GameObject m_DaysContainer;
 
-    private Vector2Int m_LastDate = Vector2Int.one * -1;
+    [SerializeField]
+    private NumberController m_MonthNumber;
+
+    [SerializeField]
+    private RectTransform m_ActualDayRect;
+
+    [SerializeField]
+    private Color m_NormalColor;
+
+    [SerializeField]
+    private Color m_SpecialColor;
+
+    private byte[] m_ActivatedDays = new byte[7 * 6];
+
+    private int m_ActualMonth = -1;
 
     public override void OnCreate( JSONNode jsonObject )
     {
-        UpdateCalendarMonthDays();
+        m_ActualMonth = DateTime.Now.Month;
+
+        for ( int i = 0; i < m_ActivatedDays.Length; i++ )
+        {
+            m_ActivatedDays[i] = 0;
+        }
+
+        if ( jsonObject != null && jsonObject["actualMonth"].AsInt == m_ActualMonth )
+        {
+            m_ActivatedDays = jsonObject["activatedDays"].AsByteArray;
+        }
     }
+
     public override void OnChange()
     {
-        CancelInvoke();
-        InvokeRepeating(nameof(UpdateCalendar), 0f, 2f);
-    }
-    // Update is called once per frame
-    private void UpdateCalendar()
-    {
-        int day = DateTime.Now.Day;
-        int month = DateTime.Now.Month;
-
-        if(m_LastDate.x != month)
-        {
-            m_monthNumber.SetNumber(month);
-            m_LastDate.x = month;
-
-            UpdateCalendarMonthDays();
-        }
-
-        if (m_LastDate.y != day)
-        {
-            m_LastDate.y = day;
-        }
-
+        UpdateCalendarMonthDays();
     }
 
     private void UpdateCalendarMonthDays()
     {
-        DateTime firstMonthDay = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-        int firstMonthDayWeekDay = (int)firstMonthDay.DayOfWeek;
-        int firstWeekEmptyDays = firstMonthDayWeekDay - 1;
+        DateTime today = DateTime.Today;
+        DateTime firstDayOfMonth = new DateTime( today.Year, today.Month, 1 );
+        int dayOfWeek = ( int ) firstDayOfMonth.DayOfWeek;
+        int daysInMonth = DateTime.DaysInMonth( today.Year, today.Month );
 
-        int daysInCurrentMonth = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
-
-        int currentDaysChecked = 0;
-
-
-        for (int i = 0; i < daysContainer.transform.childCount; ++i) 
+        if ( m_ActualMonth != today.Month )
         {
-            daysContainer.transform.GetChild(i).GetComponent<Image>().sprite = null;
-
-            if (i > firstWeekEmptyDays && i - firstWeekEmptyDays < daysInCurrentMonth + 1)
+            for ( int i = 0; i < m_ActivatedDays.Length; i++ )
             {
-                currentDaysChecked++;
-                daysContainer.transform.GetChild(i).GetComponent<NumberController>().SetNumber(currentDaysChecked);
+                m_ActivatedDays[i] = 0;
             }
+
+            m_ActualMonth = today.Month;
         }
 
-        daysContainer.transform.GetChild(DateTime.Now.Day - 1 + firstWeekEmptyDays).GetComponent<Image>().sprite = actualDaySprite;
+        m_MonthNumber.SetNumber( today.Month );
+
+        ClickDay[] days = m_DaysContainer.GetComponentsInChildren < ClickDay >();
+
+        bool firstDayFound = false;
+        int day = 0;
+
+        for ( int i = 0; i < days.Length; i++ )
+        {
+            if ( !firstDayFound )
+            {
+                if ( i < dayOfWeek )
+                {
+                    days[i].Hide();
+
+                    continue;
+                }
+
+                firstDayFound = true;
+            }
+
+            if ( day >= daysInMonth )
+            {
+                for ( int j = i; j < days.Length; ++j )
+                {
+                    days[j].Hide();
+                }
+
+                break;
+            }
+
+            days[i].Unhide();
+            days[i].NumberController.SetNumber( ++day );
+
+            if ( day == today.Day )
+            {
+                m_ActualDayRect.anchoredPosition = days[i].GetComponent < RectTransform >().anchoredPosition;
+            }
+
+            if ( m_ActivatedDays[i] == 1 )
+            {
+                days[i].Select();
+            }
+
+            if ( i % 7 == 0 )
+            {
+                days[i].SetSpecial();
+                days[i].SetNumbersColor( m_SpecialColor );
+            }
+            else
+            {
+                days[i].SetNumbersColor( m_NormalColor );
+            }
+        }
+    }
+
+    public void Save( int index, bool imageEnabled )
+    {
+        JSONObject json = new JSONObject();
+
+        m_ActivatedDays[index] = ( byte ) ( imageEnabled ? 1 : 0 );
+
+        json["activatedDays"] = m_ActivatedDays;
+        json["actualMonth"] = m_ActualMonth;
+
+        FunctionController.Instance.SaveFunctionInfo( GetType().Name, json );
     }
 }
